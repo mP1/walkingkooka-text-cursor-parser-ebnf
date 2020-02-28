@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.com/mP1/walkingkooka-text-cursor-parser-ebnf.svg?branch=master)](https://travis-ci.com/mP1/walkingkooka-text-cursor-parser-ebnf.svg?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/mP1/walkingkooka-text-cursor-parser-ebnf/badge.svg?branch=master)](https://coveralls.io/github/mP1/walkingkooka-text-cursor-parser-ebnf?branch=master)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Support for parsing EBNF grammar files and assembling [parser combinators](https://en.wikipedia.org/wiki/Parser_combinator.
 
