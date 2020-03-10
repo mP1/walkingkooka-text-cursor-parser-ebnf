@@ -85,15 +85,14 @@ public final class EbnfGrammarLoader {
                 throw new EbnfParserException("Unable to find " + this);
             }
             try (final InputStream inputStream2 = inputStream) {
-                final TextCursor grammarFile = TextCursors.charSequence(
-                        CharSequences.readerConsuming(
-                                new InputStreamReader(inputStream2, Charset.defaultCharset()),
-                                4096));
-                final Optional<ParserToken> grammar = EbnfParserToken.grammarParser()
-                        .orFailIfCursorNotEmpty(ParserReporters.basic())
-                        .parse(grammarFile, EbnfParserContexts.basic());
-                if (grammar.isPresent()) {
-                    result = grammar;
+                try (final InputStreamReader reader = new InputStreamReader(inputStream2, Charset.defaultCharset())) {
+                    final TextCursor grammarFile = TextCursors.charSequence(CharSequences.readerConsuming(reader, 4096));
+                    final Optional<ParserToken> grammar = EbnfParserToken.grammarParser()
+                            .orFailIfCursorNotEmpty(ParserReporters.basic())
+                            .parse(grammarFile, EbnfParserContexts.basic());
+                    if (grammar.isPresent()) {
+                        result = grammar;
+                    }
                 }
             }
         } catch (final Exception fail) {
