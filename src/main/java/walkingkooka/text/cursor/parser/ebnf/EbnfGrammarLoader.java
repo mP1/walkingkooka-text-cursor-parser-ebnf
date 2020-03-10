@@ -90,9 +90,7 @@ public final class EbnfGrammarLoader {
                     final Optional<ParserToken> grammar = EbnfParserToken.grammarParser()
                             .orFailIfCursorNotEmpty(ParserReporters.basic())
                             .parse(grammarFile, EbnfParserContexts.basic());
-                    if (grammar.isPresent()) {
-                        result = grammar;
-                    }
+                    result = grammar.orElse(null);
                 }
             }
         } catch (final Exception fail) {
