@@ -16,7 +16,6 @@
  */
 package walkingkooka.text.cursor.parser.ebnf;
 
-import org.junit.jupiter.api.Test;
 import walkingkooka.ToStringBuilder;
 
 import java.math.MathContext;
@@ -110,7 +109,7 @@ final class BasicEbnfParserContext implements EbnfParserContext {
         throw new UnsupportedOperationException();
     }
 
-    @Test
+    @Override
     public String toString() {
         return ToStringBuilder.empty()
                 .label("decimalSeparator").value(this.decimalSeparator())

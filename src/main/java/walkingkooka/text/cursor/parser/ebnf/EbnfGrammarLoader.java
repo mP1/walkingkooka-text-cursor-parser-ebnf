@@ -77,7 +77,7 @@ public final class EbnfGrammarLoader {
      * Loads the grammar and returns the result.
      */
     private Object loadGrammar() {
-        Object result = null;
+        Object result;
 
         try {
             final InputStream inputStream = this.klass.getResourceAsStream(this.filename);
