@@ -1,0 +1,11 @@
+*Testing.*
+*Testing2.*
+**/*Testing.*
+**/*Testing2.*
+
+#
+# Uses Class#getResourceAsStream therefore is not compatible.
+#
+EbnfGrammarLoader.*
+
+sample/*
