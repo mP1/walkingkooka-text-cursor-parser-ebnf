@@ -17,10 +17,29 @@
 
 package walkingkooka.text.cursor.parser.ebnf;
 
+import org.junit.jupiter.api.Test;
 import walkingkooka.reflect.ClassTesting2;
 import walkingkooka.reflect.JavaVisibility;
 
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public final class EbnfGrammarLoaderTest implements ClassTesting2<EbnfGrammarLoader> {
+
+    @Test
+    public void testLoad() {
+        final EbnfGrammarLoader loader = EbnfGrammarLoader.with(EbnfGrammarLoaderTest.class.getSimpleName() + "/testLoad.txt", this.getClass());
+        assertSame(loader.grammar(), loader.grammar());
+    }
+
+    @Test
+    public void testLoadFails() {
+        final EbnfGrammarLoader loader = EbnfGrammarLoader.with(EbnfGrammarLoaderTest.class.getSimpleName() + "/testFail.txt", this.getClass());
+        assertThrows(RuntimeException.class, () -> loader.grammar());
+        assertThrows(RuntimeException.class, () -> loader.grammar());
+    }
+
+    // ClassTesting.....................................................................................................
 
     @Override
     public Class<EbnfGrammarLoader> type() {

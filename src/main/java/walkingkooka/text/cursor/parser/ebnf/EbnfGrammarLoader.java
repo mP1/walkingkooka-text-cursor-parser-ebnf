@@ -74,7 +74,7 @@ public final class EbnfGrammarLoader {
     private Object loaded;
 
     /**
-     * Loads the grammar and returns the result.
+     * Loads the grammar and returns the result. The result may be an {@link Optional} or the {@link Throwable} but never null.
      */
     private Object loadGrammar() {
         Object result;
@@ -87,10 +87,9 @@ public final class EbnfGrammarLoader {
             try (final InputStream inputStream2 = inputStream) {
                 try (final InputStreamReader reader = new InputStreamReader(inputStream2, Charset.defaultCharset())) {
                     final TextCursor grammarFile = TextCursors.charSequence(CharSequences.readerConsuming(reader, 4096));
-                    final Optional<ParserToken> grammar = EbnfParserToken.grammarParser()
+                    result = EbnfParserToken.grammarParser()
                             .orFailIfCursorNotEmpty(ParserReporters.basic())
                             .parse(grammarFile, EbnfParserContexts.basic());
-                    result = grammar.orElse(null);
                 }
             }
         } catch (final Exception fail) {
