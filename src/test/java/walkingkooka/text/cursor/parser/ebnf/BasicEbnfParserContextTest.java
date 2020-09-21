@@ -43,7 +43,7 @@ public final class BasicEbnfParserContextTest implements ClassTesting2<BasicEbnf
     @Test
     public void testToString() {
         this.toStringAndCheck(this.createContext(),
-                "decimalSeparator='.' exponentSymbol='E' negativeSign='-' positiveSign='+'");
+                "decimalSeparator='.' exponentSymbol=\"E\" negativeSign='-' positiveSign='+'");
     }
 
     @Override
@@ -62,7 +62,7 @@ public final class BasicEbnfParserContextTest implements ClassTesting2<BasicEbnf
     }
 
     @Override
-    public char exponentSymbol() {
+    public String exponentSymbol() {
         return this.decimalNumberContext().exponentSymbol();
     }
 

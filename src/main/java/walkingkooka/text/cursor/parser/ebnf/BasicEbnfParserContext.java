@@ -50,8 +50,8 @@ final class BasicEbnfParserContext implements EbnfParserContext {
     }
 
     @Override
-    public char exponentSymbol() {
-        return 'E';
+    public String exponentSymbol() {
+        return "E";
     }
 
     @Override
