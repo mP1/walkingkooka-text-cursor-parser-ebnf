@@ -26,7 +26,8 @@ import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierParserToken;
 import java.util.Optional;
 
 /**
- * A proxy for a parser.
+ * A proxy for a {@link Parser} that is used as a placeholder for a forward reference within a grammar file.
+ * All parsing requests are passed without modification to the wrapped {@link Parser}.
  */
 final class EbnfParserCombinatorProxyParser<C extends ParserContext> implements Parser<C> {
 
