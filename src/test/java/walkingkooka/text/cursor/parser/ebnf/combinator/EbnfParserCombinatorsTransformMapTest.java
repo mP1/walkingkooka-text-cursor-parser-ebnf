@@ -19,9 +19,11 @@ package walkingkooka.text.cursor.parser.ebnf.combinator;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import walkingkooka.Cast;
 import walkingkooka.collect.map.MapTesting2;
 import walkingkooka.collect.map.Maps;
 import walkingkooka.reflect.TypeNameTesting;
+import walkingkooka.text.cursor.parser.FakeParserContext;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserContext;
 import walkingkooka.text.cursor.parser.Parsers;
@@ -31,8 +33,8 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public final class EbnfParserCombinatorsTransformMapTest implements MapTesting2<EbnfParserCombinatorsTransformMap, EbnfIdentifierName, Parser<ParserContext>>,
-        TypeNameTesting<EbnfParserCombinatorsTransformMap> {
+public final class EbnfParserCombinatorsTransformMapTest implements MapTesting2<EbnfParserCombinatorsTransformMap<FakeParserContext>, EbnfIdentifierName, Parser<FakeParserContext>>,
+        TypeNameTesting<EbnfParserCombinatorsTransformMap<FakeParserContext>> {
 
     @Test
     public void testGet() {
@@ -46,7 +48,7 @@ public final class EbnfParserCombinatorsTransformMapTest implements MapTesting2<
 
     @Test
     public void testGetDefault() {
-        final Parser<ParserContext> defaultParser = Parsers.fake();
+        final Parser<FakeParserContext> defaultParser = Parsers.fake();
         Assertions.assertSame(defaultParser,
                 this.createMap().getOrDefault(EbnfIdentifierName.with("unknown"), defaultParser));
     }
@@ -62,21 +64,21 @@ public final class EbnfParserCombinatorsTransformMapTest implements MapTesting2<
     }
 
 
-    private Map<EbnfIdentifierName, Parser<ParserContext>> wrappedMap() {
-        final Map<EbnfIdentifierName, Parser<ParserContext>> map = Maps.ordered();
+    private Map<EbnfIdentifierName, Parser<FakeParserContext>> wrappedMap() {
+        final Map<EbnfIdentifierName, Parser<FakeParserContext>> map = Maps.ordered();
         map.put(this.identifierName, this.parser);
         return map;
     }
 
     private final EbnfIdentifierName identifierName = EbnfIdentifierName.with("parser1");
 
-    private final Parser<ParserContext> parser = Parsers.fake();
+    private final Parser<FakeParserContext> parser = Parsers.fake();
 
     // ClassTesting.....................................................................................................
 
     @Override
-    public Class<EbnfParserCombinatorsTransformMap> type() {
-        return EbnfParserCombinatorsTransformMap.class;
+    public Class<EbnfParserCombinatorsTransformMap<FakeParserContext>> type() {
+        return Cast.to(EbnfParserCombinatorsTransformMap.class);
     }
 
     // TypeNameTesting..................................................................................................

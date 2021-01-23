@@ -37,23 +37,23 @@ import walkingkooka.text.cursor.parser.ebnf.EbnfTerminalParserToken;
  * it will be ignored by {@link #range(EbnfRangeParserToken, Parser)} which reads the
  * tokens from the range token.
  */
-public interface EbnfParserCombinatorSyntaxTreeTransformer extends Context {
+public interface EbnfParserCombinatorSyntaxTreeTransformer<C extends ParserContext> extends Context {
 
-    Parser<ParserContext> alternatives(final EbnfAlternativeParserToken token, final Parser<ParserContext> parser);
+    Parser<C> alternatives(final EbnfAlternativeParserToken token, final Parser<C> parser);
 
-    Parser<ParserContext> concatenation(final EbnfConcatenationParserToken token, final Parser<ParserContext> parser);
+    Parser<C> concatenation(final EbnfConcatenationParserToken token, final Parser<C> parser);
 
-    Parser<ParserContext> exception(final EbnfExceptionParserToken token, final Parser<ParserContext> parser);
+    Parser<C> exception(final EbnfExceptionParserToken token, final Parser<C> parser);
 
-    Parser<ParserContext> group(final EbnfGroupParserToken token, final Parser<ParserContext> parser);
+    Parser<C> group(final EbnfGroupParserToken token, final Parser<C> parser);
 
-    Parser<ParserContext> identifier(final EbnfIdentifierParserToken token, final Parser<ParserContext> parser);
+    Parser<C> identifier(final EbnfIdentifierParserToken token, final Parser<C> parser);
 
-    Parser<ParserContext> optional(final EbnfOptionalParserToken token, final Parser<ParserContext> parser);
+    Parser<C> optional(final EbnfOptionalParserToken token, final Parser<C> parser);
 
-    Parser<ParserContext> range(final EbnfRangeParserToken token, final Parser<ParserContext> parser);
+    Parser<C> range(final EbnfRangeParserToken token, final Parser<C> parser);
 
-    Parser<ParserContext> repeated(final EbnfRepeatedParserToken token, final Parser<ParserContext> parser);
+    Parser<C> repeated(final EbnfRepeatedParserToken token, final Parser<C> parser);
 
-    Parser<ParserContext> terminal(final EbnfTerminalParserToken token, final Parser<ParserContext> parser);
+    Parser<C> terminal(final EbnfTerminalParserToken token, final Parser<C> parser);
 }
