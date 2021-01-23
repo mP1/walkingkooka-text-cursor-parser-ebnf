@@ -406,7 +406,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
         }
     }
 
-    private EbnfParserCombinatorSyntaxTreeTransformer syntaxTreeTransformer(final EbnfGrammarParserToken grammar) {
+    private EbnfParserCombinatorSyntaxTreeTransformer<ParserContext> syntaxTreeTransformer(final EbnfGrammarParserToken grammar) {
         final Map<EbnfIdentifierName, EbnfParserToken> identifierToToken = Maps.sorted();
         grammar.value()
                 .stream()
@@ -416,7 +416,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 .map(EbnfRuleParserToken.class::cast)
                 .forEach(rule -> identifierToToken.put(rule.identifier().value(), rule.token()));
 
-        return new EbnfParserCombinatorSyntaxTreeTransformer() {
+        return new EbnfParserCombinatorSyntaxTreeTransformer<ParserContext>() {
             @Override
             public Parser<ParserContext> alternatives(final EbnfAlternativeParserToken token, final Parser<ParserContext> parser) {
                 return parser;

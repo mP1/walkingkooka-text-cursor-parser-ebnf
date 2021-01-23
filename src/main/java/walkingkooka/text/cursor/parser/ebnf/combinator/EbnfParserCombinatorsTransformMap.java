@@ -29,17 +29,17 @@ import java.util.Set;
 /**
  * A read only {@link Map} that also throws an exception if {@link #get(Object)} has no parser.
  */
-final class EbnfParserCombinatorsTransformMap extends AbstractMap<EbnfIdentifierName, Parser<ParserContext>> {
+final class EbnfParserCombinatorsTransformMap<C extends ParserContext> extends AbstractMap<EbnfIdentifierName, Parser<C>> {
 
     static {
         Maps.registerImmutableType(EbnfParserCombinatorsTransformMap.class);
     }
 
-    static EbnfParserCombinatorsTransformMap with(final Map<EbnfIdentifierName, Parser<ParserContext>> map) {
-        return new EbnfParserCombinatorsTransformMap(map);
+    static <C extends ParserContext> EbnfParserCombinatorsTransformMap<C> with(final Map<EbnfIdentifierName, Parser<C>> map) {
+        return new EbnfParserCombinatorsTransformMap<>(map);
     }
 
-    private EbnfParserCombinatorsTransformMap(final Map<EbnfIdentifierName, Parser<ParserContext>> map) {
+    private EbnfParserCombinatorsTransformMap(final Map<EbnfIdentifierName, Parser<C>> map) {
         super();
         this.map = Maps.readOnly(map);
     }
@@ -55,8 +55,8 @@ final class EbnfParserCombinatorsTransformMap extends AbstractMap<EbnfIdentifier
     }
 
     @Override
-    public Parser<ParserContext> get(final Object key) {
-        final Parser<ParserContext> value = this.map.get(key);
+    public Parser<C> get(final Object key) {
+        final Parser<C> value = this.map.get(key);
         if(null==value) {
             throw new EbnfParserCombinatorException("Unknown mapping " + key);
         }
@@ -64,16 +64,16 @@ final class EbnfParserCombinatorsTransformMap extends AbstractMap<EbnfIdentifier
     }
 
     @Override
-    public Parser<ParserContext> getOrDefault(final Object key, final Parser<ParserContext> defaultValue) {
+    public Parser<C> getOrDefault(final Object key, final Parser<C> defaultValue) {
         return this.map.getOrDefault(key, defaultValue);
     }
 
     @Override
-    public Set<Entry<EbnfIdentifierName, Parser<ParserContext>>> entrySet() {
+    public Set<Entry<EbnfIdentifierName, Parser<C>>> entrySet() {
         return this.map.entrySet();
     }
 
-    private final Map<EbnfIdentifierName, Parser<ParserContext>> map;
+    private final Map<EbnfIdentifierName, Parser<C>> map;
 
     @Override
     public String toString() {
