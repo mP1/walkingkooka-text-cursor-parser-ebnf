@@ -27,7 +27,6 @@ import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfRuleParserToken;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class EbnfParserCombinatorDuplicateRuleExceptionTest implements ClassTesting2<EbnfParserCombinatorDuplicateRuleException>,
@@ -59,7 +58,7 @@ public final class EbnfParserCombinatorDuplicateRuleExceptionTest implements Cla
 
         checkMessage(exception, message);
         checkCause(exception, null);
-        assertEquals(duplicate, exception.duplicate(), "duplicate");
+        this.checkEquals(duplicate, exception.duplicate(), "duplicate");
     }
 
     private String message() {

@@ -26,7 +26,6 @@ import walkingkooka.visit.Visiting;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -113,13 +112,13 @@ public final class EbnfGrammarParserTokenTest extends EbnfParentParserTokenTestC
                 visited.add(t);
             }
         }.accept(range);
-        assertEquals("13613542138421394213842742", b.toString());
-        assertEquals(Lists.of(range, range, range,
-                identifier, identifier, identifier, identifier, identifier,
-                assignment, assignment, assignment, assignment, assignment,
-                terminal, terminal, terminal, terminal, terminal,
-                terminator, terminator, terminator, terminator, terminator,
-                range, range, range),
+        this.checkEquals("13613542138421394213842742", b.toString());
+        this.checkEquals(Lists.of(range, range, range,
+                        identifier, identifier, identifier, identifier, identifier,
+                        assignment, assignment, assignment, assignment, assignment,
+                        terminal, terminal, terminal, terminal, terminal,
+                        terminator, terminator, terminator, terminator, terminator,
+                        range, range, range),
                 visited,
                 "visited");
     }
