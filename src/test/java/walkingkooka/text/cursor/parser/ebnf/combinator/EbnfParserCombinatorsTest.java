@@ -60,7 +60,6 @@ import java.math.MathContext;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -77,7 +76,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
 
     @Test
     public void testParserToString() {
-        assertEquals("'abc'", createParser2().toString());
+        this.checkEquals("'abc'", createParser2().toString());
     }
 
     @Test

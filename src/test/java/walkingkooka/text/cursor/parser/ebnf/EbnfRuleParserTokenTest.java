@@ -23,7 +23,6 @@ import walkingkooka.visit.Visiting;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -85,7 +84,7 @@ public class EbnfRuleParserTokenTest extends EbnfParentParserTokenTestCase<EbnfR
 
             @Override
             protected void visit(final EbnfIdentifierParserToken t) {
-                assertEquals(identifier, t);
+                checkEquals(identifier, t);
                 b.append("5");
                 visited.add(t);
             }
@@ -117,13 +116,13 @@ public class EbnfRuleParserTokenTest extends EbnfParentParserTokenTestCase<EbnfR
                 visited.add(t);
             }
         }.accept(rule);
-        assertEquals("13613542138421394213842742", b.toString());
-        assertEquals(Lists.<Object>of(rule, rule, rule,
-                identifier, identifier, identifier, identifier, identifier,
-                assignment, assignment, assignment, assignment, assignment,
-                terminal, terminal, terminal, terminal, terminal,
-                terminator, terminator, terminator, terminator, terminator,
-                rule, rule, rule),
+        this.checkEquals("13613542138421394213842742", b.toString());
+        this.checkEquals(Lists.<Object>of(rule, rule, rule,
+                        identifier, identifier, identifier, identifier, identifier,
+                        assignment, assignment, assignment, assignment, assignment,
+                        terminal, terminal, terminal, terminal, terminal,
+                        terminator, terminator, terminator, terminator, terminator,
+                        rule, rule, rule),
                 visited,
                 "visited");
     }

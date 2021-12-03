@@ -23,7 +23,6 @@ import walkingkooka.visit.Visiting;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -185,12 +184,12 @@ public final class EbnfRangeParserTokenTest extends EbnfParentParserTokenTestCas
                 visited.add(t);
             }
         }.accept(range);
-        assertEquals("135138421374213842642", b.toString());
-        assertEquals(Lists.<Object>of(range, range, range,
-                terminal1, terminal1, terminal1, terminal1, terminal1,
-                between, between, between, between, between,
-                terminal2, terminal2, terminal2, terminal2, terminal2,
-                range, range, range),
+        this.checkEquals("135138421374213842642", b.toString());
+        this.checkEquals(Lists.<Object>of(range, range, range,
+                        terminal1, terminal1, terminal1, terminal1, terminal1,
+                        between, between, between, between, between,
+                        terminal2, terminal2, terminal2, terminal2, terminal2,
+                        range, range, range),
                 visited,
                 "visited");
     }

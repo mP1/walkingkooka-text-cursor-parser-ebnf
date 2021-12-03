@@ -23,7 +23,6 @@ import walkingkooka.text.cursor.parser.ParserToken;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public abstract class EbnfParentParserTokenTestCase<T extends EbnfParentParserToken<T>> extends EbnfParserTokenTestCase<T> {
@@ -57,7 +56,7 @@ public abstract class EbnfParentParserTokenTestCase<T extends EbnfParentParserTo
         final T token = this.createToken(text, tokens);
         this.textAndCheck(token, text);
         this.checkValue(token, tokens);
-        assertEquals(tokens, token.value(), "tokens");
+        this.checkEquals(tokens, token.value(), "tokens");
     }
 
     abstract T createTokenWithNoise();
@@ -140,6 +139,6 @@ public abstract class EbnfParentParserTokenTestCase<T extends EbnfParentParserTo
     }
 
     final void checkValue(final EbnfParentParserToken parent, final List<ParserToken> values) {
-        assertEquals(values, parent.value(), "value");
+        this.checkEquals(values, parent.value(), "value");
     }
 }

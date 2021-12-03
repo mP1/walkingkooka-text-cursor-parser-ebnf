@@ -23,7 +23,6 @@ import walkingkooka.visit.Visiting;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 public final class EbnfAlternativeParserTokenTest extends EbnfAlternativeConcatenationParentParserTokenTestCase<EbnfAlternativeParserToken> {
@@ -85,11 +84,11 @@ public final class EbnfAlternativeParserTokenTest extends EbnfAlternativeConcate
                 visited.add(t);
             }
         }.accept(alt);
-        assertEquals("1351374213742642", b.toString());
-        assertEquals(Lists.<Object>of(alt, alt, alt,
-                identifier1, identifier1, identifier1, identifier1, identifier1,
-                identifier2, identifier2, identifier2, identifier2, identifier2,
-                alt, alt, alt),
+        this.checkEquals("1351374213742642", b.toString());
+        this.checkEquals(Lists.<Object>of(alt, alt, alt,
+                        identifier1, identifier1, identifier1, identifier1, identifier1,
+                        identifier2, identifier2, identifier2, identifier2, identifier2,
+                        alt, alt, alt),
                 visited,
                 "visited");
     }

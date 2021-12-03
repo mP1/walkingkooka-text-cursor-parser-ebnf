@@ -26,7 +26,6 @@ import walkingkooka.reflect.ThrowableTesting;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class EbnfGrammarParserTokenInvalidReferencesExceptionTest implements ClassTesting2<EbnfGrammarParserTokenInvalidReferencesException>,
@@ -51,7 +50,7 @@ public final class EbnfGrammarParserTokenInvalidReferencesExceptionTest implemen
         final Set<EbnfIdentifierName> references = this.references();
         final EbnfGrammarParserTokenInvalidReferencesException exception = new EbnfGrammarParserTokenInvalidReferencesException(message, references);
         checkMessage(exception, message);
-        assertEquals(references, exception.references(), "references");
+        this.checkEquals(references, exception.references(), "references");
     }
 
     @Test
