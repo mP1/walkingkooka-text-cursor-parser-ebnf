@@ -79,7 +79,7 @@ public final class EbnfTerminalParserTest extends EbnfParserTestCase3<EbnfTermin
 
     @Test
     public void testBackslashSingleQuote() {
-        this.parseAndCheck2(singleQuote("hel\\'lo"), "hel\'lo");
+        this.parseAndCheck2(singleQuote("hel\\'lo"), "hel'lo");
     }
 
     @Test
