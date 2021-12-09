@@ -84,7 +84,7 @@ final public class EbnfIdentifierName implements Name,
     // Object..........................................................................................................
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return CASE_SENSITIVITY.hash(this.name);
     }
 
