@@ -25,7 +25,6 @@ import walkingkooka.collect.map.Maps;
 import walkingkooka.reflect.TypeNameTesting;
 import walkingkooka.text.cursor.parser.FakeParserContext;
 import walkingkooka.text.cursor.parser.Parser;
-import walkingkooka.text.cursor.parser.ParserContext;
 import walkingkooka.text.cursor.parser.Parsers;
 import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierName;
 
@@ -59,7 +58,7 @@ public final class EbnfParserCombinatorsTransformMapTest implements MapTesting2<
     }
 
     @Override
-    public EbnfParserCombinatorsTransformMap createMap() {
+    public EbnfParserCombinatorsTransformMap<FakeParserContext> createMap() {
         return EbnfParserCombinatorsTransformMap.with(this.wrappedMap());
     }
 

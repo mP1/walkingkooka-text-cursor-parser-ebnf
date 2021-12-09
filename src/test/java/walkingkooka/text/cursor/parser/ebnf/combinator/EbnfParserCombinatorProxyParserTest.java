@@ -17,13 +17,14 @@
 
 package walkingkooka.text.cursor.parser.ebnf.combinator;
 
+import walkingkooka.Cast;
 import walkingkooka.reflect.ClassTesting2;
 import walkingkooka.reflect.JavaVisibility;
 
-public final class EbnfParserCombinatorProxyParserTest implements ClassTesting2<EbnfParserCombinatorProxyParser> {
+public final class EbnfParserCombinatorProxyParserTest implements ClassTesting2<EbnfParserCombinatorProxyParser<?>> {
     @Override
-    public Class<EbnfParserCombinatorProxyParser> type() {
-        return EbnfParserCombinatorProxyParser.class;
+    public Class<EbnfParserCombinatorProxyParser<?>> type() {
+        return Cast.to(EbnfParserCombinatorProxyParser.class);
     }
 
     @Override

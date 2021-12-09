@@ -18,6 +18,7 @@
 package walkingkooka.text.cursor.parser.ebnf.combinator;
 
 import org.junit.jupiter.api.Test;
+import walkingkooka.Cast;
 import walkingkooka.collect.map.Maps;
 import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.text.cursor.parser.Parsers;
@@ -25,7 +26,7 @@ import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierName;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserTokenVisitorTesting;
 
-public final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitorTest implements EbnfParserTokenVisitorTesting<EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor, EbnfParserToken> {
+public final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitorTest implements EbnfParserTokenVisitorTesting<EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<?>, EbnfParserToken> {
 
     @Test
     public void testToString() {
@@ -33,15 +34,21 @@ public final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitorTest
     }
 
     @Override
-    public EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor createVisitor() {
-        return new EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor(Maps.of(EbnfIdentifierName.with("abc123"), Parsers.fake().setToString("xyz456")), null);
+    public EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<?> createVisitor() {
+        return new EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<>(
+                Maps.of(
+                        EbnfIdentifierName.with("abc123"),
+                        Parsers.fake().setToString("xyz456")
+                ),
+                null
+        );
     }
 
     // ClassTesting.....................................................................................................
 
     @Override
-    public Class<EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor> type() {
-        return EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor.class;
+    public Class<EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<?>> type() {
+        return Cast.to(EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor.class);
     }
 
     @Override

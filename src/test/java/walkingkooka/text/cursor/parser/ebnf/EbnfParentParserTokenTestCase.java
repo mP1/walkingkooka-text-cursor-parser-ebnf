@@ -131,14 +131,14 @@ public abstract class EbnfParentParserTokenTestCase<T extends EbnfParentParserTo
     }
 
     final void checkValue(final EbnfParserToken parent, final ParserToken... values) {
-        checkValue((EbnfParentParserToken) parent, values);
+        checkValue((EbnfParentParserToken<?>) parent, values);
     }
 
-    final void checkValue(final EbnfParentParserToken parent, final ParserToken... values) {
+    final void checkValue(final EbnfParentParserToken<?> parent, final ParserToken... values) {
         checkValue(parent, Lists.of(values));
     }
 
-    final void checkValue(final EbnfParentParserToken parent, final List<ParserToken> values) {
+    final void checkValue(final EbnfParentParserToken<?> parent, final List<ParserToken> values) {
         this.checkEquals(values, parent.value(), "value");
     }
 }
