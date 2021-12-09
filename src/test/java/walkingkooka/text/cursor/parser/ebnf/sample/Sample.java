@@ -30,7 +30,7 @@ import walkingkooka.text.cursor.parser.ebnf.EbnfParserToken;
 import java.util.Optional;
 
 public final class Sample {
-    public static void main(final String[] args) throws Exception {
+    public static void main(final String[] args) {
         final String grammar = "TEST1=\"abc\";";
 
         final TextCursor grammarFile = TextCursors.charSequence(grammar);
