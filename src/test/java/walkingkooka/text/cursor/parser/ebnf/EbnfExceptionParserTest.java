@@ -88,8 +88,7 @@ public final class EbnfExceptionParserTest extends EbnfParserTestCase2<EbnfExcep
         return EbnfGrammarParser.EXCEPTION;
     }
 
-    @Override
-    final EbnfExceptionParserToken token(final String text) {
+    @Override EbnfExceptionParserToken token(final String text) {
         return token(text, exceptionToken(), this.identifier1());
     }
 
