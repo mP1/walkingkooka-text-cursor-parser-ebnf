@@ -17,8 +17,10 @@
 
 package walkingkooka.text.cursor.parser.ebnf.combinator;
 
+import walkingkooka.text.cursor.parser.ParserContext;
+
 /**
  * Mixin that introduces helpers and tests for {@link EbnfParserCombinatorSyntaxTreeTransformer} implementations.
  */
-public interface EbnfParserCombinatorSyntaxTreeTransformerTesting<T extends EbnfParserCombinatorSyntaxTreeTransformer> {
+public interface EbnfParserCombinatorSyntaxTreeTransformerTesting<T extends EbnfParserCombinatorSyntaxTreeTransformer<C>, C extends ParserContext> {
 }
