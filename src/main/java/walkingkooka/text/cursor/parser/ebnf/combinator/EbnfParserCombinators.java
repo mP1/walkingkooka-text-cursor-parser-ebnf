@@ -38,7 +38,7 @@ public final class EbnfParserCombinators implements PublicStaticHelper {
      */
     public static <C extends ParserContext> Map<EbnfIdentifierName, Parser<C>> transform(final EbnfGrammarParserToken grammar,
                                                                                          final Map<EbnfIdentifierName, Parser<C>> identifierToParser,
-                                                                                         final EbnfParserCombinatorSyntaxTreeTransformer transformer) {
+                                                                                         final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer) {
         Objects.requireNonNull(grammar, "grammar");
         Objects.requireNonNull(identifierToParser, "identifierToParser");
         Objects.requireNonNull(transformer, "syntaxTreeTransformer");
@@ -50,7 +50,7 @@ public final class EbnfParserCombinators implements PublicStaticHelper {
 
     private static <C extends ParserContext> Map<EbnfIdentifierName, Parser<C>> transform0(final EbnfGrammarParserToken grammar,
                                                                                            final Map<EbnfIdentifierName, Parser<C>> identifierToParser,
-                                                                                           final EbnfParserCombinatorSyntaxTreeTransformer transformer) {
+                                                                                           final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer) {
 
         grammar.checkIdentifiers(identifierToParser.keySet());
         preloadProxies(grammar, identifierToParser);
