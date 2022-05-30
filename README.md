@@ -7,7 +7,7 @@
 
 
 
-Support for parsing EBNF grammar files and assembling [parser combinators](https://en.wikipedia.org/wiki/Parser_combinator.
+Support for parsing EBNF grammar files and assembling [parser combinators](https://en.wikipedia.org/wiki/Parser_combinator).
 
 # Grammars
 A grammar is a text description of the tokens of a language. The definition of any token may be a series of characters
