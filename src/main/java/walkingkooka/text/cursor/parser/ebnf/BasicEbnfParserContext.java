@@ -19,6 +19,7 @@ package walkingkooka.text.cursor.parser.ebnf;
 import walkingkooka.ToStringBuilder;
 
 import java.math.MathContext;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
@@ -86,6 +87,11 @@ final class BasicEbnfParserContext implements EbnfParserContext {
 
     @Override
     public List<String> monthNameAbbreviations() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public LocalDateTime now() {
         throw new UnsupportedOperationException();
     }
 
