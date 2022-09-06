@@ -110,12 +110,13 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
             final EbnfParserCombinatorProxyParser<C> proxy = Cast.to(parser);
 
             // the proxy will be lost but thats okay as we have the real parser now. Any forward refs will continue to hold the proxy.
-            EbnfRuleParserToken rule = this.identifierToRule.get(identifier);
+            EbnfRuleParserToken rule = this.ruleOrFail(identifier);
 
             EbnfParserToken token = rule.token();
             while (token.isIdentifier()) {
                 final EbnfIdentifierParserToken tokenIdentifier = token.cast(EbnfIdentifierParserToken.class);
-                token = this.identifierToRule.get(tokenIdentifier.value()).token();
+                token = this.ruleOrFail(tokenIdentifier.value())
+                        .token();
             }
 
             identifierAndParser.setValue(proxy.parser.setToString(token.toString()));
@@ -149,6 +150,18 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
      * Kept so we can wrap any rule parsers to show the complete rule.
      */
     private final Map<EbnfIdentifierName, EbnfRuleParserToken> identifierToRule = Maps.ordered();
+
+    /**
+     * Fetches the {@link EbnfRangeParserToken} for the given {@link EbnfIdentifierName} complaining(throwing an {@link IllegalStateException})
+     * if it is missing (null).
+     */
+    private EbnfRuleParserToken ruleOrFail(final EbnfIdentifierName identifier) {
+        final EbnfRuleParserToken rule = this.identifierToRule.get(identifier);
+        if (null == rule) {
+            throw new IllegalStateException("Missing rule \"" + identifier + "\"");
+        }
+        return rule;
+    }
 
     // ALT ........................................................................................................
 
@@ -372,4 +385,3 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
         return this.identifierToParser.toString();
     }
 }
-
