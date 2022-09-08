@@ -28,6 +28,7 @@ The parsing framework, supports abstractions for the above mentioned concepts.
 
 
 ## Extended Backus Naur form
+
 Rather than building grammars in java which can be very verbose a text DSL is preferable for readability and brevity.
 A popular format is [EBNF](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form), in one of its various
 standard but different forms. The differences between these variations is the use of different symbols to express
@@ -65,7 +66,51 @@ To assist understanding the grammar::
 - curly brackets "{}" denote repetition.
 - any token without either square or curly brackets is required.
 - a list of tokens separated by pipes "|" is an alternation list.
-- a list of tokens separated by commas "," is a concatenation of tokens.
+- a list of tokens separated by commas "," is a sequence of tokens.
+
+Note rules have a few basic limitations, with a goal of enforcing small re-usable components identified by a name which
+can then be referenced by other rules within the same grammar.
+
+
+## Repetition
+
+```
+REPEATING = { SPACE }
+```
+
+Defines a rule that matches zero or more spaces, lets pretend SPACE means " " or char 32.
+
+
+
+## Alternatives
+
+```
+ALTERNATIVES = "NSW" | "QLD" | "VIC" 
+```
+
+A list of alternatives.
+
+
+
+## Sequence
+
+```
+SEQUENCE = FIRST, [SECOND], {THIRD}
+```
+
+A sequence which includes a combination of required, optional and repeated tokens.
+
+- FIRST is required.
+- SECOND is optional.
+- THIRD may appear zero or more times.
+
+
+A sequence may not also include alternatives, the alternatives must be defined in a separate rule, and that rule name included in place.
+
+```
+STATES         = "NSW" | "QLD" | "VIC" | "SA" | "WA" | "TAS" | "ACT" | "NT"
+POSTAL_ADDRESS = STREET_NUMBER, STREET_NAME, STREET_TYPE, STATE
+```
 
 
 
@@ -83,7 +128,7 @@ turned into parsers.
 
 
 
-## [Transform Ebnf text file into CharPredicates](https://github.com/mP1/walkingkooka-text-cursor-parser-ebnf-charpredicate)
+## [Transform Ebnf grammar text file into CharPredicates](https://github.com/mP1/walkingkooka-text-cursor-parser-ebnf-charpredicate)
 The `EbnfGrammarCharPredicates.fromGrammar(...)` accepts a EBNF text file and returns a Map of name to `CharPredicate`. This is
 another use case of the possibilities of grammars and using a visitor to turn tokens into something else.
 
