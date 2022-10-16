@@ -24,9 +24,10 @@ import walkingkooka.text.CharSequences;
 final public class EbnfSymbolParserToken extends EbnfLeafParserToken<String> {
 
     static EbnfSymbolParserToken with(final String symbol, final String text) {
-        CharSequences.failIfNullOrEmpty(symbol, "symbol");
-
-        return new EbnfSymbolParserToken(symbol, checkText(text));
+        return new EbnfSymbolParserToken(
+                CharSequences.failIfNullOrEmpty(symbol, "symbol"),
+                checkText(text)
+        );
     }
 
     private EbnfSymbolParserToken(final String symbol, final String text) {

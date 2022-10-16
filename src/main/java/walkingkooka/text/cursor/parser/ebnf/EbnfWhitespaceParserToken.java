@@ -24,10 +24,10 @@ import walkingkooka.text.CharSequences;
 public final class EbnfWhitespaceParserToken extends EbnfLeafParserToken<String> {
 
     static EbnfWhitespaceParserToken with(final String value, final String text) {
-        checkValue(value);
-        CharSequences.failIfNullOrEmpty(text, "text");
-
-        return new EbnfWhitespaceParserToken(value, text);
+        return new EbnfWhitespaceParserToken(
+                checkValue(value),
+                CharSequences.failIfNullOrEmpty(text, "text")
+        );
     }
 
     private EbnfWhitespaceParserToken(final String value, final String text) {
