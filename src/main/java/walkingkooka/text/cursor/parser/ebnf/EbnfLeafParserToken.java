@@ -25,8 +25,8 @@ import java.util.Objects;
  */
 abstract class EbnfLeafParserToken<T> extends EbnfParserToken implements LeafParserToken<T> {
 
-    static void checkValue(final Object value) {
-        Objects.requireNonNull(value, "value");
+    static <T> T checkValue(final T value) {
+        return Objects.requireNonNull(value, "value");
     }
 
     EbnfLeafParserToken(final T value, final String text) {
