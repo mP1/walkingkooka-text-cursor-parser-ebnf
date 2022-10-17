@@ -141,8 +141,7 @@ public abstract class EbnfParserToken implements ParserToken {
     }
 
     static String checkText(final String text) {
-        Whitespace.failIfNullOrEmptyOrWhitespace(text, "text");
-        return text;
+        return Whitespace.failIfNullOrEmptyOrWhitespace(text, "text");
     }
 
     /**
