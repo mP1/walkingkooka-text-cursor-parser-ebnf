@@ -34,9 +34,10 @@ A popular format is [EBNF](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%9
 standard but different forms. The differences between these variations is the use of different symbols to express
 the cardinality of a token.
 
-The file below is an example of the json grammar used to define JSON in the system.
+The file below is an example of the json grammar used to define JSON in this system.
 
 [EBNF Json grammar](https://github.com/mP1/walkingkooka-tree-json/blob/master/src/main/resources/walkingkooka/text/cursor/parser/json/json-parsers.grammar)
+
 ```ebnf
 VALUE=                  NULL | BOOLEAN | STRING | NUMBER | ARRAY | OBJECT;
 VALUE_REQUIRED=         VALUE;
@@ -61,12 +62,13 @@ OBJECT_REQUIRED=        [ OBJECT_PROPERTY, [{[ WHITESPACE ], SEPARATOR, OBJECT_P
                         OBJECT_END;
 ```
 
-To assist understanding the grammar::
-- square brackets "[]" mean that token is optional.
-- curly brackets "{}" denote repetition.
-- any token without either square or curly brackets is required.
-- a list of tokens separated by pipes "|" is an alternation list.
-- a list of tokens separated by commas "," is a sequence of tokens.
+To assist understanding the grammar:
+
+- OPTIONAL: square brackets "[]" mean that token is optional and may appear zero or once.
+- REPETITION: curly brackets "{}" denote repetition, meaning the token may appear zero or more times.
+- REQUIRED:  any token without either square or curly brackets is required and must appear only once.
+- ALTERNATIVES: a list of possible tokens choices separated by pipes "|", each will be tried until one is a successful match.
+- SEQUENCE: a list of tokens separated by commas ",", each must appear in that order.
 
 Note rules have a few basic limitations, with a goal of enforcing small re-usable components identified by a name which
 can then be referenced by other rules within the same grammar.
@@ -78,7 +80,8 @@ can then be referenced by other rules within the same grammar.
 REPEATING = { SPACE }
 ```
 
-Defines a rule that matches zero or more spaces, lets pretend SPACE means " " or char 32.
+Defines a rule that matches zero or more spaces, lets pretend SPACE means " " or char 32 which means the above rule
+matches a sequence of zero or more SPACES.
 
 
 
@@ -88,7 +91,7 @@ Defines a rule that matches zero or more spaces, lets pretend SPACE means " " or
 ALTERNATIVES = "NSW" | "QLD" | "VIC" 
 ```
 
-A list of alternatives.
+A list of alternatives. Each choice in the list is tried until one is a match and the remaining are then ignored.
 
 
 
