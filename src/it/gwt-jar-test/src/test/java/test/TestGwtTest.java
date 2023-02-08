@@ -3,6 +3,7 @@ package test;
 import com.google.gwt.junit.client.GWTTestCase;
 
 import walkingkooka.collect.list.Lists;
+import walkingkooka.j2cl.locale.LocaleAware;
 import walkingkooka.text.cursor.TextCursor;
 import walkingkooka.text.cursor.TextCursors;
 import walkingkooka.text.cursor.parser.ParserReporters;
@@ -13,6 +14,7 @@ import walkingkooka.text.cursor.parser.ebnf.EbnfParserToken;
 
 import java.util.Optional;
 
+@LocaleAware
 public class TestGwtTest extends GWTTestCase {
 
     @Override
@@ -41,8 +43,11 @@ public class TestGwtTest extends GWTTestCase {
         final EbnfParserToken token = EbnfParserToken.grammar(
                 Lists.of(
                         EbnfParserToken.rule(
-                                Lists.of(
-                                        EbnfParserToken.identifier(EbnfIdentifierName.with("TEST1"), "TEST1"),
+                                Lists.<ParserToken>of(
+                                        EbnfParserToken.identifier(
+                                                EbnfIdentifierName.with("TEST1"),
+                                                "TEST1"
+                                        ),
                                         EbnfParserToken.symbol("=", "="),
                                         EbnfParserToken.terminal("abc", "\"abc\""),
                                         EbnfParserToken.symbol(";", ";")
