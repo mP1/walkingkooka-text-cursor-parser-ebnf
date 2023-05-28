@@ -170,6 +170,16 @@ public abstract class EbnfParserToken implements ParserToken {
      */
     abstract Object value();
 
+    @Override
+    public final boolean isLeaf() {
+        return this instanceof EbnfLeafParserToken;
+    }
+
+    @Override
+    public final boolean isParent() {
+        return false == this.isLeaf();
+    }
+
     // isXXX............................................................................................................
 
     /**
