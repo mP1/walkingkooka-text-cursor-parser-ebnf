@@ -16,7 +16,7 @@
  */
 package walkingkooka.text.cursor.parser.ebnf;
 
-import walkingkooka.text.cursor.parser.ParentParserToken;
+import walkingkooka.Value;
 import walkingkooka.text.cursor.parser.ParserToken;
 
 import java.util.List;
@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Base class for a token that contain another child token, with the class knowing the cardinality.
  */
-abstract class EbnfParentParserToken<T extends EbnfParentParserToken<T>> extends EbnfParserToken implements ParentParserToken {
+abstract class EbnfParentParserToken<T extends EbnfParentParserToken<T>> extends EbnfParserToken implements Value<List<ParserToken>> {
 
     EbnfParentParserToken(final List<ParserToken> value, final String text) {
         super(text);
@@ -32,7 +32,7 @@ abstract class EbnfParentParserToken<T extends EbnfParentParserToken<T>> extends
     }
 
     final List<ParserToken> checkOnlyOneToken() {
-        final List<ParserToken> without = ParentParserToken.filterWithoutNoise(this.value);
+        final List<ParserToken> without = ParserToken.filterWithoutNoise(this.value);
         final int count = without.size();
         if (count != 1) {
             throw new IllegalArgumentException("Expected 1 token(ignoring comments, symbols and whitespace) but was " + count + "=" + this.text());
@@ -41,7 +41,7 @@ abstract class EbnfParentParserToken<T extends EbnfParentParserToken<T>> extends
     }
 
     final List<ParserToken> checkAtLeastTwoTokens() {
-        final List<ParserToken> without = ParentParserToken.filterWithoutNoise(this.value);
+        final List<ParserToken> without = ParserToken.filterWithoutNoise(this.value);
         final int count = without.size();
         if (count < 2) {
             throw new IllegalArgumentException("Expected at least 2 tokens(ignoring comments, symbols and whitespace) but was " + count + "=" + this.text());
@@ -50,7 +50,7 @@ abstract class EbnfParentParserToken<T extends EbnfParentParserToken<T>> extends
     }
 
     final List<ParserToken> checkOnlyTwoTokens() {
-        final List<ParserToken> without = ParentParserToken.filterWithoutNoise(this.value);
+        final List<ParserToken> without = ParserToken.filterWithoutNoise(this.value);
         final int count = without.size();
         if (count != 2) {
             throw new IllegalArgumentException("Expected 2 tokens(ignoring comments, symbols and whitespace) but was " + count + "=" + this.text());
