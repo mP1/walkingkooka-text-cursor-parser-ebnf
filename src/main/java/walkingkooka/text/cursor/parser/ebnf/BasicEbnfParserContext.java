@@ -61,7 +61,7 @@ final class BasicEbnfParserContext implements EbnfParserContext {
     }
 
     @Override
-    public char groupingSeparator() {
+    public char groupSeparator() {
         throw new UnsupportedOperationException();
     }
 
