@@ -56,6 +56,17 @@ public final class EbnfExceptionParserToken extends EbnfParentParserToken<EbnfEx
 
     private final EbnfParserToken exception;
 
+    // children.........................................................................................................
+
+    @Override
+    public EbnfExceptionParserToken setChildren(final List<ParserToken> children) {
+        return ParserToken.parentSetChildren(
+                this,
+                children,
+                EbnfExceptionParserToken::new
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override

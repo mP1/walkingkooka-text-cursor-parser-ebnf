@@ -35,6 +35,17 @@ public final class EbnfOptionalParserToken extends EbnfParentParserToken<EbnfOpt
         this.checkOnlyOneToken();
     }
 
+    // children.........................................................................................................
+
+    @Override
+    public EbnfOptionalParserToken setChildren(final List<ParserToken> children) {
+        return ParserToken.parentSetChildren(
+                this,
+                children,
+                EbnfOptionalParserToken::new
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override

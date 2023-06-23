@@ -73,6 +73,17 @@ final public class EbnfRangeParserToken extends EbnfParentParserToken<EbnfRangeP
 
     private final EbnfParserToken end;
 
+    // children.........................................................................................................
+
+    @Override
+    public EbnfRangeParserToken setChildren(final List<ParserToken> children) {
+        return ParserToken.parentSetChildren(
+                this,
+                children,
+                EbnfRangeParserToken::new
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override

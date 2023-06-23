@@ -96,6 +96,17 @@ public final class EbnfGrammarParserToken extends EbnfParentParserToken<EbnfGram
         return EbnfParserCombinators.transform(this, identifierToParser, transformer);
     }
 
+    // children.........................................................................................................
+
+    @Override
+    public EbnfGrammarParserToken setChildren(final List<ParserToken> children) {
+        return ParserToken.parentSetChildren(
+                this,
+                children,
+                EbnfGrammarParserToken::new
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override

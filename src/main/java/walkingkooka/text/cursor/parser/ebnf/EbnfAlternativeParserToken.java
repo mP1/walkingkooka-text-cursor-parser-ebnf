@@ -35,6 +35,17 @@ final public class EbnfAlternativeParserToken extends EbnfParentParserToken<Ebnf
         this.checkAtLeastTwoTokens();
     }
 
+    // children.........................................................................................................
+
+    @Override
+    public EbnfAlternativeParserToken setChildren(final List<ParserToken> children) {
+        return ParserToken.parentSetChildren(
+                this,
+                children,
+                EbnfAlternativeParserToken::new
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override

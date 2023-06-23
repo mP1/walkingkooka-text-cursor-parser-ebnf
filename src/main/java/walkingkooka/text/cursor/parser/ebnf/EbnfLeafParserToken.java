@@ -17,7 +17,9 @@
 package walkingkooka.text.cursor.parser.ebnf;
 
 import walkingkooka.Value;
+import walkingkooka.text.cursor.parser.ParserToken;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,6 +42,14 @@ abstract class EbnfLeafParserToken<T> extends EbnfParserToken implements Value<T
     }
 
     final T value;
+
+    @Override
+    public ParserToken setChildren(final List<ParserToken> children) {
+        return ParserToken.leafSetChildren(
+                this,
+                children
+        );
+    }
 
     abstract public void accept(final EbnfParserTokenVisitor visitor);
 }
