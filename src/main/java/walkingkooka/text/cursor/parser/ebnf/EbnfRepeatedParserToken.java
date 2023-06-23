@@ -35,6 +35,17 @@ public final class EbnfRepeatedParserToken extends EbnfParentParserToken<EbnfRep
         this.checkOnlyOneToken();
     }
 
+    // children.........................................................................................................
+
+    @Override
+    public EbnfRepeatedParserToken setChildren(final List<ParserToken> children) {
+        return ParserToken.parentSetChildren(
+                this,
+                children,
+                EbnfRepeatedParserToken::new
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override

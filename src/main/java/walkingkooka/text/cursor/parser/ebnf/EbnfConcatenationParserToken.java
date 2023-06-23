@@ -35,6 +35,17 @@ public final class EbnfConcatenationParserToken extends EbnfParentParserToken<Eb
         this.checkAtLeastTwoTokens();
     }
 
+    // children.........................................................................................................
+
+    @Override
+    public EbnfConcatenationParserToken setChildren(final List<ParserToken> children) {
+        return ParserToken.parentSetChildren(
+                this,
+                children,
+                EbnfConcatenationParserToken::new
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override

@@ -28,6 +28,16 @@ public final class EbnfGrammarParserTest extends EbnfParserTestCase<EbnfGrammarP
     private final static String RULE2 = IDENTIFIER2 + "=" + TERMINAL2_TEXT + ";";
 
     @Test
+    public void testCompact2() {
+        final String text = RULE1;
+        this.parseAndCheck(
+                text,
+                grammar(text,
+                        rule1()),
+                text);
+    }
+
+    @Test
     public void testCompact() {
         final String text = RULE1 + RULE2;
         this.parseAndCheck(text,

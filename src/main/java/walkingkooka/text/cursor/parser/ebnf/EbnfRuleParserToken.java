@@ -73,6 +73,17 @@ public final class EbnfRuleParserToken extends EbnfParentParserToken<EbnfRulePar
 
     private final EbnfParserToken token;
 
+    // children.........................................................................................................
+
+    @Override
+    public EbnfRuleParserToken setChildren(final List<ParserToken> children) {
+        return ParserToken.parentSetChildren(
+                this,
+                children,
+                EbnfRuleParserToken::new
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override
