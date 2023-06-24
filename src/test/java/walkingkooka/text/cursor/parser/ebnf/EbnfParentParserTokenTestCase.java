@@ -59,11 +59,6 @@ public abstract class EbnfParentParserTokenTestCase<T extends EbnfParentParserTo
         this.checkEquals(tokens, token.value(), "tokens");
     }
 
-    @Override
-    public final void testRemoveFirstIfParentFirstChild() {
-        throw new UnsupportedOperationException();
-    }
-
     abstract T createTokenWithNoise();
 
     @Override
