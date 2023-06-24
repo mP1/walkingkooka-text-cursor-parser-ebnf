@@ -20,6 +20,7 @@ import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.visit.Visiting;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Represents a list of alternative token in the grammar.
@@ -43,6 +44,17 @@ final public class EbnfAlternativeParserToken extends EbnfParentParserToken<Ebnf
                 this,
                 children,
                 EbnfAlternativeParserToken::new
+        );
+    }
+
+    // removeFirstIf....................................................................................................
+
+    @Override
+    public EbnfAlternativeParserToken removeFirstIf(final Predicate<ParserToken> predicate) {
+        return ParserToken.parentRemoveFirstIf(
+                this,
+                predicate,
+                EbnfAlternativeParserToken.class
         );
     }
 

@@ -20,6 +20,7 @@ import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.visit.Visiting;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Represents an repeated token in the grammar.
@@ -43,6 +44,17 @@ public final class EbnfRepeatedParserToken extends EbnfParentParserToken<EbnfRep
                 this,
                 children,
                 EbnfRepeatedParserToken::new
+        );
+    }
+
+    // removeFirstIf....................................................................................................
+
+    @Override
+    public EbnfRepeatedParserToken removeFirstIf(final Predicate<ParserToken> predicate) {
+        return ParserToken.parentRemoveFirstIf(
+                this,
+                predicate,
+                EbnfRepeatedParserToken.class
         );
     }
 

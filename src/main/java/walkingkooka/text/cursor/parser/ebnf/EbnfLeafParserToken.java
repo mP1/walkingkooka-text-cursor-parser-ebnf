@@ -21,6 +21,7 @@ import walkingkooka.text.cursor.parser.ParserToken;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Base class for a leaf token. A leaf has no further breakdown into more detailed tokens.
@@ -50,6 +51,15 @@ abstract class EbnfLeafParserToken<T> extends EbnfParserToken implements Value<T
                 children
         );
     }
+
+    // removeFirstIf....................................................................................................
+
+    @Override
+    public final ParserToken removeFirstIf(final Predicate<ParserToken> predicate) {
+        return this;
+    }
+
+    // EbnfParserTokenVisitor...........................................................................................
 
     abstract public void accept(final EbnfParserTokenVisitor visitor);
 }
