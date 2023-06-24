@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * A grammar holds all the rules and is the root of the graph. Note the {@link #value()} will contain a mixture of rules,
@@ -104,6 +105,17 @@ public final class EbnfGrammarParserToken extends EbnfParentParserToken<EbnfGram
                 this,
                 children,
                 EbnfGrammarParserToken::new
+        );
+    }
+
+    // removeFirstIf....................................................................................................
+
+    @Override
+    public EbnfGrammarParserToken removeFirstIf(final Predicate<ParserToken> predicate) {
+        return ParserToken.parentRemoveFirstIf(
+                this,
+                predicate,
+                EbnfGrammarParserToken.class
         );
     }
 

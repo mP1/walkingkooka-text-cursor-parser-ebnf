@@ -20,6 +20,7 @@ import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.visit.Visiting;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Represents an exception token in the grammar. Note the grammar requires an exception to follow another token.
@@ -64,6 +65,17 @@ public final class EbnfExceptionParserToken extends EbnfParentParserToken<EbnfEx
                 this,
                 children,
                 EbnfExceptionParserToken::new
+        );
+    }
+
+    // removeFirstIf....................................................................................................
+
+    @Override
+    public EbnfExceptionParserToken removeFirstIf(final Predicate<ParserToken> predicate) {
+        return ParserToken.parentRemoveFirstIf(
+                this,
+                predicate,
+                EbnfExceptionParserToken.class
         );
     }
 

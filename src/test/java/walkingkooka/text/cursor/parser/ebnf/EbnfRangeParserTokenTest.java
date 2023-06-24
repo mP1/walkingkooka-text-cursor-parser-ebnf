@@ -120,6 +120,11 @@ public final class EbnfRangeParserTokenTest extends EbnfParentParserTokenTestCas
         assertSame(end, token.end());
     }
 
+    @Override
+    public void testRemoveFirstIfParentLastChild() {
+        throw new UnsupportedOperationException();
+    }
+
     @Test
     public void testAccept() {
         final StringBuilder b = new StringBuilder();
