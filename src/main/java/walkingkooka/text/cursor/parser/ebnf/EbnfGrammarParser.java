@@ -110,7 +110,7 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext> {
      *      | rhs , "," , rhs ;
      * </pre>
      */
-    static final Parser<EbnfParserContext> RHS = new Parser<EbnfParserContext>() {
+    static final Parser<EbnfParserContext> RHS = new Parser<>() {
 
         @Override
         public Optional<ParserToken> parse(final TextCursor cursor,
