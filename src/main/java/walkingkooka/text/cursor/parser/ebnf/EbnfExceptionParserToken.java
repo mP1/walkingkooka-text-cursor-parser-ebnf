@@ -79,6 +79,17 @@ public final class EbnfExceptionParserToken extends EbnfParentParserToken<EbnfEx
         );
     }
 
+    // removeIf.........................................................................................................
+
+    @Override
+    public EbnfExceptionParserToken removeIf(final Predicate<ParserToken> predicate) {
+        return ParserToken.parentRemoveIf(
+                this,
+                predicate,
+                EbnfExceptionParserToken.class
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override
