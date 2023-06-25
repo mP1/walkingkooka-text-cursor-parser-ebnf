@@ -107,6 +107,19 @@ public final class EbnfRuleParserToken extends EbnfParentParserToken<EbnfRulePar
         );
     }
 
+    // replaceFirstIf...................................................................................................
+
+    @Override
+    public EbnfRuleParserToken replaceFirstIf(final Predicate<ParserToken> predicate,
+                                              final ParserToken token) {
+        return ParserToken.replaceFirstIf(
+                this,
+                predicate,
+                token,
+                EbnfRuleParserToken.class
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override

@@ -107,6 +107,19 @@ final public class EbnfRangeParserToken extends EbnfParentParserToken<EbnfRangeP
         );
     }
 
+    // replaceFirstIf...................................................................................................
+
+    @Override
+    public EbnfRangeParserToken replaceFirstIf(final Predicate<ParserToken> predicate,
+                                               final ParserToken token) {
+        return ParserToken.replaceFirstIf(
+                this,
+                predicate,
+                token,
+                EbnfRangeParserToken.class
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override
