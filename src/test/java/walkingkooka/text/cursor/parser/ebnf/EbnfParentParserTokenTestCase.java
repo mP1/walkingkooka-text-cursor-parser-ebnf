@@ -59,8 +59,6 @@ public abstract class EbnfParentParserTokenTestCase<T extends EbnfParentParserTo
         this.checkEquals(tokens, token.value(), "tokens");
     }
 
-    abstract T createTokenWithNoise();
-
     @Override
     public final T createToken(final String text) {
         return this.createToken(text, this.tokens());
@@ -128,10 +126,6 @@ public abstract class EbnfParentParserTokenTestCase<T extends EbnfParentParserTo
 
     final EbnfSymbolParserToken terminator() {
         return symbol(";");
-    }
-
-    final void checkValue(final EbnfParserToken parent, final ParserToken... values) {
-        checkValue((EbnfParentParserToken<?>) parent, values);
     }
 
     final void checkValue(final EbnfParentParserToken<?> parent, final ParserToken... values) {
