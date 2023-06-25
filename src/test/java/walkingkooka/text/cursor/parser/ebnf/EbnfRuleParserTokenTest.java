@@ -148,11 +148,6 @@ public class EbnfRuleParserTokenTest extends EbnfParentParserTokenTestCase<EbnfR
     }
 
     @Override
-    EbnfRuleParserToken createTokenWithNoise() {
-        return this.createDifferentToken();
-    }
-
-    @Override
     public Class<EbnfRuleParserToken> type() {
         return EbnfRuleParserToken.class;
     }
