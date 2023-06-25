@@ -59,6 +59,14 @@ abstract class EbnfLeafParserToken<T> extends EbnfParserToken implements Value<T
         return this;
     }
 
+    // removeIf....................................................................................................
+
+    @Override
+    public final ParserToken removeIf(final Predicate<ParserToken> predicate) {
+        Objects.requireNonNull(predicate, "predicate");
+        return this;
+    }
+
     // EbnfParserTokenVisitor...........................................................................................
 
     abstract public void accept(final EbnfParserTokenVisitor visitor);
