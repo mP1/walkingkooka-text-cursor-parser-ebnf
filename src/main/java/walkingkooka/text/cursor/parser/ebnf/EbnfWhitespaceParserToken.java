@@ -57,6 +57,19 @@ public final class EbnfWhitespaceParserToken extends EbnfLeafParserToken<String>
         );
     }
 
+    // replaceIf........................................................................................................
+
+    @Override
+    public EbnfWhitespaceParserToken replaceIf(final Predicate<ParserToken> predicate,
+                                               final ParserToken token) {
+        return ParserToken.replaceIf(
+                this,
+                predicate,
+                token,
+                EbnfWhitespaceParserToken.class
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override

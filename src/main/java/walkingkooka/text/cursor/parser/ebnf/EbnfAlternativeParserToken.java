@@ -82,6 +82,19 @@ final public class EbnfAlternativeParserToken extends EbnfParentParserToken<Ebnf
         );
     }
 
+    // replaceIf........................................................................................................
+
+    @Override
+    public EbnfAlternativeParserToken replaceIf(final Predicate<ParserToken> predicate,
+                                                final ParserToken token) {
+        return ParserToken.replaceIf(
+                this,
+                predicate,
+                token,
+                EbnfAlternativeParserToken.class
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override
