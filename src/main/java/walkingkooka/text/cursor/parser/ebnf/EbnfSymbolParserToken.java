@@ -57,6 +57,19 @@ final public class EbnfSymbolParserToken extends EbnfLeafParserToken<String> {
         );
     }
 
+    // replaceIf........................................................................................................
+
+    @Override
+    public EbnfSymbolParserToken replaceIf(final Predicate<ParserToken> predicate,
+                                           final ParserToken token) {
+        return ParserToken.replaceIf(
+                this,
+                predicate,
+                token,
+                EbnfSymbolParserToken.class
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override

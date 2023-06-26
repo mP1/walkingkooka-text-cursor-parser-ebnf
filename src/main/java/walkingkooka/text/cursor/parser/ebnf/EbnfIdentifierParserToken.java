@@ -49,6 +49,19 @@ public final class EbnfIdentifierParserToken extends EbnfLeafParserToken<EbnfIde
         );
     }
 
+    // replaceIf........................................................................................................
+
+    @Override
+    public EbnfIdentifierParserToken replaceIf(final Predicate<ParserToken> predicate,
+                                               final ParserToken token) {
+        return ParserToken.replaceIf(
+                this,
+                predicate,
+                token,
+                EbnfIdentifierParserToken.class
+        );
+    }
+
     // EbnfParserTokenVisitor............................................................................................
 
     @Override
