@@ -63,7 +63,7 @@ public final class EbnfConcatenationParserToken extends EbnfParentParserToken<Eb
 
     @Override
     public EbnfConcatenationParserToken removeIf(final Predicate<ParserToken> predicate) {
-        return ParserToken.parentRemoveIf(
+        return ParserToken.removeIfParent(
                 this,
                 predicate,
                 EbnfConcatenationParserToken.class
