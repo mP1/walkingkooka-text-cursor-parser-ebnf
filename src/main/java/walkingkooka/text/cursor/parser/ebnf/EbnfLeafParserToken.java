@@ -52,13 +52,6 @@ abstract class EbnfLeafParserToken<T> extends EbnfParserToken implements Value<T
         );
     }
 
-    // removeFirstIf....................................................................................................
-
-    @Override
-    public final ParserToken removeFirstIf(final Predicate<ParserToken> predicate) {
-        return this;
-    }
-
     // removeIf....................................................................................................
 
     @Override
