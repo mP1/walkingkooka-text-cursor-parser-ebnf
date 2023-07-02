@@ -89,7 +89,7 @@ final public class EbnfRangeParserToken extends EbnfParentParserToken<EbnfRangeP
 
     @Override
     public EbnfRangeParserToken removeFirstIf(final Predicate<ParserToken> predicate) {
-        return ParserToken.parentRemoveFirstIf(
+        return ParserToken.removeFirstIfParent(
                 this,
                 predicate,
                 EbnfRangeParserToken.class
