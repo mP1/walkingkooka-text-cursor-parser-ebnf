@@ -62,7 +62,7 @@ public final class EbnfRepeatedParserToken extends EbnfParentParserToken<EbnfRep
     // removeIf.........................................................................................................
 
     @Override
-    public EbnfRepeatedParserToken removeIf(final Predicate<ParserToken> predicate) {
+    public Optional<EbnfRepeatedParserToken> removeIf(final Predicate<ParserToken> predicate) {
         return ParserToken.removeIfParent(
                 this,
                 predicate,

@@ -56,6 +56,17 @@ public final class EbnfWhitespaceParserToken extends EbnfLeafParserToken<String>
         );
     }
 
+    // removeIf.........................................................................................................
+
+    @Override
+    public Optional<EbnfWhitespaceParserToken> removeIf(final Predicate<ParserToken> predicate) {
+        return ParserToken.removeIfLeaf(
+                this,
+                predicate,
+                EbnfWhitespaceParserToken.class
+        );
+    }
+
     // replaceFirstIf...................................................................................................
 
     @Override

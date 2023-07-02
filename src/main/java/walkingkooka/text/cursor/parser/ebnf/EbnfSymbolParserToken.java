@@ -56,6 +56,17 @@ final public class EbnfSymbolParserToken extends EbnfLeafParserToken<String> {
         );
     }
 
+    // removeIf.........................................................................................................
+
+    @Override
+    public Optional<EbnfSymbolParserToken> removeIf(final Predicate<ParserToken> predicate) {
+        return ParserToken.removeIfLeaf(
+                this,
+                predicate,
+                EbnfSymbolParserToken.class
+        );
+    }
+
     // replaceFirstIf...................................................................................................
 
     @Override

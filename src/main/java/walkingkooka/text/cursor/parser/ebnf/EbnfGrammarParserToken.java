@@ -122,7 +122,7 @@ public final class EbnfGrammarParserToken extends EbnfParentParserToken<EbnfGram
     // removeIf.........................................................................................................
 
     @Override
-    public EbnfGrammarParserToken removeIf(final Predicate<ParserToken> predicate) {
+    public Optional<EbnfGrammarParserToken> removeIf(final Predicate<ParserToken> predicate) {
         return ParserToken.removeIfParent(
                 this,
                 predicate,

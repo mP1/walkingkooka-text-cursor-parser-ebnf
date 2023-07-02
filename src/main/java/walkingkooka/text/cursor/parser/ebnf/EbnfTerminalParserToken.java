@@ -48,6 +48,17 @@ public final class EbnfTerminalParserToken extends EbnfLeafParserToken<String> {
         );
     }
 
+    // removeIf........................................................................................................
+
+    @Override
+    public Optional<EbnfTerminalParserToken> removeIf(final Predicate<ParserToken> predicate) {
+        return ParserToken.removeIfLeaf(
+                this,
+                predicate,
+                EbnfTerminalParserToken.class
+        );
+    }
+
     // replaceFirstIf...................................................................................................
 
     @Override

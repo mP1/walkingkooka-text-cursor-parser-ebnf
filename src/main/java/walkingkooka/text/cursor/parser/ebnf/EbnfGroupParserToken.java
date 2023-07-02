@@ -62,7 +62,7 @@ public final class EbnfGroupParserToken extends EbnfParentParserToken<EbnfGroupP
     // removeIf.........................................................................................................
 
     @Override
-    public EbnfGroupParserToken removeIf(final Predicate<ParserToken> predicate) {
+    public Optional<EbnfGroupParserToken> removeIf(final Predicate<ParserToken> predicate) {
         return ParserToken.removeIfParent(
                 this,
                 predicate,
