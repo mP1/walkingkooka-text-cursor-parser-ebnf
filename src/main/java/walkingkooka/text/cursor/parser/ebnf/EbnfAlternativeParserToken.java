@@ -51,7 +51,7 @@ final public class EbnfAlternativeParserToken extends EbnfParentParserToken<Ebnf
 
     @Override
     public EbnfAlternativeParserToken removeFirstIf(final Predicate<ParserToken> predicate) {
-        return ParserToken.parentRemoveFirstIf(
+        return ParserToken.removeFirstIfParent(
                 this,
                 predicate,
                 EbnfAlternativeParserToken.class

@@ -72,7 +72,7 @@ public final class EbnfExceptionParserToken extends EbnfParentParserToken<EbnfEx
 
     @Override
     public EbnfExceptionParserToken removeFirstIf(final Predicate<ParserToken> predicate) {
-        return ParserToken.parentRemoveFirstIf(
+        return ParserToken.removeFirstIfParent(
                 this,
                 predicate,
                 EbnfExceptionParserToken.class
