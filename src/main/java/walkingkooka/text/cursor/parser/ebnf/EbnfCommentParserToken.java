@@ -18,6 +18,7 @@ package walkingkooka.text.cursor.parser.ebnf;
 
 import walkingkooka.text.cursor.parser.ParserToken;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
@@ -41,6 +42,17 @@ public final class EbnfCommentParserToken extends EbnfLeafParserToken<String> {
     @Override
     public boolean isNoise() {
         return true;
+    }
+
+    // removeFirstIf....................................................................................................
+
+    @Override
+    public Optional<EbnfCommentParserToken> removeFirstIf(final Predicate<ParserToken> predicate) {
+        return ParserToken.removeFirstIfLeaf(
+                this,
+                predicate,
+                EbnfCommentParserToken.class
+        );
     }
 
     // replaceFirstIf...................................................................................................

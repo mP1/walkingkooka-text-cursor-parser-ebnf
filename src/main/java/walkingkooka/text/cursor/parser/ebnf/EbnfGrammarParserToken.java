@@ -111,7 +111,7 @@ public final class EbnfGrammarParserToken extends EbnfParentParserToken<EbnfGram
     // removeFirstIf....................................................................................................
 
     @Override
-    public EbnfGrammarParserToken removeFirstIf(final Predicate<ParserToken> predicate) {
+    public Optional<EbnfGrammarParserToken> removeFirstIf(final Predicate<ParserToken> predicate) {
         return ParserToken.removeFirstIfParent(
                 this,
                 predicate,
