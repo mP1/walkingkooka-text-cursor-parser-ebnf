@@ -100,7 +100,7 @@ final public class EbnfRangeParserToken extends EbnfParentParserToken<EbnfRangeP
     // removeIf.........................................................................................................
 
     @Override
-    public EbnfRangeParserToken removeIf(final Predicate<ParserToken> predicate) {
+    public Optional<EbnfRangeParserToken> removeIf(final Predicate<ParserToken> predicate) {
         return ParserToken.removeIfParent(
                 this,
                 predicate,

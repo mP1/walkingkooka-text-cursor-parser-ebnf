@@ -55,6 +55,17 @@ public final class EbnfCommentParserToken extends EbnfLeafParserToken<String> {
         );
     }
 
+    // removeIf.........................................................................................................
+
+    @Override
+    public Optional<EbnfCommentParserToken> removeIf(final Predicate<ParserToken> predicate) {
+        return ParserToken.removeIfLeaf(
+                this,
+                predicate,
+                EbnfCommentParserToken.class
+        );
+    }
+
     // replaceFirstIf...................................................................................................
 
     @Override
