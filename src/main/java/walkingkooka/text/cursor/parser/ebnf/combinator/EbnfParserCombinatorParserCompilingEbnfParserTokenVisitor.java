@@ -297,7 +297,8 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
 
     @Override
     protected void endVisit(final EbnfRepeatedParserToken token) {
-        final Parser<C> parser = Parsers.repeating(this.children.get(0))
+        final Parser<C> parser = this.children.get(0)
+                .repeating()
                 .setToString(token.toString());
         this.exit();
         this.add(
