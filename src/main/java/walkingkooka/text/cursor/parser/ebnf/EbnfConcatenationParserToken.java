@@ -88,7 +88,7 @@ public final class EbnfConcatenationParserToken extends EbnfParentParserToken<Eb
 
     @Override
     public EbnfConcatenationParserToken replaceIf(final Predicate<ParserToken> predicate,
-                                                  final ParserToken token) {
+                                                  final Function<ParserToken, ParserToken> token) {
         return ParserToken.replaceIf(
                 this,
                 predicate,

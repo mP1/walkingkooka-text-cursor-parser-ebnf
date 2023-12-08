@@ -126,7 +126,7 @@ final public class EbnfRangeParserToken extends EbnfParentParserToken<EbnfRangeP
 
     @Override
     public EbnfRangeParserToken replaceIf(final Predicate<ParserToken> predicate,
-                                          final ParserToken token) {
+                                          final Function<ParserToken, ParserToken> token) {
         return ParserToken.replaceIf(
                 this,
                 predicate,
