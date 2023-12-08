@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -134,11 +135,11 @@ public final class EbnfGrammarParserToken extends EbnfParentParserToken<EbnfGram
 
     @Override
     public EbnfGrammarParserToken replaceFirstIf(final Predicate<ParserToken> predicate,
-                                                 final ParserToken token) {
+                                                 final Function<ParserToken, ParserToken> mapper) {
         return ParserToken.replaceFirstIf(
                 this,
                 predicate,
-                token,
+                mapper,
                 EbnfGrammarParserToken.class
         );
     }
