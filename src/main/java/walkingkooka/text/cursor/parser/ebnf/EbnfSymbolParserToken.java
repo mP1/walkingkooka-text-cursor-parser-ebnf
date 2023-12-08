@@ -20,6 +20,7 @@ import walkingkooka.text.CharSequences;
 import walkingkooka.text.cursor.parser.ParserToken;
 
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -71,11 +72,11 @@ final public class EbnfSymbolParserToken extends EbnfLeafParserToken<String> {
 
     @Override
     public EbnfSymbolParserToken replaceFirstIf(final Predicate<ParserToken> predicate,
-                                                final ParserToken token) {
+                                                final Function<ParserToken, ParserToken> mapper) {
         return ParserToken.replaceFirstIf(
                 this,
                 predicate,
-                token,
+                mapper,
                 EbnfSymbolParserToken.class
         );
     }
