@@ -20,7 +20,6 @@ import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.visit.Visiting;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -46,28 +45,6 @@ public final class EbnfRepeatedParserToken extends EbnfParentParserToken<EbnfRep
                 this,
                 children,
                 EbnfRepeatedParserToken::new
-        );
-    }
-
-    // removeFirstIf....................................................................................................
-
-    @Override
-    public Optional<EbnfRepeatedParserToken> removeFirstIf(final Predicate<ParserToken> predicate) {
-        return ParserToken.removeFirstIfParent(
-                this,
-                predicate,
-                EbnfRepeatedParserToken.class
-        );
-    }
-
-    // removeIf.........................................................................................................
-
-    @Override
-    public Optional<EbnfRepeatedParserToken> removeIf(final Predicate<ParserToken> predicate) {
-        return ParserToken.removeIfParent(
-                this,
-                predicate,
-                EbnfRepeatedParserToken.class
         );
     }
 
