@@ -17,10 +17,6 @@
 package walkingkooka.text.cursor.parser.ebnf;
 
 import walkingkooka.text.CharSequences;
-import walkingkooka.text.cursor.parser.ParserToken;
-
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * Holds the combination of whitespace or comments.
@@ -43,32 +39,6 @@ public final class EbnfWhitespaceParserToken extends EbnfLeafParserToken<String>
     @Override
     public boolean isNoise() {
         return true;
-    }
-
-    // replaceFirstIf...................................................................................................
-
-    @Override
-    public EbnfWhitespaceParserToken replaceFirstIf(final Predicate<ParserToken> predicate,
-                                                    final Function<ParserToken, ParserToken> mapper) {
-        return ParserToken.replaceFirstIf(
-                this,
-                predicate,
-                mapper,
-                EbnfWhitespaceParserToken.class
-        );
-    }
-
-    // replaceIf........................................................................................................
-
-    @Override
-    public EbnfWhitespaceParserToken replaceIf(final Predicate<ParserToken> predicate,
-                                               final Function<ParserToken, ParserToken> token) {
-        return ParserToken.replaceIf(
-                this,
-                predicate,
-                token,
-                EbnfWhitespaceParserToken.class
-        );
     }
 
     // EbnfParserTokenVisitor............................................................................................

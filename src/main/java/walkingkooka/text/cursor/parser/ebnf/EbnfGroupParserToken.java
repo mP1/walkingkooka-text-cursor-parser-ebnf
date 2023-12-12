@@ -20,8 +20,6 @@ import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.visit.Visiting;
 
 import java.util.List;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * Represents an grouped token in the grammar.
@@ -45,32 +43,6 @@ public final class EbnfGroupParserToken extends EbnfParentParserToken<EbnfGroupP
                 this,
                 children,
                 EbnfGroupParserToken::new
-        );
-    }
-
-    // replaceFirstIf...................................................................................................
-
-    @Override
-    public EbnfGroupParserToken replaceFirstIf(final Predicate<ParserToken> predicate,
-                                               final Function<ParserToken, ParserToken> mapper) {
-        return ParserToken.replaceFirstIf(
-                this,
-                predicate,
-                mapper,
-                EbnfGroupParserToken.class
-        );
-    }
-
-    // replaceIf........................................................................................................
-
-    @Override
-    public EbnfGroupParserToken replaceIf(final Predicate<ParserToken> predicate,
-                                          final Function<ParserToken, ParserToken> token) {
-        return ParserToken.replaceIf(
-                this,
-                predicate,
-                token,
-                EbnfGroupParserToken.class
         );
     }
 

@@ -17,10 +17,6 @@
 package walkingkooka.text.cursor.parser.ebnf;
 
 import walkingkooka.text.CharSequences;
-import walkingkooka.text.cursor.parser.ParserToken;
-
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * Holds any of the symbols that separate actual tokens, such as the parens around a grouping.
@@ -43,32 +39,6 @@ final public class EbnfSymbolParserToken extends EbnfLeafParserToken<String> {
     @Override
     public boolean isNoise() {
         return true;
-    }
-
-    // replaceFirstIf...................................................................................................
-
-    @Override
-    public EbnfSymbolParserToken replaceFirstIf(final Predicate<ParserToken> predicate,
-                                                final Function<ParserToken, ParserToken> mapper) {
-        return ParserToken.replaceFirstIf(
-                this,
-                predicate,
-                mapper,
-                EbnfSymbolParserToken.class
-        );
-    }
-
-    // replaceIf........................................................................................................
-
-    @Override
-    public EbnfSymbolParserToken replaceIf(final Predicate<ParserToken> predicate,
-                                           final Function<ParserToken, ParserToken> token) {
-        return ParserToken.replaceIf(
-                this,
-                predicate,
-                token,
-                EbnfSymbolParserToken.class
-        );
     }
 
     // EbnfParserTokenVisitor............................................................................................

@@ -16,11 +16,6 @@
  */
 package walkingkooka.text.cursor.parser.ebnf;
 
-import walkingkooka.text.cursor.parser.ParserToken;
-
-import java.util.function.Function;
-import java.util.function.Predicate;
-
 /**
  * Holds the text for an identifier. Identifiers may appear on the left of a definition or as a reference to another rule definition.
  */
@@ -35,32 +30,6 @@ public final class EbnfIdentifierParserToken extends EbnfLeafParserToken<EbnfIde
 
     private EbnfIdentifierParserToken(final EbnfIdentifierName value, final String text) {
         super(value, text);
-    }
-
-    // replaceFirstIf...................................................................................................
-
-    @Override
-    public EbnfIdentifierParserToken replaceFirstIf(final Predicate<ParserToken> predicate,
-                                                    final Function<ParserToken, ParserToken> mapper) {
-        return ParserToken.replaceFirstIf(
-                this,
-                predicate,
-                mapper,
-                EbnfIdentifierParserToken.class
-        );
-    }
-
-    // replaceIf........................................................................................................
-
-    @Override
-    public EbnfIdentifierParserToken replaceIf(final Predicate<ParserToken> predicate,
-                                               final Function<ParserToken, ParserToken> token) {
-        return ParserToken.replaceIf(
-                this,
-                predicate,
-                token,
-                EbnfIdentifierParserToken.class
-        );
     }
 
     // EbnfParserTokenVisitor............................................................................................
