@@ -20,8 +20,6 @@ import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.visit.Visiting;
 
 import java.util.List;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * Represents a list of alternative token in the grammar.
@@ -83,32 +81,6 @@ final public class EbnfRangeParserToken extends EbnfParentParserToken<EbnfRangeP
                 this,
                 children,
                 EbnfRangeParserToken::new
-        );
-    }
-
-    // replaceFirstIf...................................................................................................
-
-    @Override
-    public EbnfRangeParserToken replaceFirstIf(final Predicate<ParserToken> predicate,
-                                               final Function<ParserToken, ParserToken> mapper) {
-        return ParserToken.replaceFirstIf(
-                this,
-                predicate,
-                mapper,
-                EbnfRangeParserToken.class
-        );
-    }
-
-    // replaceIf........................................................................................................
-
-    @Override
-    public EbnfRangeParserToken replaceIf(final Predicate<ParserToken> predicate,
-                                          final Function<ParserToken, ParserToken> token) {
-        return ParserToken.replaceIf(
-                this,
-                predicate,
-                token,
-                EbnfRangeParserToken.class
         );
     }
 

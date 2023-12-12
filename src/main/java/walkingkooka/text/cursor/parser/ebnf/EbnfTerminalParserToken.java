@@ -16,11 +16,6 @@
  */
 package walkingkooka.text.cursor.parser.ebnf;
 
-import walkingkooka.text.cursor.parser.ParserToken;
-
-import java.util.function.Function;
-import java.util.function.Predicate;
-
 /**
  * Holds the terminal token portion of the rhs of a rule.
  */
@@ -35,32 +30,6 @@ public final class EbnfTerminalParserToken extends EbnfLeafParserToken<String> {
 
     private EbnfTerminalParserToken(final String value, final String text) {
         super(value, text);
-    }
-
-    // replaceFirstIf...................................................................................................
-
-    @Override
-    public EbnfTerminalParserToken replaceFirstIf(final Predicate<ParserToken> predicate,
-                                                  final Function<ParserToken, ParserToken> mapper) {
-        return ParserToken.replaceFirstIf(
-                this,
-                predicate,
-                mapper,
-                EbnfTerminalParserToken.class
-        );
-    }
-
-    // replaceIf........................................................................................................
-
-    @Override
-    public EbnfTerminalParserToken replaceIf(final Predicate<ParserToken> predicate,
-                                             final Function<ParserToken, ParserToken> token) {
-        return ParserToken.replaceIf(
-                this,
-                predicate,
-                token,
-                EbnfTerminalParserToken.class
-        );
     }
 
     // EbnfParserTokenVisitor............................................................................................

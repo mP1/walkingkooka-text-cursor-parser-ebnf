@@ -20,8 +20,6 @@ import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.visit.Visiting;
 
 import java.util.List;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * Represents a single rule definition within a grammar.
@@ -83,32 +81,6 @@ public final class EbnfRuleParserToken extends EbnfParentParserToken<EbnfRulePar
                 this,
                 children,
                 EbnfRuleParserToken::new
-        );
-    }
-
-    // replaceFirstIf...................................................................................................
-
-    @Override
-    public EbnfRuleParserToken replaceFirstIf(final Predicate<ParserToken> predicate,
-                                              final Function<ParserToken, ParserToken> mapper) {
-        return ParserToken.replaceFirstIf(
-                this,
-                predicate,
-                mapper,
-                EbnfRuleParserToken.class
-        );
-    }
-
-    // replaceIf........................................................................................................
-
-    @Override
-    public EbnfRuleParserToken replaceIf(final Predicate<ParserToken> predicate,
-                                         final Function<ParserToken, ParserToken> token) {
-        return ParserToken.replaceIf(
-                this,
-                predicate,
-                token,
-                EbnfRuleParserToken.class
         );
     }
 

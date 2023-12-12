@@ -30,8 +30,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * A grammar holds all the rules and is the root of the graph. Note the {@link #value()} will contain a mixture of rules,
@@ -106,32 +104,6 @@ public final class EbnfGrammarParserToken extends EbnfParentParserToken<EbnfGram
                 this,
                 children,
                 EbnfGrammarParserToken::new
-        );
-    }
-
-    // replaceFirstIf...................................................................................................
-
-    @Override
-    public EbnfGrammarParserToken replaceFirstIf(final Predicate<ParserToken> predicate,
-                                                 final Function<ParserToken, ParserToken> mapper) {
-        return ParserToken.replaceFirstIf(
-                this,
-                predicate,
-                mapper,
-                EbnfGrammarParserToken.class
-        );
-    }
-
-    // replaceIf........................................................................................................
-
-    @Override
-    public EbnfGrammarParserToken replaceIf(final Predicate<ParserToken> predicate,
-                                            final Function<ParserToken, ParserToken> token) {
-        return ParserToken.replaceIf(
-                this,
-                predicate,
-                token,
-                EbnfGrammarParserToken.class
         );
     }
 

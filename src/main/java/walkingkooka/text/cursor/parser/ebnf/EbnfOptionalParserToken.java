@@ -20,8 +20,6 @@ import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.visit.Visiting;
 
 import java.util.List;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * Represents an optional token in the grammar.
@@ -45,32 +43,6 @@ public final class EbnfOptionalParserToken extends EbnfParentParserToken<EbnfOpt
                 this,
                 children,
                 EbnfOptionalParserToken::new
-        );
-    }
-
-    // replaceFirstIf...................................................................................................
-
-    @Override
-    public EbnfOptionalParserToken replaceFirstIf(final Predicate<ParserToken> predicate,
-                                                  final Function<ParserToken, ParserToken> mapper) {
-        return ParserToken.replaceFirstIf(
-                this,
-                predicate,
-                mapper,
-                EbnfOptionalParserToken.class
-        );
-    }
-
-    // replaceIf........................................................................................................
-
-    @Override
-    public EbnfOptionalParserToken replaceIf(final Predicate<ParserToken> predicate,
-                                             final Function<ParserToken, ParserToken> token) {
-        return ParserToken.replaceIf(
-                this,
-                predicate,
-                token,
-                EbnfOptionalParserToken.class
         );
     }
 
