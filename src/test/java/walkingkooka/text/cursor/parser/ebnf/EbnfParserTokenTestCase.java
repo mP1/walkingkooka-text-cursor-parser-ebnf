@@ -74,7 +74,8 @@ public abstract class EbnfParserTokenTestCase<T extends EbnfParserToken> impleme
     public final Predicate<String> isMethodIgnoreMethodFilter() {
         return (m) -> m.equals("isLeaf") ||
                 m.equals("isNoise") ||
-                m.equals("isParent");
+                m.equals("isParent") ||
+                m.equals("isEmpty");
     }
 
     // ClassTestCase.................................................................................................
