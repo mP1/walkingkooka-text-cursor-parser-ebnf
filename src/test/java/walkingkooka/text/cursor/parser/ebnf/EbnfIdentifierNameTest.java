@@ -23,7 +23,6 @@ import walkingkooka.naming.NameTesting2;
 import walkingkooka.reflect.ClassTesting2;
 import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.text.CaseSensitivity;
-import walkingkooka.util.PropertiesPath;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -32,7 +31,7 @@ final public class EbnfIdentifierNameTest implements ClassTesting2<EbnfIdentifie
 
     @Test
     public void testCreateContainsSeparatorFails() {
-        assertThrows(InvalidCharacterException.class, () -> EbnfIdentifierName.with("xyz" + PropertiesPath.SEPARATOR.string()));
+        assertThrows(InvalidCharacterException.class, () -> EbnfIdentifierName.with("xyz."));
     }
 
     @Test
