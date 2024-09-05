@@ -18,6 +18,7 @@ package walkingkooka.text.cursor.parser.ebnf;
 
 import walkingkooka.collect.list.Lists;
 import walkingkooka.collect.set.Sets;
+import walkingkooka.collect.set.SortedSets;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserContext;
 import walkingkooka.text.cursor.parser.ParserToken;
@@ -81,7 +82,7 @@ public final class EbnfGrammarParserToken extends EbnfParentParserToken<EbnfGram
             throw new EbnfGrammarParserTokenDuplicateIdentifiersException(duplicates.size() + " rules with the same identifier=" + duplicates, duplicates);
         }
 
-        final Set<EbnfIdentifierName> missing = Sets.sorted();
+        final Set<EbnfIdentifierName> missing = SortedSets.tree();
         missing.addAll(visitor.references);
         missing.removeAll(identifiers.keySet());
         missing.removeAll(external);
