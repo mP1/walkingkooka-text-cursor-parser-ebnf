@@ -392,7 +392,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
             if (!grammar.isPresent()) {
                 fail("Failed to parse a grammar from " + CharSequences.quote(resourceName) + "\n" + text);
             }
-            if (!cursor.isEmpty()) {
+            if (cursor.isNotEmpty()) {
                 final TextCursorSavePoint save = cursor.save();
                 cursor.end();
                 final CharSequence remaining = save.textBetween();

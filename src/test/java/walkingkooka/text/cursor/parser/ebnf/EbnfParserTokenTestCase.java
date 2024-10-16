@@ -75,7 +75,8 @@ public abstract class EbnfParserTokenTestCase<T extends EbnfParserToken> impleme
         return (m) -> m.equals("isLeaf") ||
                 m.equals("isNoise") ||
                 m.equals("isParent") ||
-                m.equals("isEmpty");
+                m.equals("isEmpty") ||
+                m.equals("isNotEmpty");
     }
 
     // ClassTestCase.................................................................................................
