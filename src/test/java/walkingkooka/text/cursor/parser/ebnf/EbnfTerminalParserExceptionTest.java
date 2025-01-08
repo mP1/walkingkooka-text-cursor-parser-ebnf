@@ -31,7 +31,7 @@ public class EbnfTerminalParserExceptionTest implements StandardThrowableTesting
     public EbnfTerminalParserException createThrowable(final String message, final Throwable cause) {
         return new EbnfTerminalParserException(message, cause);
     }
-    
+
     @Override
     public Class<EbnfTerminalParserException> type() {
         return EbnfTerminalParserException.class;

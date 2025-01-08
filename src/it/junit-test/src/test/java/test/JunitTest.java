@@ -44,9 +44,9 @@ public class JunitTest {
                 .parse(grammarFile, EbnfParserContexts.basic());
 
         final EbnfParserToken token = EbnfParserToken.grammar(Lists.<ParserToken>of(EbnfParserToken.rule(Lists.<ParserToken>of(EbnfParserToken.identifier(EbnfIdentifierName.with("TEST1"), "TEST1"),
-                EbnfParserToken.symbol("=", "="),
-                EbnfParserToken.terminal("abc", "\"abc\""),
-                EbnfParserToken.symbol(";", ";")),
+                        EbnfParserToken.symbol("=", "="),
+                        EbnfParserToken.terminal("abc", "\"abc\""),
+                        EbnfParserToken.symbol(";", ";")),
                 grammar)), grammar);
 
         Assert.assertEquals("parsed " + CharSequences.quoteAndEscape(grammar),

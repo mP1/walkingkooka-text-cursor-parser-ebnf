@@ -35,8 +35,7 @@ public abstract class EbnfGroupOptionalRepeatParentParserTokenTestCase<T extends
         assertThrows(IllegalArgumentException.class, () -> this.createToken(this.text(), this.identifier1(), this.comment2(), this.identifier("identifier3")));
     }
 
-    @Override
-    final List<ParserToken> tokens() {
+    @Override final List<ParserToken> tokens() {
         return Lists.of(this.identifier1());
     }
 
@@ -45,8 +44,7 @@ public abstract class EbnfGroupOptionalRepeatParentParserTokenTestCase<T extends
         return this.createToken(this.openChar() + "different" + this.closeChar(), this.identifier("different"));
     }
 
-    @Override
-    final public String text() {
+    @Override final public String text() {
         return this.openChar() + this.identifier1().text() + this.closeChar();
     }
 

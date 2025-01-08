@@ -57,7 +57,7 @@ final class EbnfParserCombinatorsTransformMap<C extends ParserContext> extends A
     @Override
     public Parser<C> get(final Object key) {
         final Parser<C> value = this.map.get(key);
-        if(null==value) {
+        if (null == value) {
             throw new EbnfParserCombinatorException("Unknown mapping " + key);
         }
         return value;

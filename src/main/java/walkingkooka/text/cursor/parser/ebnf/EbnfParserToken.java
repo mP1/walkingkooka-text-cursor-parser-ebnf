@@ -308,7 +308,7 @@ public abstract class EbnfParserToken implements ParserToken {
     public final boolean equals(final Object other) {
         return this == other ||
                 this.canBeEqual(other) &&
-                        this.equals0((EbnfParserToken)other);
+                        this.equals0((EbnfParserToken) other);
     }
 
     abstract boolean canBeEqual(final Object other);
