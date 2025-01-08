@@ -145,8 +145,7 @@ public abstract class EbnfAlternativeOrConcatenationParserTestCase<T extends Ebn
                 text);
     }
 
-    @Override
-    final String text() {
+    @Override final String text() {
         return IDENTIFIER1 + this.separator() + IDENTIFIER2;
     }
 
@@ -157,8 +156,7 @@ public abstract class EbnfAlternativeOrConcatenationParserTestCase<T extends Ebn
         return EbnfParserToken.symbol(separator, separator);
     }
 
-    @Override
-    final T token(final String text) {
+    @Override final T token(final String text) {
         return this.token(text,
                 identifier1(),
                 separatorCharToken(),

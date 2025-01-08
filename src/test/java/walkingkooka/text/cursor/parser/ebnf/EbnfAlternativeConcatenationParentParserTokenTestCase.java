@@ -35,8 +35,7 @@ public abstract class EbnfAlternativeConcatenationParentParserTokenTestCase<T ex
         assertThrows(IllegalArgumentException.class, () -> this.createToken(this.text(), this.identifier("first"), this.comment2()));
     }
 
-    @Override
-    final List<ParserToken> tokens() {
+    @Override final List<ParserToken> tokens() {
         return Lists.of(this.identifier1(), this.identifier2());
     }
 
