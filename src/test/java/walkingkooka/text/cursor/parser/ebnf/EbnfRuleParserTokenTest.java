@@ -29,18 +29,36 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class EbnfRuleParserTokenTest extends EbnfParentParserTokenTestCase<EbnfRuleParserToken> {
 
     @Test
-    public void testMissingIdentifierFails() {
-        assertThrows(IllegalArgumentException.class, () -> this.createToken(this.text(), assignment(), terminal1(), terminator()));
+    public void testWithMissingIdentifierFails() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> this.createToken(
+                        this.text(),
+                        assignment(), terminal1(), terminator()
+                )
+        );
     }
 
     @Test
-    public void testMissingIdentifierFails2() {
-        assertThrows(IllegalArgumentException.class, () -> this.createToken(this.text(), terminal1(), assignment(), identifier1(), terminator()));
+    public void testWithMissingIdentifierFails2() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> this.createToken(
+                        this.text(),
+                        terminal1(), assignment(), identifier1(), terminator()
+                )
+        );
     }
 
     @Test
-    public void testMissingTokenFails() {
-        assertThrows(IllegalArgumentException.class, () -> this.createToken(this.text(), identifier1(), assignment(), terminator()));
+    public void testWithMissingTokenFails() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> this.createToken(
+                        this.text(),
+                        identifier1(), assignment(), terminator()
+                )
+        );
     }
 
     @Test
@@ -146,6 +164,8 @@ public class EbnfRuleParserTokenTest extends EbnfParentParserTokenTestCase<EbnfR
     EbnfRuleParserToken createToken(final String text, final List<ParserToken> tokens) {
         return EbnfRuleParserToken.with(tokens, text);
     }
+
+    // class............................................................................................................
 
     @Override
     public Class<EbnfRuleParserToken> type() {

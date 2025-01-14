@@ -45,8 +45,11 @@ public abstract class EbnfParserTokenTestCase<T extends EbnfParserToken> impleme
     }
 
     @Test
-    public final void testEmptyTextFails() {
-        assertThrows(IllegalArgumentException.class, () -> this.createToken(""));
+    public final void testWithEmptyTextFails() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> this.createToken("")
+        );
     }
 
     static EbnfSymbolParserToken symbol(final String s) {

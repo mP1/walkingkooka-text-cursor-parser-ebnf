@@ -33,39 +33,66 @@ public final class EbnfRangeParserTokenTest extends EbnfParentParserTokenTestCas
     private final static String WHITESPACE = "   ";
 
     @Test
-    public void testMissingBeginTokenFails() {
+    public void testWithMissingBeginTokenFails() {
         final EbnfParserToken identifier1 = this.identifier1();
-        assertThrows(IllegalArgumentException.class, () -> this.createToken(this.text(), EbnfParserToken.optional(Lists.of(identifier1), "{" + identifier1 + "}"), between(), terminal2()));
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> this.createToken(
+                        this.text(),
+                        EbnfParserToken.optional(
+                                Lists.of(identifier1),
+                                "{" + identifier1 + "}"),
+                        between(),
+                        terminal2()
+                )
+        );
     }
 
     @Test
-    public void testMissingRangeBetweenFails() {
-        assertThrows(IllegalArgumentException.class, () -> this.createToken(this.text(), identifier1(), terminal2(), terminal2()));
+    public void testWithMissingRangeBetweenFails() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> this.createToken(
+                        this.text(),
+                        identifier1(), terminal2(), terminal2()
+                )
+        );
     }
 
     @Test
-    public void testMissingEndTokenFails2() {
-        assertThrows(IllegalArgumentException.class, () -> this.createToken(this.text(), terminal1(), between(), comment1()));
+    public void testWithMissingEndTokenFails2() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> this.createToken(
+                        this.text(),
+                        terminal1(),
+                        between(),
+                        comment1()
+                )
+        );
     }
 
     @Test
-    public void testTerminalTerminal() {
+    public void testWithTerminalTerminal() {
         final EbnfParserToken terminal1 = this.terminal1();
         final EbnfParserToken terminal2 = this.terminal2();
         final EbnfRangeParserToken token = this.createToken(
                 TERMINAL_TEXT1 + BETWEEN + TERMINAL_TEXT2,
-                terminal1, between(), terminal2);
+                terminal1, between(), terminal2
+        );
 
         this.check(token, terminal1, terminal2);
     }
 
     @Test
-    public void testIdentifierIdentifier() {
+    public void tesWithtIdentifierIdentifier() {
         final EbnfParserToken identifier1 = this.identifier1();
         final EbnfParserToken identifier2 = this.identifier2();
         final EbnfRangeParserToken token = this.createToken(
                 TERMINAL_TEXT1 + BETWEEN + TERMINAL_TEXT2,
-                identifier1, between(), identifier2);
+                identifier1, between(), identifier2
+        );
 
         this.check(token, identifier1, identifier2);
     }
@@ -82,40 +109,44 @@ public final class EbnfRangeParserTokenTest extends EbnfParentParserTokenTestCas
     }
 
     @Test
-    public void testTerminalBeginComment() {
+    public void testWithTerminalBeginComment() {
         final EbnfParserToken terminal1 = this.terminal1();
         final EbnfParserToken terminal2 = this.terminal2();
         final EbnfRangeParserToken token = this.createToken(
                 TERMINAL_TEXT1 + COMMENT1 + BETWEEN + TERMINAL_TEXT2,
-                terminal1, comment1(), between(), terminal2);
+                terminal1, comment1(), between(), terminal2
+        );
 
         this.check(token, terminal1, terminal2);
     }
 
     @Test
-    public void testRangeBeginWhitespace() {
+    public void testWithRangeBeginWhitespace() {
         final EbnfParserToken terminal1 = this.terminal1();
         final EbnfParserToken terminal2 = this.terminal2();
         final EbnfRangeParserToken token = this.createToken(
                 TERMINAL_TEXT1 + BETWEEN + WHITESPACE + TERMINAL_TEXT2,
-                terminal1, between(), whitespace(), terminal2);
+                terminal1, between(), whitespace(), terminal2
+        );
 
         this.check(token, terminal1, terminal2);
     }
 
     @Test
-    public void testRangeBeginComment() {
+    public void testWithRangeBeginComment() {
         final EbnfParserToken terminal1 = this.terminal1();
         final EbnfParserToken terminal2 = this.terminal2();
         final EbnfRangeParserToken token = this.createToken(
                 TERMINAL_TEXT1 + BETWEEN + COMMENT1 + TERMINAL_TEXT2,
-                terminal1, between(), comment1(), terminal2);
+                terminal1, between(), comment1(), terminal2
+        );
 
         this.check(token, terminal1, terminal2);
     }
 
     private void check(final EbnfRangeParserToken token,
-                       final EbnfParserToken begin, final EbnfParserToken end) {
+                       final EbnfParserToken begin,
+                       final EbnfParserToken end) {
         assertSame(begin, token.begin(), "begin");
         assertSame(end, token.end());
     }
@@ -213,6 +244,8 @@ public final class EbnfRangeParserTokenTest extends EbnfParentParserTokenTestCas
     EbnfRangeParserToken createToken(final String text, final List<ParserToken> tokens) {
         return EbnfRangeParserToken.with(tokens, text);
     }
+
+    // class............................................................................................................
 
     @Override
     public Class<EbnfRangeParserToken> type() {
