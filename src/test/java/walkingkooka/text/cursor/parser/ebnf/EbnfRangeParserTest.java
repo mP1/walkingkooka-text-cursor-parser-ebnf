@@ -37,7 +37,7 @@ public final class EbnfRangeParserTest extends EbnfParserTestCase2<EbnfRangePars
 
     @Test
     public void testParseBetweenOnlyFails() {
-        this.parseThrows(
+        this.parseThrowsInvalidCharacterException(
                 BETWEEN,
                 '.',
                 1,
@@ -47,7 +47,7 @@ public final class EbnfRangeParserTest extends EbnfParserTestCase2<EbnfRangePars
 
     @Test
     public void testParseDoubleBetweenFails() {
-        this.parseThrows(
+        this.parseThrowsInvalidCharacterException(
                 TERMINAL1_TEXT + BETWEEN + BETWEEN,
                 BETWEEN.charAt(0),
                 16,
@@ -57,7 +57,7 @@ public final class EbnfRangeParserTest extends EbnfParserTestCase2<EbnfRangePars
 
     @Test
     public void testParseDoubleBetweenFails2() {
-        this.parseThrows(
+        this.parseThrowsInvalidCharacterException(
                 TERMINAL1_TEXT + BETWEEN + BETWEEN + TERMINAL2_TEXT,
                 BETWEEN.charAt(0),
                 16,

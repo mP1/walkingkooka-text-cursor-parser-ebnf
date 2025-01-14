@@ -104,13 +104,23 @@ public final class EbnfGrammarParserTest extends EbnfParserTestCase<EbnfGrammarP
     }
 
     @Test
-    public void testInvalidRuleNameDefinitionFails() {
-        this.parseThrows("123", '1', 1, 1);
+    public void testParseInvalidRuleNameDefinitionFails() {
+        this.parseThrowsInvalidCharacterException(
+                "123",
+                '1',
+                1,
+                1
+        );
     }
 
     @Test
-    public void testInvalidRuleDefinitionFails() {
-        this.parseThrows("abc!", '!', 4, 1);
+    public void testParseInvalidRuleDefinitionFails() {
+        this.parseThrowsInvalidCharacterException(
+                "abc!",
+                '!',
+                4,
+                1
+        );
     }
 
     @Test
@@ -125,7 +135,7 @@ public final class EbnfGrammarParserTest extends EbnfParserTestCase<EbnfGrammarP
 
     @Test
     public void testParseInvalidRuleRhsFails() {
-        this.parseThrows(
+        this.parseThrowsInvalidCharacterException(
                 IDENTIFIER1 + ASSIGNMENT + "123",
                 '1',
                 IDENTIFIER1 + ASSIGNMENT + '1',
@@ -135,7 +145,7 @@ public final class EbnfGrammarParserTest extends EbnfParserTestCase<EbnfGrammarP
 
     @Test
     public void testParseInvalidExceptionTokenFails() {
-        this.parseThrows(
+        this.parseThrowsInvalidCharacterException(
                 IDENTIFIER1 + ASSIGNMENT + "'A'-123",
                 '1',
                 IDENTIFIER1 + ASSIGNMENT + "'A'-'",
