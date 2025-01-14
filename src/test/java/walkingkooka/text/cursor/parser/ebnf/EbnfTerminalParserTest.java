@@ -118,8 +118,11 @@ public final class EbnfTerminalParserTest extends EbnfParserTestCase3<EbnfTermin
     }
 
     @Test
-    public void testParseInvalidUnicode() {
-        this.parseThrows("'\\u0XYZ1");
+    public void testParseInvalidUnicodeFails() {
+        this.parseThrows(
+                "'\\u0XYZ1",
+                "Invalid unicode sequence 'X'"
+        );
     }
 
     @Test
