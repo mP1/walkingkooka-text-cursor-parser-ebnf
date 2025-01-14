@@ -28,56 +28,79 @@ public final class EbnfGrammarParserTest extends EbnfParserTestCase<EbnfGrammarP
     private final static String RULE2 = IDENTIFIER2 + "=" + TERMINAL2_TEXT + ";";
 
     @Test
-    public void testCompact2() {
+    public void testParseCompact2() {
         final String text = RULE1;
+
         this.parseAndCheck(
                 text,
-                grammar(text,
-                        rule1()),
-                text);
+                grammar(
+                        text,
+                        rule1()
+                ),
+                text
+        );
     }
 
     @Test
-    public void testCompact() {
+    public void testParseCompact() {
         final String text = RULE1 + RULE2;
-        this.parseAndCheck(text,
-                grammar(text,
+
+        this.parseAndCheck(
+                text,
+                grammar(
+                        text,
                         rule1(),
-                        rule2()),
-                text);
+                        rule2()
+                ),
+                text
+        );
     }
 
 
     @Test
-    public void testWhitespaceBetweenRules() {
+    public void testParseWhitespaceBetweenRules() {
         final String text = RULE1 + WHITESPACE1 + RULE2;
-        this.parseAndCheck(text,
-                grammar(text,
+
+        this.parseAndCheck(
+                text,
+                grammar(
+                        text,
                         rule1(),
-                        rule(WHITESPACE1 + RULE2, whitespace1(), identifier2(), assignmentToken(), terminal2(), terminatorToken())),
-                text);
+                        rule(WHITESPACE1 + RULE2, whitespace1(), identifier2(), assignmentToken(), terminal2(), terminatorToken())
+                ),
+                text
+        );
     }
 
     @Test
     public void testWhitespaceAfterRules() {
         final String text = RULE1 + RULE2 + WHITESPACE1;
-        this.parseAndCheck(text,
-                grammar(text,
+
+        this.parseAndCheck(
+                text,
+                grammar(
+                        text,
                         rule1(),
                         rule2(),
-                        whitespace1()),
-                text);
+                        whitespace1()
+                ),
+                text
+        );
     }
 
     @Test
     public void testRuleWithRange() {
         final String rule2Text = IDENTIFIER2 + ASSIGNMENT + TERMINAL1_TEXT + BETWEEN + TERMINAL2_TEXT + TERMINATOR;
         final String text = RULE1 + rule2Text;
-        this.parseAndCheck(text,
-                grammar(text,
+
+        this.parseAndCheck(
+                text,
+                grammar(
+                        text,
                         rule1(),
                         rule(rule2Text, identifier2(), assignmentToken(), range(TERMINAL1_TEXT + BETWEEN + TERMINAL2_TEXT, terminal1(), between(), terminal2()), terminatorToken())),
-                text);
+                text
+        );
     }
 
     @Test

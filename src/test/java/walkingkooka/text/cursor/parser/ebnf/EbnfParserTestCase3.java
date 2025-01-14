@@ -25,19 +25,28 @@ public abstract class EbnfParserTestCase3<T extends EbnfParserToken> extends Ebn
     }
 
     @Test
-    public final void testOnlyToken() {
+    public final void testParseOnlyToken() {
         final String text = this.text();
         final T token = this.token(text);
-        this.parseAndCheck(text, token, text);
+
+        this.parseAndCheck(
+                text,
+                token,
+                text
+        );
     }
 
     @Test
-    public final void testWhitespaceBeforeFails() {
-        this.parseFailAndCheck(" " + this.text());
+    public final void testParseWhitespaceBeforeFails() {
+        this.parseFailAndCheck(
+                " " + this.text()
+        );
     }
 
     @Test
-    public final void testCommentBeforeFails() {
-        this.parseFailAndCheck(" " + this.text());
+    public final void testParseCommentBeforeFails() {
+        this.parseFailAndCheck(
+                " " + this.text()
+        );
     }
 }

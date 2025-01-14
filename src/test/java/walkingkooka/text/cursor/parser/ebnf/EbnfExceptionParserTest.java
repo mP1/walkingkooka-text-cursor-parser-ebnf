@@ -24,58 +24,96 @@ import walkingkooka.text.cursor.parser.ParserToken;
 public final class EbnfExceptionParserTest extends EbnfParserTestCase2<EbnfExceptionParserToken> {
 
     @Test
-    public void testExceptionFails() {
-        this.parseThrows(EXCEPTION, '-', 1, 1);
+    public void testParseExceptionFails() {
+        this.parseThrows(
+                EXCEPTION,
+                '-',
+                1,
+                1
+        );
     }
 
     @Test
-    public void testCommentIdentifierExceptionIdentifier() {
+    public void testParseCommentIdentifierExceptionIdentifier() {
         final String text = COMMENT1 + IDENTIFIER1 + EXCEPTION + IDENTIFIER2;
-        this.parseAndCheck(text,
-                this.token(text, comment1(), this.identifier1(), exceptionToken(), this.identifier2()),
-                text);
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text, 
+                        comment1(), this.identifier1(), exceptionToken(), this.identifier2()
+                ),
+                text
+        );
     }
 
     @Test
-    public void testWhitespaceIdentifierExceptionIdentifier() {
+    public void testParseWhitespaceIdentifierExceptionIdentifier() {
         final String text = WHITESPACE1 + IDENTIFIER1 + EXCEPTION + IDENTIFIER2;
-        this.parseAndCheck(text,
-                this.token(text, whitespace1(), this.identifier1(), exceptionToken(), this.identifier2()),
-                text);
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text, 
+                        whitespace1(), this.identifier1(), exceptionToken(), this.identifier2()
+                ),
+                text
+        );
     }
 
     @Test
-    public void testIdentifierExceptionWhitespaceIdentifier() {
+    public void testParseIdentifierExceptionWhitespaceIdentifier() {
         final String text = IDENTIFIER1 + EXCEPTION + WHITESPACE1 + IDENTIFIER2;
-        this.parseAndCheck(text,
-                this.token(text, identifier1(), exceptionToken(), whitespace1(), this.identifier2()),
-                text);
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text, 
+                        identifier1(), exceptionToken(), whitespace1(), this.identifier2()
+                ),
+                text
+        );
     }
 
     @Test
-    public void testIdentifierExceptionCommentIdentifier() {
+    public void testParseIdentifierExceptionCommentIdentifier() {
         final String text = IDENTIFIER1 + EXCEPTION + COMMENT1 + IDENTIFIER2;
-        this.parseAndCheck(text,
-                this.token(text, identifier1(), exceptionToken(), comment1(), this.identifier2()),
-                text);
+        
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text,
+                        identifier1(), exceptionToken(), comment1(), this.identifier2()
+                ),
+                text
+        );
     }
 
     @Test
-    public void testIdentifierExceptionIdentifierWhitespace() {
+    public void testParseIdentifierExceptionIdentifierWhitespace() {
         final String text = IDENTIFIER1 + EXCEPTION + IDENTIFIER2;
-        this.parseAndCheck(text + WHITESPACE1,
-                this.token(text, identifier1(), exceptionToken(), this.identifier2()),
+        
+        this.parseAndCheck(
+                text + WHITESPACE1,
+                this.token(
+                        text, 
+                        identifier1(), exceptionToken(), this.identifier2()
+                ),
                 text,
-                WHITESPACE1);
+                WHITESPACE1
+        );
     }
 
     @Test
-    public void testIdentifierExceptionIdentifierComment() {
+    public void testParseIdentifierExceptionIdentifierComment() {
         final String text = IDENTIFIER1 + EXCEPTION + IDENTIFIER2;
-        this.parseAndCheck(text + COMMENT1,
-                this.token(text, identifier1(), exceptionToken(), this.identifier2()),
+        
+        this.parseAndCheck(
+                text + COMMENT1,
+                this.token(
+                        text, 
+                        identifier1(), exceptionToken(), this.identifier2()
+                ),
                 text,
-                COMMENT1);
+                COMMENT1
+        );
     }
 
     @Override

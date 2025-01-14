@@ -25,22 +25,33 @@ import java.util.List;
 public abstract class EbnfAlternativeOrConcatenationParserTestCase<T extends EbnfParserToken> extends EbnfParserTestCase2<T> {
 
     @Test
-    public final void testOnlyToken() {
+    public final void testParseOnlyToken() {
         final String text = this.text();
         final T token = this.token(text);
-        this.parseAndCheck(text, token, text);
+
+        this.parseAndCheck(
+                text,
+                token,
+                text
+        );
     }
 
     @Test
-    public final void testWhitespaceIdentifier() {
+    public final void testParseWhitespaceIdentifier() {
         final String text = WHITESPACE1 + IDENTIFIER1 + this.separator() + IDENTIFIER2;
-        this.parseAndCheck(text,
-                this.token(text, whitespace1(), identifier1(), this.separatorCharToken(), identifier2()),
-                text);
+
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text,
+                        whitespace1(), identifier1(), this.separatorCharToken(), identifier2()
+                ),
+                text
+        );
     }
 
     @Test
-    public final void testWhitespaceIdentifierWhitespace() {
+    public final void testParseWhitespaceIdentifierWhitespace() {
         final String text = WHITESPACE1 + IDENTIFIER1 + WHITESPACE2 + this.separator() + IDENTIFIER2;
         this.parseAndCheck(text,
                 this.token(text, whitespace1(), identifier1(), whitespace2(), this.separatorCharToken(), identifier2()),
@@ -48,104 +59,177 @@ public abstract class EbnfAlternativeOrConcatenationParserTestCase<T extends Ebn
     }
 
     @Test
-    public final void testWhitespaceIdentifierWhitespaceWhitespaceIdentifier2() {
+    public final void testParseWhitespaceIdentifierWhitespaceWhitespaceIdentifier2() {
         final String text = WHITESPACE1 + IDENTIFIER1 + WHITESPACE2 + this.separator() + WHITESPACE1 + IDENTIFIER2;
-        this.parseAndCheck(text,
-                this.token(text, whitespace1(), identifier1(), whitespace2(), this.separatorCharToken(), whitespace1(), identifier2()),
-                text);
-    }
 
-    @Test
-    public final void testWhitespaceIdentifierWhitespaceWhitespaceIdentifier2Whitespace() {
-        final String text = WHITESPACE1 + IDENTIFIER1 + WHITESPACE2 + this.separator() + WHITESPACE1 + IDENTIFIER2;
-        this.parseAndCheck(text + WHITESPACE2,
-                this.token(text, whitespace1(), identifier1(), whitespace2(), this.separatorCharToken(), whitespace1(), identifier2()),
+        this.parseAndCheck(
                 text,
-                WHITESPACE2);
+                this.token(
+                        text,
+                        whitespace1(), identifier1(), whitespace2(), this.separatorCharToken(), whitespace1(), identifier2()
+                ),
+                text
+        );
     }
 
     @Test
-    public final void testCommentIdentifier() {
+    public final void testParseWhitespaceIdentifierWhitespaceWhitespaceIdentifier2Whitespace() {
+        final String text = WHITESPACE1 + IDENTIFIER1 + WHITESPACE2 + this.separator() + WHITESPACE1 + IDENTIFIER2;
+
+        this.parseAndCheck(
+                text + WHITESPACE2,
+                this.token(
+                        text,
+                        whitespace1(), identifier1(), whitespace2(), this.separatorCharToken(), whitespace1(), identifier2()
+                ),
+                text,
+                WHITESPACE2
+        );
+    }
+
+    @Test
+    public final void testParseCommentIdentifier() {
         final String text = COMMENT1 + IDENTIFIER1 + this.separator() + IDENTIFIER2;
-        this.parseAndCheck(text,
-                this.token(text, comment1(), identifier1(), this.separatorCharToken(), identifier2()),
-                text);
-    }
 
-    @Test
-    public final void testCommentIdentifierComment() {
-        final String text = COMMENT1 + IDENTIFIER1 + COMMENT2 + this.separator() + IDENTIFIER2;
-        this.parseAndCheck(text,
-                this.token(text, comment1(), identifier1(), comment2(), this.separatorCharToken(), identifier2()),
-                text);
-    }
-
-    @Test
-    public final void testCommentIdentifierCommentCommentIdentifier2() {
-        final String text = COMMENT1 + IDENTIFIER1 + COMMENT2 + this.separator() + COMMENT1 + IDENTIFIER2;
-        this.parseAndCheck(text,
-                this.token(text, comment1(), identifier1(), comment2(), this.separatorCharToken(), comment1(), identifier2()),
-                text);
-    }
-
-    @Test
-    public final void testCommentIdentifierCommentCommentIdentifier2Comment() {
-        final String text = COMMENT1 + IDENTIFIER1 + COMMENT2 + this.separator() + COMMENT1 + IDENTIFIER2;
-        this.parseAndCheck(text + COMMENT2,
-                this.token(text, comment1(), identifier1(), comment2(), this.separatorCharToken(), comment1(), identifier2()),
+        this.parseAndCheck(
                 text,
-                COMMENT2);
+                this.token(
+                        text,
+                        comment1(), identifier1(), this.separatorCharToken(), identifier2()
+                ),
+                text
+        );
     }
 
     @Test
-    public final void testWhitespaceCommentIdentifier() {
+    public final void testParseCommentIdentifierComment() {
+        final String text = COMMENT1 + IDENTIFIER1 + COMMENT2 + this.separator() + IDENTIFIER2;
+
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text,
+                        comment1(), identifier1(), comment2(), this.separatorCharToken(), identifier2()
+                ),
+                text
+        );
+    }
+
+    @Test
+    public final void testParseCommentIdentifierCommentCommentIdentifier2() {
+        final String text = COMMENT1 + IDENTIFIER1 + COMMENT2 + this.separator() + COMMENT1 + IDENTIFIER2;
+
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text,
+                        comment1(), identifier1(), comment2(), this.separatorCharToken(), comment1(), identifier2()
+                ),
+                text
+        );
+    }
+
+    @Test
+    public final void testParseCommentIdentifierCommentCommentIdentifier2Comment() {
+        final String text = COMMENT1 + IDENTIFIER1 + COMMENT2 + this.separator() + COMMENT1 + IDENTIFIER2;
+
+        this.parseAndCheck(
+                text + COMMENT2,
+                this.token(
+                        text,
+                        comment1(), identifier1(), comment2(), this.separatorCharToken(), comment1(), identifier2()
+                ),
+                text,
+                COMMENT2
+        );
+    }
+
+    @Test
+    public final void testParseWhitespaceCommentIdentifier() {
         final String text = WHITESPACE1 + COMMENT1 + IDENTIFIER1 + this.separator() + IDENTIFIER2;
-        this.parseAndCheck(text,
-                this.token(text, whitespace1(), comment1(), identifier1(), this.separatorCharToken(), identifier2()),
-                text);
+
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text,
+                        whitespace1(), comment1(), identifier1(), this.separatorCharToken(), identifier2()
+                ),
+                text
+        );
     }
 
     @Test
-    public final void testWhitespaceCommentWhitespaceIdentifier() {
+    public final void testParseWhitespaceCommentWhitespaceIdentifier() {
         final String text = WHITESPACE1 + COMMENT1 + WHITESPACE2 + IDENTIFIER1 + this.separator() + IDENTIFIER2;
-        this.parseAndCheck(text,
-                this.token(text, whitespace1(), comment1(), whitespace2(), identifier1(), this.separatorCharToken(), identifier2()),
-                text);
+
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text,
+                        whitespace1(), comment1(), whitespace2(), identifier1(), this.separatorCharToken(), identifier2()
+                ),
+                text
+        );
     }
 
     @Test
-    public final void testThreeTokens() {
+    public final void testParseThreeTokens() {
         final String text = IDENTIFIER1 + this.separator() + IDENTIFIER2 + this.separator() + IDENTIFIER3;
-        this.parseAndCheck(text,
-                this.token(text, identifier1(), this.separatorCharToken(), identifier2(), this.separatorCharToken(), identifier3()),
-                text);
+
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text,
+                        identifier1(), this.separatorCharToken(), identifier2(), this.separatorCharToken(), identifier3()
+                ),
+                text
+        );
     }
 
     @Test
-    public final void testIdentifierIdentifierSeparatorWhitespaceIdentifier() {
+    public final void testParseIdentifierIdentifierSeparatorWhitespaceIdentifier() {
         final String text = IDENTIFIER1 + this.separator() + IDENTIFIER2 + this.separator() + this.whitespace1() + IDENTIFIER3;
-        this.parseAndCheck(text,
-                this.token(text, identifier1(), this.separatorCharToken(), identifier2(), this.separatorCharToken(), this.whitespace1(), identifier3()),
-                text);
+
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text,
+                        identifier1(), this.separatorCharToken(), identifier2(), this.separatorCharToken(), this.whitespace1(), identifier3()
+                ),
+                text
+        );
     }
 
     @Test
-    public final void testIdentifierIdentifierWhitespaceSeparatorWhitespaceIdentifier() {
+    public final void testParseIdentifierIdentifierWhitespaceSeparatorWhitespaceIdentifier() {
         final String text = IDENTIFIER1 + this.separator() + IDENTIFIER2 + this.whitespace1() + this.separator() + this.whitespace2() + IDENTIFIER3;
-        this.parseAndCheck(text,
-                this.token(text, identifier1(), this.separatorCharToken(), identifier2(), this.whitespace1(), this.separatorCharToken(), this.whitespace2(), identifier3()),
-                text);
+
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text,
+                        identifier1(), this.separatorCharToken(), identifier2(), this.whitespace1(), this.separatorCharToken(), this.whitespace2(), identifier3()
+                ),
+                text
+        );
     }
 
     @Test
-    public final void testIdentifierIdentifierWhitespaceSeparatorIdentifier() {
+    public final void testParseIdentifierIdentifierWhitespaceSeparatorIdentifier() {
         final String text = IDENTIFIER1 + this.separator() + IDENTIFIER2 + this.whitespace1() + this.separator() + IDENTIFIER3;
-        this.parseAndCheck(text,
-                this.token(text, identifier1(), this.separatorCharToken(), identifier2(), this.whitespace1(), this.separatorCharToken(), identifier3()),
-                text);
+
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text,
+                        identifier1(), this.separatorCharToken(), identifier2(), this.whitespace1(), this.separatorCharToken(), identifier3()
+                ),
+                text
+        );
     }
 
-    @Override final String text() {
+    @Override
+    final String text() {
         return IDENTIFIER1 + this.separator() + IDENTIFIER2;
     }
 
@@ -156,16 +240,19 @@ public abstract class EbnfAlternativeOrConcatenationParserTestCase<T extends Ebn
         return EbnfParserToken.symbol(separator, separator);
     }
 
-    @Override final T token(final String text) {
+    @Override
+    final T token(final String text) {
         return this.token(text,
                 identifier1(),
                 separatorCharToken(),
                 identifier2());
     }
 
-    final T token(final String text, final ParserToken... tokens) {
+    final T token(final String text,
+                  final ParserToken... tokens) {
         return this.token(text, Lists.of(tokens));
     }
 
-    abstract T token(final String text, final List<ParserToken> tokens);
+    abstract T token(final String text,
+                     final List<ParserToken> tokens);
 }

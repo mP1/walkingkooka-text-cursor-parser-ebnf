@@ -34,7 +34,8 @@ public final class EbnfConcatenationParserTest extends EbnfAlternativeOrConcaten
     }
 
     @Override
-    EbnfConcatenationParserToken token(final String text, final List<ParserToken> tokens) {
+    EbnfConcatenationParserToken token(final String text,
+                                       final List<ParserToken> tokens) {
         return EbnfParserToken.concatenation(tokens, text);
     }
 }

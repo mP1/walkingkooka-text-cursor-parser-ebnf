@@ -24,80 +24,115 @@ import walkingkooka.text.cursor.parser.ParserToken;
 public final class EbnfRangeParserTest extends EbnfParserTestCase2<EbnfRangeParserToken> {
 
     @Test
-    public void testBeginOnlyFails() {
+    public void testParseBeginOnlyFails() {
         this.parseFailAndCheck(TERMINAL1_TEXT);
     }
 
     @Test
-    public void testBeginBetweenFails() {
-        this.parseThrowsEndOfText(TERMINAL1_TEXT + BETWEEN);
+    public void testParseBeginBetweenFails() {
+        this.parseThrowsEndOfText(
+                TERMINAL1_TEXT + BETWEEN
+        );
     }
 
     @Test
-    public void testBetweenOnlyFails() {
-        this.parseThrows(BETWEEN, '.', 1, 1);
+    public void testParseBetweenOnlyFails() {
+        this.parseThrows(
+                BETWEEN,
+                '.',
+                1,
+                1
+        );
     }
 
     @Test
-    public void testDoubleBetweenFails() {
-        this.parseThrows(TERMINAL1_TEXT + BETWEEN + BETWEEN, BETWEEN.charAt(0), 16, 1);
+    public void testParseDoubleBetweenFails() {
+        this.parseThrows(
+                TERMINAL1_TEXT + BETWEEN + BETWEEN,
+                BETWEEN.charAt(0),
+                16,
+                1
+        );
     }
 
     @Test
-    public void testDoubleBetweenFails2() {
-        this.parseThrows(TERMINAL1_TEXT + BETWEEN + BETWEEN + TERMINAL2_TEXT, BETWEEN.charAt(0), 16, 1);
+    public void testParseDoubleBetweenFails2() {
+        this.parseThrows(
+                TERMINAL1_TEXT + BETWEEN + BETWEEN + TERMINAL2_TEXT,
+                BETWEEN.charAt(0),
+                16,
+                1
+        );
     }
 
     @Test
-    public void testBeginWhitespaceBetweenEnd() {
+    public void testParseBeginWhitespaceBetweenEnd() {
         final String text = TERMINAL1_TEXT + WHITESPACE1 + BETWEEN + TERMINAL2_TEXT;
-        this.parseAndCheck(text,
+
+        this.parseAndCheck(
+                text,
                 range(text, terminal1(), whitespace1(), between(), terminal2()),
-                text);
+                text
+        );
     }
 
     @Test
-    public void testBeginCommentBetweenEnd() {
+    public void testParseBeginCommentBetweenEnd() {
         final String text = TERMINAL1_TEXT + COMMENT1 + BETWEEN + TERMINAL2_TEXT;
-        this.parseAndCheck(text,
+
+        this.parseAndCheck
+                (text,
                 range(text, terminal1(), comment1(), between(), terminal2()),
-                text);
+                text
+                );
     }
 
     @Test
-    public void testBeginBetweenWhitespaceEnd() {
+    public void testParseBeginBetweenWhitespaceEnd() {
         final String text = TERMINAL1_TEXT + BETWEEN + WHITESPACE1 + TERMINAL2_TEXT;
-        this.parseAndCheck(text,
+
+        this.parseAndCheck(
+                text,
                 range(text, terminal1(), between(), whitespace1(), terminal2()),
-                text);
+                text
+        );
     }
 
     @Test
-    public void testBeginBetweenCommentEnd() {
+    public void testParseBeginBetweenCommentEnd() {
         final String text = TERMINAL1_TEXT + BETWEEN + COMMENT1 + TERMINAL2_TEXT;
-        this.parseAndCheck(text,
+
+        this.parseAndCheck(
+                text,
                 range(text, terminal1(), between(), comment1(), terminal2()),
-                text);
+                text
+        );
     }
 
     // trailing....
 
     @Test
-    public void testEndWhitespace() {
+    public void testParseEndWhitespace() {
         final String text = TERMINAL1_TEXT + BETWEEN + TERMINAL2_TEXT;
-        this.parseAndCheck(text + WHITESPACE1,
+
+        this.parseAndCheck(
+                text + WHITESPACE1,
                 range(text, terminal1(), between(), terminal2()),
                 text,
-                WHITESPACE1);
+                WHITESPACE1
+        );
     }
 
     @Test
-    public void testEndComments() {
+    public void testParseEndComments() {
         final String text = TERMINAL1_TEXT + BETWEEN + TERMINAL2_TEXT;
-        this.parseAndCheck(text + COMMENT1,
+
+        this.parseAndCheck(
+                text + COMMENT1,
                 range(text, terminal1(), between(), terminal2()),
                 text,
-                COMMENT1);
+                COMMENT1
+        );
     }
 
     @Override
@@ -118,7 +153,11 @@ public final class EbnfRangeParserTest extends EbnfParserTestCase2<EbnfRangePars
                 terminal2());
     }
 
-    private EbnfRangeParserToken token(final String text, final ParserToken... tokens) {
-        return EbnfRangeParserToken.with(Lists.of(tokens), text);
+    private EbnfRangeParserToken token(final String text,
+                                       final ParserToken... tokens) {
+        return EbnfRangeParserToken.with(
+                Lists.of(tokens),
+                text
+        );
     }
 }

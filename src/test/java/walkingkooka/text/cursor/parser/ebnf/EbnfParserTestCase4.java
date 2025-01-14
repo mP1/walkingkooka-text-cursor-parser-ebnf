@@ -29,43 +29,72 @@ public abstract class EbnfParserTestCase4<T extends EbnfParserToken> extends Ebn
     }
 
     @Test
-    public final void testWhitespaceIdentifier() {
+    public final void testParseWhitespaceIdentifier() {
         final String text = this.beginChar() + WHITESPACE1 + IDENTIFIER1 + this.endChar();
-        this.parseAndCheck(text,
-                this.token(text, this.beginCharToken(), whitespace1(), this.identifier1(), this.endCharToken()),
-                text);
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text, 
+                        this.beginCharToken(), whitespace1(), this.identifier1(), this.endCharToken()
+                ),
+                text
+        );
     }
 
     @Test
-    public final void testWhitespaceIdentifierWhitespace() {
+    public final void testParseWhitespaceIdentifierWhitespace() {
         final String text = this.beginChar() + WHITESPACE1 + IDENTIFIER1 + WHITESPACE2 + this.endChar();
-        this.parseAndCheck(text,
-                this.token(text, this.beginCharToken(), whitespace1(), this.identifier1(), this.whitespace2(), this.endCharToken()),
-                text);
+        
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text, 
+                        this.beginCharToken(), whitespace1(), this.identifier1(), this.whitespace2(), this.endCharToken()
+                ),
+                text
+        );
     }
 
     @Test
-    public final void testCommentIdentifier() {
+    public final void testParseCommentIdentifier() {
         final String text = this.beginChar() + COMMENT1 + IDENTIFIER1 + this.endChar();
-        this.parseAndCheck(text,
-                this.token(text, this.beginCharToken(), comment1(), this.identifier1(), this.endCharToken()),
-                text);
+        
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text,
+                        this.beginCharToken(), comment1(), this.identifier1(), this.endCharToken()
+                ),
+                text
+        );
     }
 
     @Test
-    public final void testCommentIdentifierComment() {
+    public final void testParseCommentIdentifierComment() {
         final String text = this.beginChar() + COMMENT1 + IDENTIFIER1 + COMMENT2 + this.endChar();
-        this.parseAndCheck(text,
-                this.token(text, this.beginCharToken(), comment1(), this.identifier1(), this.comment2(), this.endCharToken()),
-                text);
+        
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text, 
+                        this.beginCharToken(), comment1(), this.identifier1(), this.comment2(), this.endCharToken()
+                ),
+                text
+        );
     }
 
     @Test
-    public final void testWhitespaceIdentifierComment() {
+    public final void testParseWhitespaceIdentifierComment() {
         final String text = this.beginChar() + WHITESPACE1 + IDENTIFIER1 + COMMENT2 + this.endChar();
-        this.parseAndCheck(text,
-                this.token(text, this.beginCharToken(), whitespace1(), this.identifier1(), this.comment2(), this.endCharToken()),
-                text);
+        
+        this.parseAndCheck(
+                text,
+                this.token(
+                        text, 
+                        this.beginCharToken(), whitespace1(), this.identifier1(), this.comment2(), this.endCharToken()
+                ),
+                text
+        );
     }
 
     @Override
@@ -90,12 +119,20 @@ public abstract class EbnfParserTestCase4<T extends EbnfParserToken> extends Ebn
     }
 
     final T token(final String text) {
-        return this.token(text, identifier1());
+        return this.token(
+                text,
+                identifier1()
+        );
     }
 
-    final T token(final String text, final ParserToken... tokens) {
-        return this.token(text, Lists.of(tokens));
+    final T token(final String text,
+                  final ParserToken... tokens) {
+        return this.token(
+                text,
+                Lists.of(tokens)
+        );
     }
 
-    abstract T token(final String text, final List<ParserToken> tokens);
+    abstract T token(final String text,
+                     final List<ParserToken> tokens);
 }
