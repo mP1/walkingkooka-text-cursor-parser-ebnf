@@ -25,7 +25,7 @@ public final class EbnfExceptionParserTest extends EbnfParserTestCase2<EbnfExcep
 
     @Test
     public void testParseExceptionFails() {
-        this.parseThrows(
+        this.parseThrowsInvalidCharacterException(
                 EXCEPTION,
                 '-',
                 1,
