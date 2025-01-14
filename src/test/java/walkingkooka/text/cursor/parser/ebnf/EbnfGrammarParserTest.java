@@ -114,23 +114,33 @@ public final class EbnfGrammarParserTest extends EbnfParserTestCase<EbnfGrammarP
     }
 
     @Test
-    public void testInvalidRuleMissingRhsFails() {
+    public void testParseInvalidRuleMissingRhsFails() {
         this.parseThrowsEndOfText(IDENTIFIER1 + ASSIGNMENT);
     }
 
     @Test
-    public void testInvalidRuleMissingTerminatorFails() {
+    public void testParseInvalidRuleMissingTerminatorFails() {
         this.parseThrowsEndOfText(IDENTIFIER1 + ASSIGNMENT + TERMINAL1_TEXT);
     }
 
     @Test
-    public void testInvalidRuleRhsFails() {
-        this.parseThrows(IDENTIFIER1 + ASSIGNMENT + "123", '1', IDENTIFIER1 + ASSIGNMENT + '1', 1);
+    public void testParseInvalidRuleRhsFails() {
+        this.parseThrows(
+                IDENTIFIER1 + ASSIGNMENT + "123",
+                '1',
+                IDENTIFIER1 + ASSIGNMENT + '1',
+                1
+        );
     }
 
     @Test
-    public void testInvalidExceptionTokenFails() {
-        this.parseThrows(IDENTIFIER1 + ASSIGNMENT + "'A'-123", '1', IDENTIFIER1 + ASSIGNMENT + "'A'-'", 1);
+    public void testParseInvalidExceptionTokenFails() {
+        this.parseThrows(
+                IDENTIFIER1 + ASSIGNMENT + "'A'-123",
+                '1',
+                IDENTIFIER1 + ASSIGNMENT + "'A'-'",
+                1
+        );
     }
 
     private EbnfGrammarParserToken grammar(final String text, final EbnfParserToken... rules) {
