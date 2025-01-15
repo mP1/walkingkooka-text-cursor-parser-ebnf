@@ -16,9 +16,14 @@
  */
 package walkingkooka.text.cursor.parser.ebnf;
 
+import org.junit.jupiter.api.Test;
 import walkingkooka.text.cursor.parser.Parser;
 
 public final class EbnfRhsParserTest extends EbnfParserTestCase2<EbnfParserToken> {
+
+    @Test
+    public void testDummy() {
+    }
 
     @Override
     public Parser<EbnfParserContext> createParser() {
