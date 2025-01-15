@@ -37,6 +37,7 @@ public abstract class EbnfParserTokenTestCase<T extends EbnfParserToken> impleme
     }
 
     @Test
+    @Override
     public final void testPublicStaticFactoryMethod() {
         PublicStaticFactoryTesting.checkFactoryMethods(EbnfParserToken.class,
                 "Ebnf",

@@ -156,6 +156,7 @@ public class EbnfRuleParserTokenTest extends EbnfParentParserTokenTestCase<EbnfR
         return "abc123=def456";
     }
 
+    @Override
     final List<ParserToken> tokens() {
         return Lists.of(this.identifier1(), this.assignment(), this.terminal1(), this.terminator());
     }

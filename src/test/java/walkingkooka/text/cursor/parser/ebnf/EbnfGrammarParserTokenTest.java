@@ -200,6 +200,7 @@ public final class EbnfGrammarParserTokenTest extends EbnfParentParserTokenTestC
         return "identifier1='terminal-1';";
     }
 
+    @Override
     List<ParserToken> tokens() {
         return Lists.of(rule());
     }

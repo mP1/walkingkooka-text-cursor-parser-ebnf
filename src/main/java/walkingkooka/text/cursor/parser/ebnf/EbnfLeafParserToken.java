@@ -53,5 +53,6 @@ abstract class EbnfLeafParserToken<T> extends EbnfParserToken implements Value<T
 
     // EbnfParserTokenVisitor...........................................................................................
 
+    @Override
     abstract public void accept(final EbnfParserTokenVisitor visitor);
 }
