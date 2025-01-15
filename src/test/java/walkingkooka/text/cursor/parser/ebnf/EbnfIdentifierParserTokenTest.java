@@ -70,6 +70,7 @@ public final class EbnfIdentifierParserTokenTest extends EbnfLeafParserTokenTest
         return "abc123";
     }
 
+    @Override
     EbnfIdentifierName value() {
         return EbnfIdentifierName.with(this.text());
     }

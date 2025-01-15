@@ -262,6 +262,7 @@ public abstract class EbnfParserToken implements ParserToken {
     /**
      * Only symbols tokens return true
      */
+    @Override
     public final boolean isSymbol() {
         return this instanceof EbnfSymbolParserToken || this.isWhitespace();
     }
@@ -276,6 +277,7 @@ public abstract class EbnfParserToken implements ParserToken {
     /**
      * Only {@link EbnfWhitespaceParserToken} return true
      */
+    @Override
     public final boolean isWhitespace() {
         return this instanceof EbnfWhitespaceParserToken;
     }

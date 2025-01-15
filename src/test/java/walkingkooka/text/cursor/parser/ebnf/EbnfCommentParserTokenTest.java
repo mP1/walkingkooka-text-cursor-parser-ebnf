@@ -70,6 +70,7 @@ public final class EbnfCommentParserTokenTest extends EbnfLeafParserTokenTestCas
         return "(* comment *)";
     }
 
+    @Override
     String value() {
         return this.text();
     }

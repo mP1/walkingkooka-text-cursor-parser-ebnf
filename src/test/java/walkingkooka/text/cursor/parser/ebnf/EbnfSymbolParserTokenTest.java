@@ -70,6 +70,7 @@ public final class EbnfSymbolParserTokenTest extends EbnfLeafParserTokenTestCase
         return ";";
     }
 
+    @Override
     String value() {
         return this.text();
     }

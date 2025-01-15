@@ -70,6 +70,7 @@ public final class EbnfTerminalParserTokenTest extends EbnfLeafParserTokenTestCa
         return "'A'";
     }
 
+    @Override
     String value() {
         return this.text();
     }

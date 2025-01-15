@@ -118,6 +118,7 @@ public abstract class EbnfParserTestCase4<T extends EbnfParserToken> extends Ebn
         return EbnfParserToken.symbol(s, s);
     }
 
+    @Override
     final T token(final String text) {
         return this.token(
                 text,
