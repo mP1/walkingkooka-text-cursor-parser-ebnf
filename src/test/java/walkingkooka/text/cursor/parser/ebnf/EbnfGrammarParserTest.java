@@ -73,7 +73,7 @@ public final class EbnfGrammarParserTest extends EbnfParserTestCase<EbnfGrammarP
     }
 
     @Test
-    public void testWhitespaceAfterRules() {
+    public void testParseWhitespaceAfterRules() {
         final String text = RULE1 + RULE2 + WHITESPACE1;
 
         this.parseAndCheck(
@@ -89,7 +89,7 @@ public final class EbnfGrammarParserTest extends EbnfParserTestCase<EbnfGrammarP
     }
 
     @Test
-    public void testRuleWithRange() {
+    public void testParseRuleWithRange() {
         final String rule2Text = IDENTIFIER2 + ASSIGNMENT + TERMINAL1_TEXT + BETWEEN + TERMINAL2_TEXT + TERMINATOR;
         final String text = RULE1 + rule2Text;
 
@@ -153,16 +153,32 @@ public final class EbnfGrammarParserTest extends EbnfParserTestCase<EbnfGrammarP
         );
     }
 
-    private EbnfGrammarParserToken grammar(final String text, final EbnfParserToken... rules) {
-        return EbnfGrammarParserToken.with(Lists.of(rules), text);
+    private EbnfGrammarParserToken grammar(final String text,
+                                           final EbnfParserToken... rules) {
+        return EbnfGrammarParserToken.with(
+                Lists.of(rules),
+                text
+        );
     }
 
     private EbnfRuleParserToken rule1() {
-        return rule(RULE1, identifier1(), assignmentToken(), terminal1(), terminatorToken());
+        return rule(
+                RULE1,
+                identifier1(),
+                assignmentToken(),
+                terminal1(),
+                terminatorToken()
+        );
     }
 
     private EbnfRuleParserToken rule2() {
-        return rule(RULE2, identifier2(), assignmentToken(), terminal2(), terminatorToken());
+        return rule(
+                RULE2,
+                identifier2(),
+                assignmentToken(),
+                terminal2(),
+                terminatorToken()
+        );
     }
 
     @Override
