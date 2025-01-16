@@ -80,7 +80,7 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext> {
                                 ).cast()
                 ).build()
                 .transform(EbnfGrammarParserIdentifierParserTokenVisitor::ebnfIdentifierParserToken)
-                .setToString("IDENTIFIER");
+                .setToString("identifier");
 
     /**
      * <pre>
