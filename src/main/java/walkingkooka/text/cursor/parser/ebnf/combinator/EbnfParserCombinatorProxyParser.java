@@ -46,16 +46,31 @@ final class EbnfParserCombinatorProxyParser<C extends ParserContext> implements 
 
     private final EbnfIdentifierParserToken identifier;
 
+    Optional<Parser<C>> parser() {
+        return Optional.ofNullable(this.parser);
+    }
+
+    void setParser(final Parser<C> parser) {
+        if (null == parser) {
+            throw new IllegalStateException("Duplicate parser " + this.identifier);
+        }
+        this.parser = parser;
+    }
+
     /**
      * The actual parser is once its rule is eventually visited completely.
      */
-    Parser<C> parser;
+    private Parser<C> parser;
 
     /**
-     * Return the identifier rather than the full rule definition, this will help prevent cycles and very long and complex toStrings.
+     * If the parser is present return {@link Parser#toString()} otherwise return the {@link #identifier}.
      */
     @Override
     public String toString() {
-        return this.identifier.toString();
+        final Parser<C> parser = this.parser;
+
+        return null != parser ?
+                parser.toString() :
+                this.identifier.toString();
     }
 }

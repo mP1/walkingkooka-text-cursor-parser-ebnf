@@ -76,7 +76,11 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
 
     @Test
     public void testParserToString() {
-        this.checkEquals("'abc'", createParser2().toString());
+        this.checkEquals(
+                "\"abc\"",
+                createParser2()
+                        .toString()
+        );
     }
 
     @Test

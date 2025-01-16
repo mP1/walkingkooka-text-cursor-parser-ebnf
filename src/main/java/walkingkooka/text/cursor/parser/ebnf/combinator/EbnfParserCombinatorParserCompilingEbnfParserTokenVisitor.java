@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Compiles all tokens, passing each token to the {@link EbnfParserCombinatorSyntaxTreeTransformer} allowing substitution.
@@ -97,11 +98,12 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
         // replace all EbnfParserCombinatorProxyParser with the parser they are wrapping. This also has the advantage that
         // all parsers display their complete source.
 
-        this.identifierToParser.entrySet().forEach(this::fixRuleParserToString);
+        this.identifierToParser.entrySet()
+                .forEach(this::fixProxyParserForwardReference);
         super.endVisit(token);
     }
 
-    private void fixRuleParserToString(final Entry<EbnfIdentifierName, Parser<C>> identifierAndParser) {
+    private void fixProxyParserForwardReference(final Entry<EbnfIdentifierName, Parser<C>> identifierAndParser) {
         final EbnfIdentifierName identifier = identifierAndParser.getKey();
         final Parser<C> parser = identifierAndParser.getValue();
 
@@ -119,7 +121,10 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
                         .token();
             }
 
-            identifierAndParser.setValue(proxy.parser.setToString(token.toString()));
+            identifierAndParser.setValue(
+                    proxy.parser()
+                            .orElse(proxy)
+            );
         }
     }
 
@@ -133,9 +138,15 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
         final EbnfIdentifierParserToken name = rule.identifier();
 
         // update the proxy holding all references to this rule...
-        final EbnfParserCombinatorProxyParser<C> proxy = Cast.to(this.identifierToParser.get(name.value()));
+        final EbnfParserCombinatorProxyParser<C> proxy = Cast.to(
+                this.identifierToParser.get(name.value())
+        );
         final Parser<C> parser = this.children.get(0);
-        proxy.parser = this.transformer.identifier(name, parser);
+
+        proxy.setParser(
+                this.transformer.identifier(name, parser)
+        );
+
         this.replaceParser(proxy, parser);
 
         return Visiting.SKIP; // skip because we dont want to visit LHS of rule.
@@ -173,12 +184,21 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
 
     @Override
     protected void endVisit(final EbnfAlternativeParserToken token) {
-        final Parser<C> parser = Parsers.alternatives(this.children)
-                .setToString(token.toString());
+        final Parser<C> parser = Parsers.alternatives(
+                this.children.stream()
+                        .map(this::tryUnwrapProxy)
+                        .collect(Collectors.toList())
+        );
+
         this.exit();
+
         this.add(
-                this.transformer.alternatives(token, parser),
-                token);
+                this.transformer.alternatives(
+                        token,
+                        parser
+                ),
+                token
+        );
     }
 
     // CONCAT ........................................................................................................
@@ -192,23 +212,28 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
     @Override
     protected void endVisit(final EbnfConcatenationParserToken token) {
         final SequenceParserBuilder<C> b = Parsers.sequenceParserBuilder();
-        this.children.forEach(p -> this.concatenationParserToken(p, b));
 
-        final Parser<C> parser = b.build()
-                .setToString(token.toString());
-        this.exit();
-        this.add(
-                this.transformer.concatenation(token, parser),
-                token);
-    }
+        for(final Parser<C> parser : this.children) {
+            final Parser<C> unwrapped = tryUnwrapProxy(parser);
 
-    private void concatenationParserToken(final Parser<C> parser,
-                                          final SequenceParserBuilder<C> b) {
-        if (this.isOptional(parser)) {
-            b.optional(parser);
-        } else {
-            b.required(parser);
+            if (this.isOptional(parser)) {
+                b.optional(unwrapped);
+            } else {
+                b.required(unwrapped);
+            }
         }
+
+        final Parser<C> parser = b.build();
+
+        this.exit();
+
+        this.add(
+                this.transformer.concatenation(
+                        token,
+                        parser
+                ),
+                token
+        );
     }
 
     // EXCEPTION ........................................................................................................
@@ -221,14 +246,24 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
 
     @Override
     protected void endVisit(final EbnfExceptionParserToken token) {
-        final Parser<C> left = this.children.get(0);
-        final Parser<C> right = this.children.get(1);
-        final Parser<C> parser = left.andNot(right)
-                .setToString(token.toString());
+        final Parser<C> left = tryUnwrapProxy(
+                this.children.get(0)
+        );
+        final Parser<C> right = tryUnwrapProxy(
+                this.children.get(1)
+        );
+
+        final Parser<C> parser = left.andNot(right);
+
         this.exit();
+
         this.add(
-                this.transformer.exception(token, parser),
-                token);
+                this.transformer.exception(
+                        token,
+                        parser
+                ),
+                token
+        );
     }
 
     // GROUP ........................................................................................................
@@ -241,12 +276,19 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
 
     @Override
     protected void endVisit(final EbnfGroupParserToken token) {
-        final Parser<C> parser = this.children.get(0)
-                .setToString(token.toString());
+        final Parser<C> parser = tryUnwrapProxy(
+                this.children.get(0)
+        );
+
         this.exit();
+
         this.add(
-                this.transformer.group(token, parser),
-                token);
+                this.transformer.group(
+                        token,
+                        parser
+                ),
+                token
+        );
     }
 
     // OPT ........................................................................................................
@@ -259,12 +301,21 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
 
     @Override
     protected void endVisit(final EbnfOptionalParserToken token) {
-        final Parser<C> parser = this.children.get(0)
-                .setToString(token.toString());
+        final Parser<C> parser = tryUnwrapProxy(
+                this.children.get(0)
+        );
+
         this.exit();
+
         this.add(
-                this.addOptional(this.transformer.optional(token, parser)),
-                token);
+                this.addOptional(
+                        this.transformer.optional(
+                                token,
+                                parser
+                        )
+                ),
+                token
+        );
     }
 
     // RANGE ........................................................................................................
@@ -278,13 +329,20 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
     @Override
     protected void endVisit(final EbnfRangeParserToken token) {
         final SequenceParserBuilder<C> b = Parsers.sequenceParserBuilder();
-        this.children.forEach(b::required);
-        final Parser<C> parser = b.build()
-                .setToString(token.toString());
+        this.children.forEach(
+                p -> b.required(
+                        tryUnwrapProxy(p)
+                )
+        );
+
+        final Parser<C> parser = b.build();
+
         this.exit();
+
         this.add(
                 this.transformer.range(token, parser),
-                token);
+                token
+        );
     }
 
     // REPEAT ........................................................................................................
@@ -297,13 +355,16 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
 
     @Override
     protected void endVisit(final EbnfRepeatedParserToken token) {
-        final Parser<C> parser = this.children.get(0)
-                .repeating()
-                .setToString(token.toString());
+        final Parser<C> parser = tryUnwrapProxy(
+                this.children.get(0)
+        ).repeating();
+
         this.exit();
+
         this.add(
                 this.transformer.repeated(token, parser),
-                token);
+                token
+        );
     }
 
     // IDENTIFIER ........................................................................................................
@@ -317,9 +378,7 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
 
     @Override
     protected void visit(final EbnfTerminalParserToken token) {
-        final Parser<C> parser = Parsers.string(token.value(), CaseSensitivity.SENSITIVE)
-                .setToString(token.toString())
-                .cast();
+        final Parser<C> parser = Parsers.string(token.value(), CaseSensitivity.SENSITIVE);
         this.add(
                 this.transformer.terminal(token, parser),
                 token);
@@ -350,6 +409,19 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
 
     private final Map<EbnfIdentifierName, Parser<C>> identifierToParser;
     private final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer;
+
+    /**
+     * Forward parser references in the grammar file are replaced with a {@link EbnfParserCombinatorProxyParser}.
+     * Eventually proxy parsers should be unwrapped and the {@link Parser} returned.
+     */
+    private Parser<C> tryUnwrapProxy(final Parser<C> parser) {
+        return parser instanceof EbnfParserCombinatorProxyParser ?
+                Cast.to(
+                        ((EbnfParserCombinatorProxyParser) parser).parser()
+                                .orElse(parser)
+                ) :
+                parser;
+    }
 
     /**
      * Marks a new parser as optional if the previous was also optional.
