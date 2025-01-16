@@ -70,18 +70,17 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext> {
      * identifier = letter , { letter | digit | "_" } ;
      * </pre>
      */
-    final static Parser<EbnfParserContext> IDENTIFIER =
-            identifier()
-                    .setToString("identifier");
-
-    private static Parser<EbnfParserContext> identifier() {
-        return Parsers.<EbnfParserContext>sequenceParserBuilder()
+    final static Parser<EbnfParserContext> IDENTIFIER = Parsers.<EbnfParserContext>sequenceParserBuilder()
                 .required(Parsers.character(EbnfIdentifierName.INITIAL))
-                .required(Parsers.character(EbnfIdentifierName.PART).repeating().orReport(ParserReporters.basic()).cast())
-                .build()
+                .required(
+                        Parsers.character(EbnfIdentifierName.PART)
+                                .repeating()
+                                .orReport(
+                                        ParserReporters.basic()
+                                ).cast()
+                ).build()
                 .transform(EbnfGrammarParserIdentifierParserTokenVisitor::ebnfIdentifierParserToken)
                 .setToString("IDENTIFIER");
-    }
 
     /**
      * <pre>
