@@ -47,13 +47,13 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext> {
     private static Parser<EbnfParserContext> whitespaceOrComment() {
         final Parser<EbnfParserContext> whitespace = Parsers.<EbnfParserContext>stringCharPredicate(CharPredicates.whitespace(), 1, Integer.MAX_VALUE)
                 .transform(EbnfGrammarParser::transformWhitespace)
-                .setToString("whitespace");
+                .setToString("WHITESPACE");
 
         final Parser<EbnfParserContext> comment = Parsers.<EbnfParserContext>surround(
                 EbnfGrammar.COMMENT_OPEN,
                         EbnfGrammar.COMMENT_CLOSE
                 ).transform(EbnfGrammarParser::transformComment)
-                .setToString("comment");
+                .setToString("COMMENT");
 
         return whitespace.or(comment)
                 .repeating();
@@ -82,7 +82,7 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext> {
                                 ).cast()
                 ).build()
                 .transform(EbnfGrammarParserIdentifierParserTokenVisitor::ebnfIdentifierParserToken)
-                .setToString("identifier");
+                .setToString("IDENTIFIER");
 
     /**
      * <pre>
