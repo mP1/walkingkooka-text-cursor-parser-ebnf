@@ -49,7 +49,7 @@ final class EbnfGrammarParserTokenReferenceCollectorEbnfParserTokenVisitor exten
         }
         rules.add(rule);
 
-        this.accept(rule.token()); // RHS.. visiting everything on the RHS to find identifiers which are actually references.
+        this.accept(rule.assignment()); // RHS.. visiting everything on the RHS to find identifiers which are actually references.
         return Visiting.SKIP;
     }
 
