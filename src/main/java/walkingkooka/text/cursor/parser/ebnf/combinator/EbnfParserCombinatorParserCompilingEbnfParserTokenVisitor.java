@@ -114,11 +114,11 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
             // the proxy will be lost but thats okay as we have the real parser now. Any forward refs will continue to hold the proxy.
             EbnfRuleParserToken rule = this.ruleOrFail(identifier);
 
-            EbnfParserToken token = rule.token();
-            while (token.isIdentifier()) {
-                final EbnfIdentifierParserToken tokenIdentifier = token.cast(EbnfIdentifierParserToken.class);
-                token = this.ruleOrFail(tokenIdentifier.value())
-                        .token();
+            EbnfParserToken assignment = rule.assignment();
+            while (assignment.isIdentifier()) {
+                final EbnfIdentifierParserToken tokenIdentifier = assignment.cast(EbnfIdentifierParserToken.class);
+                assignment = this.ruleOrFail(tokenIdentifier.value())
+                        .assignment();
             }
 
             identifierAndParser.setValue(
@@ -133,7 +133,7 @@ final class EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor<C extends 
     @Override
     protected Visiting startVisit(final EbnfRuleParserToken rule) {
         this.enter();
-        this.accept(rule.token());
+        this.accept(rule.assignment());
 
         final EbnfIdentifierParserToken name = rule.identifier();
 

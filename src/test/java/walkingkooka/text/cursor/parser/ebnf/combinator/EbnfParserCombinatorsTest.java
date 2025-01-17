@@ -417,7 +417,13 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 .map(EbnfParserToken.class::cast)
                 .filter(EbnfParserToken::isRule)
                 .map(EbnfRuleParserToken.class::cast)
-                .forEach(rule -> identifierToToken.put(rule.identifier().value(), rule.token()));
+                .forEach(
+                        rule -> identifierToToken.put(
+                                rule.identifier()
+                                        .value(),
+                                rule.assignment()
+                        )
+                );
 
         return new EbnfParserCombinatorSyntaxTreeTransformer<>() {
             @Override

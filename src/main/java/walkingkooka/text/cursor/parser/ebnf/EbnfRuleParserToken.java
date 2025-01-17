@@ -48,13 +48,13 @@ public final class EbnfRuleParserToken extends EbnfParentParserToken<EbnfRulePar
         if (null == identifier) {
             throw new IllegalArgumentException("Rule missing Identifier on lhs=" + text);
         }
-        final EbnfParserToken token = checker.token;
-        if (null == token) {
-            throw new IllegalArgumentException("Rule missing Token on rhs=" + text);
+        final EbnfParserToken assignment = checker.assignment;
+        if (null == assignment) {
+            throw new IllegalArgumentException("Rule missing assignment on rhs=" + text);
         }
 
         this.identifier = identifier;
-        this.token = token;
+        this.assignment = assignment;
     }
 
     private static EbnfParserToken toEbnfParserToken(final ParserToken token) {
@@ -67,11 +67,11 @@ public final class EbnfRuleParserToken extends EbnfParentParserToken<EbnfRulePar
 
     private final EbnfIdentifierParserToken identifier;
 
-    public EbnfParserToken token() {
-        return this.token;
+    public EbnfParserToken assignment() {
+        return this.assignment;
     }
 
-    private final EbnfParserToken token;
+    private final EbnfParserToken assignment;
 
     // children.........................................................................................................
 

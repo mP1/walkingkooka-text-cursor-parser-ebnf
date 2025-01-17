@@ -35,15 +35,15 @@ final class EbnfRuleParserTokenConsumer implements Consumer<EbnfParserToken> {
                 if (!token.isIdentifier()) {
                     throw new IllegalArgumentException("Rule expected identifier but got " + token);
                 }
-                identifier = token.cast(EbnfIdentifierParserToken.class);
+                this.identifier = token.cast(EbnfIdentifierParserToken.class);
             } else {
-                if (null == this.token) {
-                    this.token = token;
+                if (null == this.assignment) {
+                    this.assignment = token;
                 }
             }
         }
     }
 
     EbnfIdentifierParserToken identifier;
-    EbnfParserToken token;
+    EbnfParserToken assignment;
 }
