@@ -43,13 +43,13 @@ public final class EbnfGrammarParserTokenTest extends EbnfParentParserTokenTestC
 
 
         final EbnfGrammarParserToken grammar = this.createToken();
-        final EbnfRuleParserToken range = Cast.to(grammar.value().get(0));
+        final EbnfRuleParserToken rule = Cast.to(grammar.value().get(0));
 
-        final Iterator<ParserToken> rangeTokens = range.value().iterator();
-        final EbnfIdentifierParserToken identifier = Cast.to(rangeTokens.next());
-        final EbnfSymbolParserToken assignment = Cast.to(rangeTokens.next());
-        final EbnfTerminalParserToken terminal = Cast.to(rangeTokens.next());
-        final EbnfSymbolParserToken terminator = Cast.to(rangeTokens.next());
+        final Iterator<ParserToken> ruleTokens = rule.value().iterator();
+        final EbnfIdentifierParserToken identifier = Cast.to(ruleTokens.next());
+        final EbnfSymbolParserToken assignment = Cast.to(ruleTokens.next());
+        final EbnfTerminalParserToken terminal = Cast.to(ruleTokens.next());
+        final EbnfSymbolParserToken terminator = Cast.to(ruleTokens.next());
 
         new FakeEbnfParserTokenVisitor() {
             @Override
@@ -87,7 +87,7 @@ public final class EbnfGrammarParserTokenTest extends EbnfParentParserTokenTestC
 
             @Override
             protected Visiting startVisit(final EbnfRuleParserToken t) {
-                assertSame(range, t);
+                assertSame(rule, t);
                 b.append("6");
                 visited.add(t);
                 return Visiting.CONTINUE;
@@ -95,7 +95,7 @@ public final class EbnfGrammarParserTokenTest extends EbnfParentParserTokenTestC
 
             @Override
             protected void endVisit(final EbnfRuleParserToken t) {
-                assertSame(range, t);
+                assertSame(rule, t);
                 b.append("7");
                 visited.add(t);
             }
@@ -111,14 +111,14 @@ public final class EbnfGrammarParserTokenTest extends EbnfParentParserTokenTestC
                 b.append("9");
                 visited.add(t);
             }
-        }.accept(range);
+        }.accept(rule);
         this.checkEquals("13613542138421394213842742", b.toString());
-        this.checkEquals(Lists.of(range, range, range,
+        this.checkEquals(Lists.of(rule, rule, rule,
                         identifier, identifier, identifier, identifier, identifier,
                         assignment, assignment, assignment, assignment, assignment,
                         terminal, terminal, terminal, terminal, terminal,
                         terminator, terminator, terminator, terminator, terminator,
-                        range, range, range),
+                        rule, rule, rule),
                 visited,
                 "visited");
     }
