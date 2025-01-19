@@ -29,19 +29,22 @@ import walkingkooka.text.cursor.parser.ebnf.EbnfOptionalParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfRangeParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfRepeatedParserToken;
+import walkingkooka.text.cursor.parser.ebnf.EbnfRuleParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfTerminalParserToken;
 
 /**
  * The {@link Context} that provides callbacks for a grammar that defines multiple {@link Parser parses}.
  * <br>
  * Note if a different parser object is returned by {@link #terminal(EbnfTerminalParserToken, Parser)},
- * it will be ignored by {@link #range(EbnfRangeParserToken, Parser)} which reads the
+ * it will be ignored by {@link #range(EbnfRangeParserToken, String, String)} which reads the
  * tokens from the range token.
  * <br>
  * Note the {@link EbnfParserToken#toString()} may be set upon the {@link Parser} if the text definition from the grammar
  * file should be kept.
  */
 public interface EbnfParserCombinatorSyntaxTreeTransformer<C extends ParserContext> extends Context {
+
+    Parser<C> rule(final EbnfRuleParserToken token, final Parser<C> parser);
 
     Parser<C> alternatives(final EbnfAlternativeParserToken token, final Parser<C> parser);
 
@@ -55,7 +58,9 @@ public interface EbnfParserCombinatorSyntaxTreeTransformer<C extends ParserConte
 
     Parser<C> optional(final EbnfOptionalParserToken token, final Parser<C> parser);
 
-    Parser<C> range(final EbnfRangeParserToken token, final Parser<C> parser);
+    Parser<C> range(final EbnfRangeParserToken token,
+                    final String beginText,
+                    final String endText);
 
     Parser<C> repeated(final EbnfRepeatedParserToken token, final Parser<C> parser);
 

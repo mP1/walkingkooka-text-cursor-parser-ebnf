@@ -28,6 +28,7 @@ import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfOptionalParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfRangeParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfRepeatedParserToken;
+import walkingkooka.text.cursor.parser.ebnf.EbnfRuleParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfTerminalParserToken;
 
 public class FakeEbnfParserCombinatorSyntaxTreeTransformer<C extends ParserContext> implements EbnfParserCombinatorSyntaxTreeTransformer<C> {
@@ -74,13 +75,20 @@ public class FakeEbnfParserCombinatorSyntaxTreeTransformer<C extends ParserConte
 
     @Override
     public Parser<C> range(final EbnfRangeParserToken token,
-                           final Parser<C> parser) {
+                           final String beginText,
+                           final String endText) {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public Parser<C> repeated(final EbnfRepeatedParserToken token,
                               final Parser<C> parser) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Parser<C> rule(final EbnfRuleParserToken token,
+                          final Parser<C> parser) {
         throw new UnsupportedOperationException();
     }
 
