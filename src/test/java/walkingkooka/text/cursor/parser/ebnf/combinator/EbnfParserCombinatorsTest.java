@@ -24,19 +24,16 @@ import walkingkooka.collect.map.Maps;
 import walkingkooka.predicate.character.CharPredicates;
 import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.reflect.PublicStaticHelperTesting;
-import walkingkooka.test.ResourceTesting;
-import walkingkooka.text.CharSequences;
-import walkingkooka.text.cursor.TextCursor;
-import walkingkooka.text.cursor.TextCursorSavePoint;
 import walkingkooka.text.cursor.TextCursors;
 import walkingkooka.text.cursor.parser.BigIntegerParserToken;
 import walkingkooka.text.cursor.parser.FakeParserContext;
 import walkingkooka.text.cursor.parser.Parser;
-import walkingkooka.text.cursor.parser.ParserContext;
+import walkingkooka.text.cursor.parser.ParserReporters;
 import walkingkooka.text.cursor.parser.ParserTesting2;
 import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.text.cursor.parser.ParserTokens;
 import walkingkooka.text.cursor.parser.Parsers;
+import walkingkooka.text.cursor.parser.SequenceParserToken;
 import walkingkooka.text.cursor.parser.StringParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfAlternativeParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfConcatenationParserToken;
@@ -53,20 +50,19 @@ import walkingkooka.text.cursor.parser.ebnf.EbnfRepeatedParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfRuleParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfTerminalParserToken;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.math.MathContext;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<FakeParserContext>, FakeParserContext>,
-        PublicStaticHelperTesting<EbnfParserCombinators>,
-        ResourceTesting {
+        PublicStaticHelperTesting<EbnfParserCombinators> {
 
     @Test
     @Disabled("Until proper error reporting is available")
@@ -74,435 +70,1609 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
         this.parseFailAndCheck("");
     }
 
+    // terminal.........................................................................................................
+
+    // TEST = "abc";
     @Test
-    public void testParserToString() {
+    public void testTransformEbnfParserCombinatorSyntaxTreeTransformerTerminal() {
+        final StringBuilder b = new StringBuilder();
+
+        this.parseGrammarAndGetParser(
+                "TEST = \"abc\";",
+                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+
+                    @Override
+                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                                                              final Parser<FakeParserContext> parser) {
+                        b.append("TERMINAL " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                                                          final Parser<FakeParserContext> parser) {
+                        b.append("RULE\n");
+                        return parser;
+                    }
+                }
+        );
+
         this.checkEquals(
-                "\"abc\"",
-                createParser2()
-                        .toString()
+                "TERMINAL \"abc\"\n" +
+                        "RULE\n",
+                b.toString()
         );
     }
 
+    // TEST="terminal-text-123";
     @Test
-    public void testTerminal() {
+    public void testTransformTerminal() {
         final String text = "terminal-text-123";
-        this.parseAndCheck2(text, this.string(text), text);
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                "TEST=\"terminal-text-123\";\n", // grammar
+                text
+        );
     }
 
+    // alt..............................................................................................................
+
+    // TEST = "abc" | "def";
     @Test
-    public void testAlternative() {
-        final Parser<FakeParserContext> parser = createParser2();
+    public void testTransformEbnfParserCombinatorSyntaxTreeTransformerAlternative() {
+        final StringBuilder b = new StringBuilder();
+
+        this.parseGrammarAndGetParser(
+                "TEST = \"abc\" | \"def\";",
+                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                    @Override
+                    public Parser<FakeParserContext> alternatives(final EbnfAlternativeParserToken token,
+                                                                  final Parser<FakeParserContext> parser) {
+                        b.append("ALTERNATIVES " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                                                              final Parser<FakeParserContext> parser) {
+                        b.append("TERMINAL " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                                                          final Parser<FakeParserContext> parser) {
+                        b.append("RULE\n");
+                        return parser;
+                    }
+                }
+        );
+
+        this.checkEquals(
+                "TERMINAL \"abc\"\n" +
+                        "TERMINAL \"def\"\n" +
+                        "ALTERNATIVES \"abc\" | \"def\"\n" +
+                        "RULE\n",
+                b.toString()
+        );
+    }
+
+    // OPTIONAL = ["optional-xyz"];
+    // TEST     =   "abc" | OPTIONAL;
+    @Test
+    public void testTransformAlternativeOptionalFails() {
+        this.parseGrammarAndGetParserThrows(
+                "OPTIONAL = [\"optional-xyz\"];\n" +
+                        "TEST     =   \"abc\" | OPTIONAL;",
+                new IllegalArgumentException("Alternatives given 1 optional(s) expected 0 got OPTIONAL")
+        );
+    }
+
+    // TEST    =   "abc" | "xyz";
+    @Test
+    public void testTransformAlternativeTerminalTerminal() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser("TEST    =   \"abc\" | \"xyz\";");
 
         final String text = "abc";
-        this.parseAndCheck2(parser, text, this.string(text), text);
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                text
+        );
 
         final String text2 = "xyz";
-        this.parseAndCheck2(parser, text2, this.string("xyz"), text2);
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                text2
+        );
     }
 
+    // TEST    =   "abc" | "xyz" | "qrs";
     @Test
-    public void testConcatenation() {
-        final Parser<FakeParserContext> parser = createParser2();
+    public void testTransformAlternativeTerminalTerminalTerminal() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser("TEST    =   \"abc\" | \"xyz\" | \"qrs\";");
+
+        final String text = "abc";
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                text
+        );
+
+        final String text2 = "xyz";
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                text2
+        );
+    }
+
+    // concat...........................................................................................................
+
+    // TEST = \"abc\", \"def\";
+    @Test
+    public void testTransformEbnfParserCombinatorSyntaxTreeTransformerConcatenation() {
+        final StringBuilder b = new StringBuilder();
+
+        this.parseGrammarAndGetParser(
+                "TEST = \"abc\" , \"def\";",
+                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                    @Override
+                    public Parser<FakeParserContext> concatenation(final EbnfConcatenationParserToken token,
+                                                                   final Parser<FakeParserContext> parser) {
+                        b.append("CONCAT " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                                                              final Parser<FakeParserContext> parser) {
+                        b.append("TERMINAL " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                                                          final Parser<FakeParserContext> parser) {
+                        b.append("RULE\n");
+                        return parser;
+                    }
+                }
+        );
+
+        this.checkEquals(
+                "TERMINAL \"abc\"\n" +
+                        "TERMINAL \"def\"\n" +
+                        "CONCAT \"abc\" , \"def\"\n" +
+                        "RULE\n",
+                b.toString()
+        );
+    }
+
+    // TEST="abc" ,  "def";
+    @Test
+    public void testTransformConcatenationTerminalTerminal() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser("TEST=\"abc\", \"def\";");
 
         final String text1 = "abc";
-        final String text2 = "xyz";
+        final String text2 = "def";
         final String concatText = text1 + text2;
-        this.parseAndCheck2(parser,
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
                 concatText,
-                ParserTokens.sequence(Lists.of(this.string(text1), this.string(text2)), concatText),
-                concatText);
+                sequence(
+                        this.string(text1),
+                        this.string(text2)
+                ),
+                concatText
+        );
     }
 
+    // TEST="abc" , "def", "ghi";
     @Test
-    public void testException() {
-        final Parser<FakeParserContext> parser = createParser2();
+    public void testTransformConcatenationTerminalTerminalTerminal() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser("TEST=\"abc\", \"def\", \"ghi\";");
 
-        final String text = "match";
-        this.parseAndCheck2(parser, text, this.string(text), text);
+        final String text1 = "abc";
+        final String text2 = "def";
+        final String text3 = "ghi";
+        final String concatText = text1 + text2 + text3;
 
-        this.parseFailAndCheck(parser, "abc");
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                concatText,
+                sequence(
+                        this.string(text1),
+                        this.string(text2),
+                        this.string(text3)
+                ),
+                concatText
+        );
     }
 
+    // TEST=["abc"] ,  "def";
     @Test
-    public void testGroup() {
-        final String text = "group-text-abc";
-        this.parseAndCheck2(text, this.string(text), text);
+    public void testTransformConcatenationMissingOptionalTerminalTerminal() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser("TEST=[\"abc\"], \"def\";");
+
+        final String text2 = "def";
+
+        // optional absent
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                text2,
+                sequence(
+                        this.string(text2)
+                ),
+                text2
+        );
     }
 
+    // TEST=["abc"] ,  "def";
     @Test
-    public void testIdentifierDuplicateRuleGrammarFails() {
-        assertThrows(EbnfParserCombinatorDuplicateRuleException.class, this::createParser2);
+    public void testTransformConcatenationPresentOptionalTerminalTerminal() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser("TEST=[\"abc\"], \"def\";");
+
+        final String text1 = "abc";
+        final String text2 = "def";
+        final String concatText = text1 + text2;
+
+        // optional present
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                concatText,
+                sequence(
+                        this.string(text1),
+                        this.string(text2)
+                ),
+                concatText
+        );
     }
 
+    // INITIAL =   "a";
+    // LAST    =   "z";
+    // TEST    =   [INITIAL], LAST;
     @Test
-    public void testIdentifierDuplicateRulePredefinedFails() {
-        assertThrows(EbnfParserCombinatorDuplicateRuleException.class, this::createParser2);
-    }
+    public void testTransformConcatOfMissingOptionalIdentifierTerminalThenIdentifierTerminal() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser(
+                "INITIAL =   \"a\";\n" +
+                        "LAST    =   \"z\";\n" +
+                        "TEST    =   [INITIAL], LAST;"
+        );
 
-    @Test
-    public void testIdentifierReference() {
-        final String text = "abc123";
-        this.parseAndCheck2(text, this.string(text), text);
-    }
+        final ParserToken z = this.string("z");
 
-    @Test
-    public void testIdentifierReference2() {
-        final String text = "abc123";
-        this.parseAndCheck2(text, this.string(text), text);
-    }
+        // missing optional a
+        final String text = "z";
+        final String after = "!!!";
 
-    @Test
-    public void testOptional() {
-        final Parser<FakeParserContext> parser = createParser2();
-
-        final String text = "optional-text-abc";
-        this.parseAndCheck2(parser, text, this.string(text), text);
-
-        this.parseFailAndCheck(parser, "different");
-    }
-
-    @Test
-    public void testRepeat() {
-        final Parser<FakeParserContext> parser = createParser2();
-
-        final String text = "abc";
-        final String after = "123";
-        final String repeatedText = text + text;
-        this.parseAndCheck2(parser,
-                repeatedText + after,
-                ParserTokens.repeated(Lists.of(this.string(text), this.string(text)), repeatedText),
-                repeatedText,
-                after);
-    }
-
-    @Test
-    public void testRangeTerminalTerminal() {
-        this.parseRangeAndCheck();
-    }
-
-    @Test
-    public void testRangeIdentifierTerminal() {
-        this.parseRangeAndCheck();
-    }
-
-    @Test
-    public void testRangeTerminalIdentifier() {
-        this.parseRangeAndCheck();
-    }
-
-    @Test
-    public void testRangeIdentifierIdentifier() {
-        this.parseRangeAndCheck();
-    }
-
-    @Test
-    public void testRangeIdentifierIdentifier2() {
-        this.parseRangeAndCheck();
-    }
-
-    private void parseRangeAndCheck() {
-        final Parser<FakeParserContext> parser = createParser2();
-
-        final String text = "m";
-        final String after = "123";
-        this.parseAndCheck2(parser,
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
                 text + after,
-                this.string(text),
+                sequence(z),
                 text,
-                after);
-
-        this.parseFailAndCheck(parser, "Q");
+                after
+        );
     }
 
+    // INITIAL =   ["a"];
+    // LAST    =   "z";
+    // TEST    =   INITIAL, LAST;
     @Test
-    public void testRangeInvalidBoundFails() {
-        // from is a Range, terminal or identifier to terminal required
-        this.parseFailAndCheck("abc");
+    public void testTransformConcatOfMissingOptionalIdentifierTerminalThenIdentifierTerminal2() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser(
+                "INITIAL =   [\"a\"];\n" +
+                        "LAST    =   \"z\";\n" +
+                        "TEST    =   INITIAL, LAST;"
+        );
+
+        final ParserToken z = this.string("z");
+
+        // missing optional a
+        final String text = "z";
+        final String after = "!!!";
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                text + after,
+                sequence(z),
+                text,
+                after
+        );
     }
 
+    // INITIAL =   "a";
+    // LAST    =   "z";
+    // TEST    =   INITIAL, [LAST];
     @Test
-    public void testRangeInvalidBoundFails2() {
-        // from is a repeated, terminal or identifier to terminal required
-        this.parseFailAndCheck("abc");
+    public void testTransformConcatOfIdentifierTerminalThenMissingOptionalIdentifierTerminal() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser(
+                "INITIAL =   \"a\";\n" +
+                        "LAST    =   [\"z\"];\n" +
+                        "TEST    =   INITIAL, LAST;"
+        );
+
+        final ParserToken a = this.string("a");
+
+        // missing optional z
+        final String text = "a";
+        final String after = "!!!";
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                text + after,
+                sequence(
+                        a
+                ),
+                text,
+                after
+        );
     }
 
+    // INITIAL =   "a";
+    // LAST    =   "z";
+    // TEST    =   INITIAL , [LAST];
     @Test
-    public void testRangeInvalidBoundFails3() {
-        // to is a Optional, terminal or identifier to terminal required
-        this.parseFailAndCheck("abc");
+    public void testTransformConcatOfIdentifierTerminalThenOptionalIdentifierTerminal() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser(
+                "INITIAL =   \"a\";\n" +
+                        "LAST    =   [\"z\"];\n" +
+                        "TEST    =   INITIAL , LAST;"
+        );
+
+        final ParserToken a = this.string("a");
+        final ParserToken z = this.string("z");
+
+        // missing optional z
+        final String text = "az";
+        final String after = "!!!";
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                text + after,
+                sequence(
+                        a,
+                        z
+                ),
+                text,
+                after
+        );
     }
 
+    // INITIAL =   "i" | "j" | "k";
+    // PART    =   "p" | "q" | "r";
+    // TEST    =   INITIAL , PART , {PART};
     @Test
-    public void testComplex() {
-        final Parser<FakeParserContext> parser = createParser2();
+    public void testTransformConcatOfIdentifierAlternativesThenIdentifierAlternativesThenRepeatingIdentifierAlternatives() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser(
+                "INITIAL =   \"i\" | \"j\" | \"k\";\n" +
+                        "PART    =   \"p\" | \"q\" | \"r\";\n" +
+                        "TEST    =   INITIAL , PART , {PART};"
+        );
 
         final ParserToken i = this.string("i");
         final ParserToken p = this.string("p");
         final ParserToken q = this.string("q");
 
-        {
-            // required i1 and required p1 and optional p1
-            final String text = "ipq";
-            final String after = "!!!";
+        // required i1 and required p1 and optional p1
+        final String text = "ipq";
+        final String after = "!!!";
 
-            final ParserToken repeatedQ = ParserTokens.repeated(Lists.of(q), "q");
+        final ParserToken repeatedQ = ParserTokens.repeated(
+                Lists.of(q),
+                "q"
+        );
 
-            this.parseAndCheck2(parser,
-                    text + after,
-                    ParserTokens.sequence(Lists.of(i, p, repeatedQ), text),
-                    text,
-                    after);
-        }
-
-        {
-            // required i1 and required p1 and repeating q
-            final String text = "ipqqq";
-            final String after = "!!!";
-
-            final ParserToken repeatedQ = ParserTokens.repeated(Lists.of(q, q, q), "qqq");
-
-            this.parseAndCheck2(parser,
-                    text + after,
-                    ParserTokens.sequence(Lists.of(i, p, repeatedQ), text),
-                    text,
-                    after);
-        }
-
-        this.parseFailAndCheck(parser, "D123");
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                text + after,
+                sequence(
+                        i, p, repeatedQ
+                ),
+                text,
+                after
+        );
     }
 
-//    INITIAL =   "i";
-//    PART    =   "p";
-//    LAST    =   [ "L" ];
-//
-//    TEST    =   INITIAL, PART, {PART}, LAST];
-
+    // INITIAL =   "i" | "j" | "k";
+    // PART    =   "p" | "q" | "r";
+    // TEST    =   INITIAL , PART , {PART};
     @Test
-    public void testComplex2() {
-        final Parser<FakeParserContext> parser = createParser2();
+    public void testTransformConcatOfIdentifierAlternativesThenIdentifierAlternativesThenRepeatingIdentifierAlternatives2() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser(
+                "INITIAL =   \"i\" | \"j\" | \"k\";\n" +
+                        "PART    =   \"p\" | \"q\" | \"r\";\n" +
+                        "TEST    =   INITIAL , PART , {PART};"
+        );
 
         final ParserToken i = this.string("i");
         final ParserToken p = this.string("p");
-        final ParserToken l = this.string("L");
+        final ParserToken q = this.string("q");
 
-        {
-            // without optional L
-            final String text = "ipp";
-            final String after = "!!!";
+        // required i1 and required p1 and repeating q
+        final String text = "ipqqq";
+        final String after = "!!!";
 
-            final ParserToken repeatedP = ParserTokens.repeated(Lists.of(p), "p");
+        final ParserToken repeatedQ = ParserTokens.repeated(
+                Lists.of(
+                        q, q, q
+                ),
+                "qqq"
+        );
 
-            this.parseAndCheck2(parser,
-                    text + after,
-                    ParserTokens.sequence(Lists.of(i, p, repeatedP), text),
-                    text,
-                    after);
-        }
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                text + after,
+                sequence(
+                        i, p, repeatedQ
+                ),
+                text,
+                after
+        );
+    }
 
-        {
-            // includes optional L
-            final String text = "ippL";
-            final String after = "!!!";
+    // INITIAL =   "i" | "j" | "k";
+    // PART    =   "p" | "q" | "r";
+    // TEST    =   INITIAL , PART , {PART};
+    @Test
+    public void testTransformConcatOfIdentifierAlternativesThenIdentifierAlternativesThenRepeatingIdentifierAlternativesWhenNone() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser(
+                "INITIAL =   \"i\" | \"j\" | \"k\";\n" +
+                        "PART    =   \"p\" | \"q\" | \"r\";\n" +
+                        "TEST    =   INITIAL , PART , {PART};"
+        );
 
-            final ParserToken repeatedP = ParserTokens.repeated(Lists.of(p), "p");
-
-            this.parseAndCheck2(parser,
-                    text + after,
-                    ParserTokens.sequence(Lists.of(i, p, repeatedP, l), text),
-                    text,
-                    after);
-        }
-
-        this.parseFailAndCheck(parser, "ip");
+        this.parseFailAndCheck(
+                parser,
+                "D123"
+        );
     }
 
     @Test
-    public void testReplaceToken() {
-        final Parser<FakeParserContext> parser = createParser2();
+    public void testTransformConcatOfIdentifierTerminalThenIdentifierTerminalThenMissingRepeatingIdentifierTerminalThenMissingOptionalIdentifierTerminal() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser(
+                "INITIAL =   \"Initial\";\n" +
+                        "PART    =   \"Part\";\n" +
+                        "LAST    =   [ \"Last\" ];\n" +
+                        "TEST    =   INITIAL, PART, {PART}, LAST;"
+        );
 
-        // <8> is optional
-        {
-            final String text = "9";
-            final String after = "xyz";
-            this.parseAndCheck2(parser,
-                    text + after,
-                    number(text),
-                    text,
-                    after);
-        }
+        this.parseFailAndCheck(
+                parser,
+                "InitialPart"
+        );
+    }
 
-        this.parseFailAndCheck(parser, "D123");
+    //    INITIAL =   "Initial";
+    //    PART    =   "Part";
+    //    LAST    =   [ "Last" ];
+    //
+    //    TEST    =   INITIAL, PART, {PART}, [LAST];
+    @Test
+    public void testTransformConcatOfIdentifierTerminalThenIdentifierTerminalThenRepeatingIdentifierTerminalThenMissingOptionalIdentifierTerminal() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser(
+                "INITIAL =   \"Initial\";\n" +
+                        "PART    =   \"Part\";\n" +
+                        "LAST    =   [ \"Last\" ];\n" +
+                        "TEST    =   INITIAL, PART, {PART}, LAST;"
+        );
+
+        final ParserToken initial = this.string("Initial");
+        final ParserToken part = this.string("Part");
+
+        // without optional LAST
+        final String initialPartPart = "InitialPartPart";
+        final String after = "!!!";
+
+        final ParserToken repeatedPart = ParserTokens.repeated(
+                Lists.of(part),
+                "Part"
+        );
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                initialPartPart + after,
+                sequence(
+                        initial,
+                        part,
+                        repeatedPart
+                ),
+                initialPartPart,
+                after
+        );
+    }
+
+    //    INITIAL =   "Initial";
+    //    PART    =   "Part";
+    //    LAST    =   [ "Last" ];
+    //
+    //    TEST    =   INITIAL, PART, {PART}, [LAST];
+    @Test
+    public void testTransformConcatOfIdentifierTerminalThenIdentifierTerminalThenRepeatingIdentifierTerminalThenPresentOptionalIdentifierTerminal() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser(
+                "INITIAL =   \"Initial\";\n" +
+                        "PART    =   \"Part\";\n" +
+                        "LAST    =   [ \"Last\" ];\n" +
+                        "TEST    =   INITIAL, PART, {PART}, LAST;"
+        );
+
+        final ParserToken initial = this.string("Initial");
+        final ParserToken part = this.string("Part");
+        final ParserToken last = this.string("Last");
+
+        // includes optional L
+        final String initialPartPartLast = "InitialPartPartPartLast";
+        final String after = "!!!";
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                initialPartPartLast + after,
+                sequence(
+                        initial,
+                        part,
+                        ParserTokens.repeated(
+                                Lists.of(
+                                        part,
+                                        part
+                                ),
+                                "PartPart"
+                        ),
+                        last
+                ),
+                initialPartPartLast,
+                after
+        );
+    }
+
+    // exception........................................................................................................
+
+    // TEST = \"abc\" - \"def\";
+    @Test
+    public void testTransformEbnfParserCombinatorSyntaxTreeTransformerException() {
+        final StringBuilder b = new StringBuilder();
+
+        this.parseGrammarAndGetParser(
+                "TEST = \"abc\" - \"def\";",
+                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+
+                    @Override
+                    public Parser<FakeParserContext> exception(final EbnfExceptionParserToken token,
+                                                               final Parser<FakeParserContext> parser) {
+                        b.append("EXCEPTION " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                                                              final Parser<FakeParserContext> parser) {
+                        b.append("TERMINAL " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                                                          final Parser<FakeParserContext> parser) {
+                        b.append("RULE\n");
+                        return parser;
+                    }
+                }
+        );
+
+        this.checkEquals(
+                "TERMINAL \"abc\"\n" +
+                        "TERMINAL \"def\"\n" +
+                        "EXCEPTION \"abc\" - \"def\"\n" +
+                        "RULE\n",
+                b.toString()
+        );
+    }
+
+    // OPTIONAL=["1"];
+    // TEST=OPTIONAL - "2";
+    @Test
+    public void testParseGrammarExceptionOptionalTerminalTerminalFails() {
+        this.parseGrammarAndGetParserThrows(
+                "OPTIONAL=[\"1\"];\n" +
+                        "TEST=OPTIONAL - \"2\";",
+                new IllegalArgumentException("Exception left must not be optional got OPTIONAL")
+        );
+    }
+
+    // OPTIONAL=["2"];
+    // TEST="1" - OPTIONAL;
+    @Test
+    public void testParseGrammarExceptionTerminalOptionalTerminalFails() {
+        this.parseGrammarAndGetParserThrows(
+                "OPTIONAL=[\"2\"];\n" +
+                        "TEST=\"1\" - OPTIONAL;",
+                new IllegalArgumentException("Exception right must not be optional got \"1\"")
+        );
+    }
+
+    // TEST=ONLY_LETTERS - "abc";
+    @Test
+    public void testTransformExceptionTerminalTerminal() {
+        this.parseGrammarAndGetParserAndParseCheck(
+                "TEST=ONLY_LETTERS - \"abc\";",
+                "xyz"
+        );
+    }
+
+    // TEST=ONLY_LETTERS - "abc";
+    @Test
+    public void testTransformExceptionTerminalTerminal2() {
+        this.parseGrammarGetParsersThenParseFail(
+                "TEST=ONLY_LETTERS - \"abc\";",
+                "abc"
+        );
+    }
+
+    // group............................................................................................................
+
+    // TEST = ("abc");
+    @Test
+    public void testTransformEbnfParserCombinatorSyntaxTreeTransformerGroup() {
+        final StringBuilder b = new StringBuilder();
+
+        this.parseGrammarAndGetParser(
+                "TEST = (\"abc\");",
+                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+
+                    @Override
+                    public Parser<FakeParserContext> group(final EbnfGroupParserToken token,
+                                                           final Parser<FakeParserContext> parser) {
+                        b.append("GROUP " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                                                              final Parser<FakeParserContext> parser) {
+                        b.append("TERMINAL " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                                                          final Parser<FakeParserContext> parser) {
+                        b.append("RULE\n");
+                        return parser;
+                    }
+                }
+        );
+
+        this.checkEquals(
+                "TERMINAL \"abc\"\n" +
+                        "GROUP (\"abc\")\n" +
+                        "RULE\n",
+                b.toString()
+        );
+    }
+
+    // TEST=["Hello"];
+    @Test
+    public void testTransformGroupOptionalTerminal() {
+        this.parseGrammarAndGetParserAndParseCheck(
+                "TEST=([\"Hello\"]);", // grammar
+                "Hello"
+        );
+    }
+
+    // TEST=("group-text-abc");
+    @Test
+    public void testTransformGroupTerminal() {
+        this.parseGrammarAndGetParserAndParseCheck(
+                "TEST=(\"Hello\");", // grammar
+                "Hello"
+        );
+    }
+
+    // identifier.......................................................................................................
+
+    // BACK_REFERENCE = "abc";
+    // TEST = BACK_REFERENCE;
+    @Test
+    public void testTransformEbnfParserCombinatorSyntaxTreeTransformerIdentifierBackwardReference() {
+        final StringBuilder b = new StringBuilder();
+
+        this.parseGrammarAndGetParser(
+                "BACK_REFERENCE = \"abc\";  \n" +
+                        "TEST = BACK_REFERENCE;\n",
+                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+
+                    @Override
+                    public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
+                                                                final Parser<FakeParserContext> parser) {
+                        b.append("IDENTIFIER " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                                                              final Parser<FakeParserContext> parser) {
+                        b.append("TERMINAL " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                                                          final Parser<FakeParserContext> parser) {
+                        b.append("RULE " + token.toString().replace("\n", "") + "\n");
+                        return parser;
+                    }
+                }
+        );
+
+        this.checkEquals(
+                "TERMINAL \"abc\"\n" +
+                        "RULE BACK_REFERENCE = \"abc\";\n" +
+                        "IDENTIFIER BACK_REFERENCE\n" +
+                        "RULE   TEST = BACK_REFERENCE;\n",
+                b.toString()
+        );
+    }
+
+    // TEST = FORWARD_REFERENCE;
+    // FORWARD_REFERENCE = "abc";
+    @Test
+    public void testTransformEbnfParserCombinatorSyntaxTreeTransformerIdentifierForwardReference() {
+        final StringBuilder b = new StringBuilder();
+
+        this.parseGrammarAndGetParser(
+                "TEST = FORWARD_REFERENCE;\n" +
+                        "FORWARD_REFERENCE = \"abc\";  \n",
+                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+
+                    @Override
+                    public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
+                                                                final Parser<FakeParserContext> parser) {
+                        b.append("IDENTIFIER " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                                                              final Parser<FakeParserContext> parser) {
+                        b.append("TERMINAL " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                                                          final Parser<FakeParserContext> parser) {
+                        b.append("RULE " + token.toString().replace("\n", "") + "\n");
+                        return parser;
+                    }
+                }
+        );
+
+        this.checkEquals(
+                "TERMINAL \"abc\"\n" +
+                        "RULE FORWARD_REFERENCE = \"abc\";\n" +
+                        "IDENTIFIER FORWARD_REFERENCE\n" +
+                        "RULE TEST = FORWARD_REFERENCE;\n",
+                b.toString()
+        );
+    }
+
+    // TEST = "abc", TEST;
+    @Test
+    public void testTransformEbnfParserCombinatorSyntaxTreeTransformerIdentifierSelfReference() {
+        final StringBuilder b = new StringBuilder();
+
+        this.parseGrammarAndGetParser(
+                "TEST = \"abc\", TEST;",
+                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+
+                    @Override
+                    public Parser<FakeParserContext> concatenation(final EbnfConcatenationParserToken token,
+                                                                   final Parser<FakeParserContext> parser) {
+                        b.append("CONCAT " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
+                                                                final Parser<FakeParserContext> parser) {
+                        b.append("IDENTIFIER " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                                                              final Parser<FakeParserContext> parser) {
+                        b.append("TERMINAL " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                                                          final Parser<FakeParserContext> parser) {
+                        b.append("RULE " + token.toString().replace("\n", "") + "\n");
+                        return parser;
+                    }
+                }
+        );
+
+        this.checkEquals(
+                "TERMINAL \"abc\"\n" +
+                        "CONCAT \"abc\", TEST\n" +
+                        "RULE TEST = \"abc\", TEST;\n" +
+                        "IDENTIFIER TEST\n",
+                b.toString()
+        );
+    }
+
+    // DUPLICATED=   "duplicate";
+    @Test
+    public void testTransformIdentifierDuplicateRuleGrammarFails() {
+        assertThrows(
+                EbnfParserCombinatorDuplicateRuleException.class,
+                () -> this.parseGrammarAndGetParser("DUPLICATED=   \"duplicate\";")
+        );
+    }
+
+    // RULE1 = "rule-1"
+    // RULE1 = "2nd-rule-1"
+    @Test
+    public void testTransformIdentifierDuplicateRulePredefinedFails() {
+        assertThrows(
+                EbnfParserCombinatorDuplicateRuleException.class,
+                () -> this.parseGrammarAndGetParser(
+                        "RULE1=   \"rule-1\";\n" +
+                                "RULE1=   \"2nd-rule-1\";\n"
+                )
+        );
+    }
+
+    // TEST=FORWARD_REFERENCE;
+    // FORWARD_REFERENCE="abc123";;
+    @Test
+    public void testTransformIdentifierBackwardReference() {
+        final String text = "abc123";
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                "TEST=FORWARD_REFERENCE;\n" +
+                        "FORWARD_REFERENCE=\"abc123\";", // grammar
+                text
+        );
+    }
+
+    // BACKWARD_REFERENCE="abc123";;
+    // TEST=BACKWARD_REFERENCE;
+    @Test
+    public void testTransformIdentifierForwardReference() {
+        final String text = "abc123";
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                "FORWARD_REFERENCE=\"abc123\";\n" +
+                        "TEST=FORWARD_REFERENCE;", // grammar
+                text
+        );
+    }
+
+    // TEST=FORWARD_REFERENCE;
+    // FORWARD_REFERENCE=FORWARD_REFERENCE2;
+    // FORWARD_REFERENCE2="abc123";
+    @Test
+    public void testTransformIdentifierForwardReference2() {
+        final String text = "abc123";
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                "TEST=FORWARD_REFERENCE;\n" +
+                        "FORWARD_REFERENCE=FORWARD_REFERENCE2;\n" +
+                        "FORWARD_REFERENCE2=\"abc123\";", // grammar
+                text
+        );
+    }
+
+    // TEST=FORWARD_REFERENCE;
+    // FORWARD_REFERENCE=FORWARD_REFERENCE2;
+    // FORWARD_REFERENCE2=FORWARD_REFERENCE3;
+    // FORWARD_REFERENCE3="abc123";
+    @Test
+    public void testTransformIdentifierForwardReference3() {
+        final String text = "abc123";
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                "TEST=FORWARD_REFERENCE;\n" +
+                        "FORWARD_REFERENCE=FORWARD_REFERENCE2;\n" +
+                        "FORWARD_REFERENCE2=FORWARD_REFERENCE3;\n" +
+                        "FORWARD_REFERENCE3=\"abc123\";",
+                text
+        );
+    }
+
+    // TEST=[FORWARD_REFERENCE], "abc";
+    // FORWARD_REFERENCE="def", FORWARD_REFERENCE;
+    //
+    // FORWARD_REFERENCE will be a EbnfParserCombinatorProxyParser
+    @Test
+    public void testTransformIdentifierToSelf() {
+        final String text = "abc";
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                "TEST=[FORWARD_REFERENCE], \"abc\";\n" +
+                        "FORWARD_REFERENCE=\"def\", FORWARD_REFERENCE;",
+                text,
+                sequence(
+                        string(text)
+                ),
+                text,
+                ""
+        );
+    }
+
+    // TEST=FORWARD_REFERENCE;
+    // FORWARD_REFERENCE=FORWARD_REFERENCE2;
+    // FORWARD_REFERENCE2=ONLY_LETTERS;
+    @Test
+    public void testTransformIdentifierForwardReferenceToPredefinedParser() {
+        final String text = "abc";
+        final String after = "123";
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                "TEST=FORWARD_REFERENCE;\n" +
+                        "FORWARD_REFERENCE=FORWARD_REFERENCE2;\n" +
+                        "FORWARD_REFERENCE2=ONLY_LETTERS;",
+                text + after,
+                string(text),
+                text,
+                after
+        );
+    }
+
+    // TEST=FORWARD_REFERENCE;
+    // FORWARD_REFERENCE=FORWARD_REFERENCE2;
+    // FORWARD_REFERENCE2=ONLY_LETTERS, "123";
+    @Test
+    public void testTransformIdentifierForwardReferenceToPredefinedParser2() {
+        final String text = "abc123";
+        final String after = "...";
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                "TEST=FORWARD_REFERENCE;\n" +
+                        "FORWARD_REFERENCE=FORWARD_REFERENCE2;\n" +
+                        "FORWARD_REFERENCE2=ONLY_LETTERS, \"123\";",
+                text + after,
+                sequence(
+                        string("abc"),
+                        number("123")
+                ),
+                text,
+                after
+        );
+    }
+
+    // optional.........................................................................................................
+
+    // TEST = ["abc"];
+    @Test
+    public void testTransformEbnfParserCombinatorSyntaxTreeTransformerOptional() {
+        final StringBuilder b = new StringBuilder();
+
+        this.parseGrammarAndGetParser(
+                "TEST = [\"abc\"];",
+                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+
+                    @Override
+                    public Parser<FakeParserContext> optional(final EbnfOptionalParserToken token,
+                                                              final Parser<FakeParserContext> parser) {
+                        b.append("OPTIONAL " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                                                              final Parser<FakeParserContext> parser) {
+                        b.append("TERMINAL " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                                                          final Parser<FakeParserContext> parser) {
+                        b.append("RULE\n");
+                        return parser;
+                    }
+                }
+        );
+
+        this.checkEquals(
+                "TERMINAL \"abc\"\n" +
+                        "OPTIONAL [\"abc\"]\n" +
+                        "RULE\n",
+                b.toString()
+        );
+    }
+
+    // TEST=["optional-text-abc"];
+    @Test
+    public void testTransformOptionalTerminal() {
+        this.parseGrammarAndGetParserAndParseCheck(
+                "TEST=[\"optional-text-abc\"];",
+                "optional-text-abc"
+        );
+    }
+
+    // TEST=["optional-text-abc"];
+    @Test
+    public void testTransformOptionalTerminal2() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser("TEST=[\"optional-text-abc\"];");
+
+        this.parseFailAndCheck(
+                parser,
+                "different"
+        );
     }
 
     @Test
-    public void testPublicStaticMethodsWithoutMathContextParameter() {
-        this.publicStaticMethodParametersTypeCheck(MathContext.class);
+    public void testTransformMissingOptionalTerminal() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser("TEST=[\"optional-text-abc\"];");
+
+        this.parseFailAndCheck(
+                parser,
+                "different"
+        );
     }
 
-    // HELPERS ............................................................................................................
-
-    private void parseAndCheck2(final String textCursor, final ParserToken expected, final String text) {
-        this.parseAndCheck2(textCursor, expected, text, "");
+    // ABC="abc";
+    // TEST=[ABC];
+    @Test
+    public void testTransformOptionalIdentifier() {
+        this.parseGrammarAndGetParserAndParseCheck(
+                "ABC=\"abc\";\n" +
+                        "TEST=[ABC];",
+                "abc"
+        );
     }
 
-    private void parseAndCheck2(final String textCursor, final ParserToken expected, final String text, final String textAfter) {
-        this.parseAndCheck2(this.createParser2(), textCursor, expected, text, textAfter);
+    // ABC="abc";
+    // TEST=[ABC];
+    @Test
+    public void testTransformOptionalIdentifier2() {
+        this.parseGrammarGetParsersThenParseFail(
+                "ABC=\"abc\";\n" +
+                        "TEST=[ABC];",
+                "different"
+        );
     }
 
-    private void parseAndCheck2(final Parser<FakeParserContext> parser, final String textCursor, final ParserToken expected, final String text) {
-        this.parseAndCheck(parser, textCursor, expected, text, "");
+    // TEST=[["optional-text-abc"]];
+    @Test
+    public void testTransformOptionalOptionalTerminal() {
+        this.parseGrammarAndGetParserAndParseCheck(
+                "TEST=[[\"optional-text-abc\"]];",
+                "optional-text-abc"
+        );
     }
 
-    private void parseAndCheck2(final Parser<FakeParserContext> parser, final String textCursor, final ParserToken expected, final String text, final String textAfter) {
-        this.parseAndCheck(parser, textCursor, expected, text, textAfter);
+    // range............................................................................................................
+
+    // TEST = "a".."b";
+    @Test
+    public void testTransformEbnfParserCombinatorSyntaxTreeTransformerRangeTerminalTerminal() {
+        final StringBuilder b = new StringBuilder();
+
+        this.parseGrammarAndGetParser(
+                "TEST = \"a\"..\"b\";",
+                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+
+                    @Override
+                    public Parser<FakeParserContext> range(final EbnfRangeParserToken token,
+                                                           final String beginText,
+                                                           final String endText) {
+                        b.append("RANGE " + token + " " + beginText + " " + endText + "\n");
+                        return Parsers.fake();
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                                                              final Parser<FakeParserContext> parser) {
+                        b.append("TERMINAL " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                                                          final Parser<FakeParserContext> parser) {
+                        b.append("RULE\n");
+                        return parser;
+                    }
+                }
+        );
+
+        this.checkEquals(
+                "TERMINAL \"a\"\n" +
+                        "TERMINAL \"b\"\n" +
+                        "RANGE \"a\"..\"b\" a b\n" +
+                        "RULE\n",
+                b.toString()
+        );
     }
+
+    // TEST="a".."z";
+    @Test
+    public void testTransformRangeTerminalTerminal() {
+        this.parseRangeAndCheck("TEST=\"a\"..\"z\";");
+    }
+
+    // FROM="a";
+    //
+    // TEST=FROM.."z";
+    @Test
+    public void testTransformRangeIdentifierTerminal() {
+        this.parseRangeAndCheck(
+                "FROM=\"a\";\n" +
+                        "\n" +
+                        "TEST=FROM..\"z\";"
+        );
+    }
+
+    // TO="z";
+    //
+    // TEST="a"..TO;
+    @Test
+    public void testTransformRangeTerminalIdentifier() {
+        this.parseRangeAndCheck(
+                "TO=\"z\";\n" +
+                        "\n" +
+                        "TEST=\"a\"..TO;"
+        );
+    }
+
+    // FROM    =   "a";
+    // TO      =   "z";
+    //
+    // TEST    =   FROM..TO;
+    @Test
+    public void testTransformRangeIdentifierIdentifier() {
+        this.parseRangeAndCheck(
+                "FROM    =   \"a\";\n" +
+                        "TO      =   \"z\";\n" +
+                        "\n" +
+                        "TEST    =   FROM..TO;"
+        );
+    }
+    // FROM="a";
+    // TO="z";
+    //
+    // TEST=FROM2..TO2;
+    //
+    // FROM2 = FROM;
+    // TO2 = TO;
+
+    @Test
+    public void testTransformRangeIdentifierIdentifier2() {
+        this.parseRangeAndCheck(
+                "FROM=\"a\";\n" +
+                        "TO=\"z\";\n" +
+                        "\n" +
+                        "TEST=FROM2..TO2;\n" +
+                        "\n" +
+                        "FROM2 = FROM;\n" +
+                        "TO2 = TO;"
+        );
+    }
+
+    private void parseRangeAndCheck(final String grammar) {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser(grammar);
+
+        final String text = "m";
+        final String after = "123";
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                text + after,
+                this.string(text),
+                text,
+                after
+        );
+
+        this.parseFailAndCheck(
+                parser,
+                "Q"
+        );
+    }
+
+    // FROM="a".."z";
+    // TO="9";
+    //
+    // TEST=FROM..TO;
+    @Test
+    public void testTransformRangeInvalidBoundFails() {
+        // from is a Range, terminal or identifier to terminal required
+        this.parseGrammarAndGetParserThrows(
+                "FROM=\"a\"..\"z\";\n" +
+                        "TO=\"9\";\n" +
+                        "\n" +
+                        "TEST=FROM..TO;", // grammar
+                new IllegalArgumentException("Invalid range begin, expected identifier or terminal but got Identifier=FROM")
+        );
+    }
+
+    // FROM={"a"};
+    // TO="z";
+    //
+    // TEST=FROM..TO;
+    @Test
+    public void testTransformRangeInvalidBoundFails2() {
+        // from is a repeated, terminal or identifier to terminal required
+        this.parseGrammarAndGetParserThrows(
+                "FROM={\"a\"};\n" +
+                        "TO=\"z\";\n" +
+                        "\n" +
+                        "TEST=FROM..TO;", // grammar
+                new IllegalArgumentException("Invalid range begin, expected identifier or terminal but got Identifier=FROM")
+        );
+    }
+
+    // FROM="a";
+    // TO=["z"];
+    // TEST=FROM..TO;
+    @Test
+    public void testTransformRangeInvalidBoundFails3() {
+        // to is a Optional, terminal or identifier to terminal required
+        this.parseGrammarAndGetParserThrows(
+                "FROM=\"a\";\n" +
+                        "TO=[\"z\"];\n" +
+                        "\n" +
+                        "TEST=FROM..TO;", // grammar
+                new IllegalArgumentException("Invalid range end, expected identifier or terminal but got Identifier=TO")
+        );
+    }
+
+    // repeat............................................................................................................
+
+    // TEST={"abc"};
+    @Test
+    public void testTransformEbnfParserCombinatorSyntaxTreeTransformerRepeatTerminal() {
+        final StringBuilder b = new StringBuilder();
+
+        this.parseGrammarAndGetParser(
+                "TEST={\"abc\"};",
+                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+
+                    @Override
+                    public Parser<FakeParserContext> repeated(final EbnfRepeatedParserToken token,
+                                                              final Parser<FakeParserContext> parser) {
+                        b.append("REPEATED " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                                                              final Parser<FakeParserContext> parser) {
+                        b.append("TERMINAL " + token + "\n");
+                        return parser;
+                    }
+
+                    @Override
+                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                                                          final Parser<FakeParserContext> parser) {
+                        b.append("RULE\n");
+                        return parser;
+                    }
+                }
+        );
+
+        this.checkEquals(
+                "TERMINAL \"abc\"\n" +
+                        "REPEATED {\"abc\"}\n" +
+                        "RULE\n",
+                b.toString()
+        );
+    }
+
+    // TEST={"abc"};
+    @Test
+    public void testTransformRepeat() {
+        final Parser<FakeParserContext> parser = this.parseGrammarAndGetParser("TEST={\"abc\"};");
+
+        final String text = "abc";
+        final String after = "123";
+        final String repeatedText = text + text;
+
+        this.parseGrammarAndGetParserAndParseCheck(
+                parser,
+                repeatedText + after,
+                ParserTokens.repeated(
+                        Lists.of(
+                                this.string(text),
+                                this.string(text)
+                        ),
+                        repeatedText
+                ),
+                repeatedText,
+                after
+        );
+    }
+
+    // HELPERS .........................................................................................................
 
     @Override
     public Parser<FakeParserContext> createParser() {
-        return this.createParser("default.grammar");
+        return this.parseGrammarAndGetParser("TEST=\"text\";");
     }
 
-    private Parser<FakeParserContext> createParser2() {
-        return this.createParser(this.currentTestName() + ".grammar");
+    private void parseGrammarGetParsersThenParseFail(final String grammar,
+                                                     final String text) {
+        this.parseFailAndCheck(
+                this.parseGrammarAndGetParser(grammar),
+                text
+        );
+    }
+
+    private void parseGrammarAndGetParserThrows(final String grammar,
+                                                final IllegalArgumentException expected) {
+        final IllegalArgumentException thrown = assertThrows(
+                expected.getClass(),
+                () -> this.parseGrammarAndGetParser(grammar)
+        );
+
+        this.checkEquals(
+                expected.getMessage(),
+                thrown.getMessage(),
+                () -> "parseGrammar\n" + grammar
+        );
+    }
+
+    private void parseGrammarAndGetParserAndParseCheck(final String grammar,
+                                                       final String text) {
+        this.parseGrammarAndGetParserAndParseCheck(
+                this.parseGrammarAndGetParser(grammar),
+                text
+        );
+    }
+
+    private void parseGrammarAndGetParserAndParseCheck(final Parser<FakeParserContext> parser,
+                                                       final String text) {
+        this.parseAndCheck(
+                parser,
+                text,
+                this.string(text),
+                text,
+                ""
+        );
+    }
+
+    private void parseGrammarAndGetParserAndParseCheck(final Parser<FakeParserContext> parser,
+                                                       final String text,
+                                                       final ParserToken expected,
+                                                       final String expectedText) {
+        this.parseAndCheck(
+                parser,
+                text,
+                expected,
+                expectedText,
+                ""
+        );
+    }
+
+    private void parseGrammarAndGetParserAndParseCheck(final String grammar,
+                                                       final String text,
+                                                       final ParserToken expected,
+                                                       final String expectedText,
+                                                       final String textAfter) {
+        this.parseAndCheck(
+                this.parseGrammarAndGetParser(grammar),
+                text,
+                expected,
+                expectedText,
+                textAfter
+        );
+    }
+
+    private void parseGrammarAndGetParserAndParseCheck(final Parser<FakeParserContext> parser,
+                                                       final String text,
+                                                       final ParserToken expected,
+                                                       final String expectedText,
+                                                       final String textAfter) {
+        this.parseAndCheck(
+                parser,
+                text,
+                expected,
+                expectedText,
+                textAfter
+        );
     }
 
     /**
      * Parses the grammar file, uses the transformer to convert each rule into parsers and then returns the parser for the rule called "TEST".
      */
-    private Parser<FakeParserContext> createParser(final String grammarResourceFile) {
-        final EbnfGrammarParserToken grammar = this.grammar(grammarResourceFile);
+    private Parser<FakeParserContext> parseGrammarAndGetParser(final String grammar) {
+//        final EbnfGrammarParserToken grammarToken = this.parseGrammar(grammar);
+//
+//        final Function<EbnfIdentifierName, Optional<Parser<FakeParserContext>>> nameToParser = this.parseGrammarAndGetParsers(grammarToken);
+//        final Parser<FakeParserContext> test = nameToParser.apply(TEST)
+//                .orElse(null);
+//        failIfOptionalParser(
+//                test,
+//                () -> "OptionalParser returned by named parser lookup " + test
+//        );
+//        this.checkNotEquals(
+//                null,
+//                test,
+//                () -> "Parser " + TEST + " not found in grammar\n" + grammar
+//        );
+//        return test;
+        return this.parseGrammarAndGetParser(
+                grammar,
+                this.syntaxTreeTransformer()
+        );
+    }
 
-        final Map<EbnfIdentifierName, Parser<ParserContext>> defaults = Maps.hash();
-        defaults.put(EbnfIdentifierName.with("LETTERS"), Parsers.stringCharPredicate(CharPredicates.letter(), 1, Integer.MAX_VALUE).cast());
-        defaults.put(EbnfIdentifierName.with("DUPLICATED"), Parsers.fake());
+    private Parser<FakeParserContext> parseGrammarAndGetParser(final String grammar,
+                                                               final EbnfParserCombinatorSyntaxTreeTransformer<FakeParserContext> transformer) {
+        final EbnfGrammarParserToken grammarToken = this.parseGrammar(grammar);
 
-        final Map<EbnfIdentifierName, Parser<ParserContext>> all = grammar.combinator(defaults,
-                this.syntaxTreeTransformer(grammar));
-
-        final Parser<FakeParserContext> test = all.get(TEST).cast();
-        assertNotNull(test, TEST + " parser not found in grammar\n" + grammar);
+        final Function<EbnfIdentifierName, Optional<Parser<FakeParserContext>>> nameToParser = this.parseGrammarAndGetParsers(
+                grammarToken,
+                transformer
+        );
+        final Parser<FakeParserContext> test = nameToParser.apply(TEST)
+                .orElse(null);
+        failIfOptionalParser(
+                test,
+                () -> "OptionalParser returned by named parser lookup " + test
+        );
+        this.checkNotEquals(
+                null,
+                test,
+                () -> "Parser " + TEST + " not found in grammar\n" + grammar
+        );
         return test;
     }
 
-    private final EbnfIdentifierName TEST = EbnfIdentifierName.with("TEST");
+    private final static EbnfIdentifierName TEST = EbnfIdentifierName.with("TEST");
 
-    private EbnfGrammarParserToken grammar(final String resourceName) {
-        try {
-            final Class<?> classs = this.getClass();
-            final String text = this.resourceAsText(classs, classs.getSimpleName() + "/" + resourceName);
-            final TextCursor cursor = TextCursors.charSequence(text);
-            final Optional<ParserToken> grammar = EbnfParserToken.grammarParser()
-                    .parse(cursor, EbnfParserContexts.basic());
-            if (!grammar.isPresent()) {
-                fail("Failed to parse a grammar from " + CharSequences.quote(resourceName) + "\n" + text);
-            }
-            if (cursor.isNotEmpty()) {
-                final TextCursorSavePoint save = cursor.save();
-                cursor.end();
-                final CharSequence remaining = save.textBetween();
-                fail("Failed to parse all of grammar from " + CharSequences.quote(resourceName) + " text remaining: " + remaining + "\n\n" + CharSequences.escape(remaining) + "\n\nGrammar File:\n" + text);
-            }
-            return grammar.get()
-                    .cast(EbnfGrammarParserToken.class);
-        } catch (final IOException cause) {
-            throw new Error("failed to read grammar from " + CharSequences.quote(resourceName));
-        }
+    private EbnfGrammarParserToken parseGrammar(final String grammar) {
+        return EbnfParserToken.grammarParser()
+                .orFailIfCursorNotEmpty(ParserReporters.basic())
+                .parse(
+                        TextCursors.charSequence(grammar),
+                        EbnfParserContexts.basic()
+                ).get()
+                .cast(EbnfGrammarParserToken.class);
     }
 
-    private EbnfParserCombinatorSyntaxTreeTransformer<ParserContext> syntaxTreeTransformer(final EbnfGrammarParserToken grammar) {
-        final Map<EbnfIdentifierName, EbnfParserToken> identifierToToken = Maps.sorted();
-        grammar.value()
-                .stream()
-                .filter(t -> t instanceof EbnfParserToken)
-                .map(EbnfParserToken.class::cast)
-                .filter(EbnfParserToken::isRule)
-                .map(EbnfRuleParserToken.class::cast)
-                .forEach(
-                        rule -> identifierToToken.put(
-                                rule.identifier()
-                                        .value(),
-                                rule.assignment()
-                        )
-                );
+    private Function<EbnfIdentifierName, Optional<Parser<FakeParserContext>>> parseGrammarAndGetParsers(final EbnfGrammarParserToken grammar) {
+        return this.parseGrammarAndGetParsers(
+                grammar,
+                this.syntaxTreeTransformer()
+        );
+    }
 
+    private Function<EbnfIdentifierName, Optional<Parser<FakeParserContext>>> parseGrammarAndGetParsers(final EbnfGrammarParserToken grammar,
+                                                                                                        final EbnfParserCombinatorSyntaxTreeTransformer<FakeParserContext> transformer) {
+        final Map<EbnfIdentifierName, Parser<FakeParserContext>> defaults = Maps.hash();
+        defaults.put(
+                EbnfIdentifierName.with("ONLY_LETTERS"),
+                Parsers.stringCharPredicate(
+                        CharPredicates.letter(),
+                        1,
+                        Integer.MAX_VALUE
+                ).cast()
+        );
+        defaults.put(
+                EbnfIdentifierName.with("DUPLICATED"),
+                Parsers.fake()
+        );
+
+        return grammar.combinator(
+                (n) -> Optional.ofNullable(
+                        defaults.get(n)
+                ),
+                transformer
+        );
+    }
+
+    private EbnfParserCombinatorSyntaxTreeTransformer<FakeParserContext> syntaxTreeTransformer() {
         return new EbnfParserCombinatorSyntaxTreeTransformer<>() {
             @Override
-            public Parser<ParserContext> alternatives(final EbnfAlternativeParserToken token, final Parser<ParserContext> parser) {
+            public Parser<FakeParserContext> alternatives(final EbnfAlternativeParserToken token,
+                                                          final Parser<FakeParserContext> parser) {
+                failIfOptionalParser(
+                        parser,
+                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.alternatives got " + parser
+                );
                 return parser;
             }
 
             @Override
-            public Parser<ParserContext> concatenation(final EbnfConcatenationParserToken token, final Parser<ParserContext> parser) {
+            public Parser<FakeParserContext> concatenation(final EbnfConcatenationParserToken token,
+                                                           final Parser<FakeParserContext> parser) {
+                failIfOptionalParser(
+                        parser,
+                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.concatenation got " + parser
+                );
                 return parser.transform((sequenceParserToken, fakeParserContext) -> sequenceParserToken);
             }
 
             @Override
-            public Parser<ParserContext> exception(final EbnfExceptionParserToken token, final Parser<ParserContext> parser) {
+            public Parser<FakeParserContext> exception(final EbnfExceptionParserToken token,
+                                                       final Parser<FakeParserContext> parser) {
+                failIfOptionalParser(
+                        parser,
+                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.exception got " + parser
+                );
                 return parser;
             }
 
             @Override
-            public Parser<ParserContext> group(final EbnfGroupParserToken token, final Parser<ParserContext> parser) {
+            public Parser<FakeParserContext> group(final EbnfGroupParserToken token,
+                                                   final Parser<FakeParserContext> parser) {
+                failIfOptionalParser(
+                        parser,
+                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.group got " + parser
+                );
                 return parser;
             }
 
             @Override
-            public Parser<ParserContext> identifier(final EbnfIdentifierParserToken token, final Parser<ParserContext> parser) {
+            public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
+                                                        final Parser<FakeParserContext> parser) {
+                failIfOptionalParser(
+                        parser,
+                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.identifier got " + parser
+                );
                 return parser;
             }
 
             @Override
-            public Parser<ParserContext> optional(final EbnfOptionalParserToken token, final Parser<ParserContext> parser) {
+            public Parser<FakeParserContext> optional(final EbnfOptionalParserToken token,
+                                                      final Parser<FakeParserContext> parser) {
+                failIfOptionalParser(
+                        parser,
+                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.optional got " + parser
+                );
                 return parser;
             }
 
             @Override
-            public Parser<ParserContext> range(final EbnfRangeParserToken token, final Parser<ParserContext> ignored) {
-                final char begin = this.characterForIdentifierOrTerminal(token.begin());
-                final char end = this.characterForIdentifierOrTerminal(token.end());
+            public Parser<FakeParserContext> range(final EbnfRangeParserToken token,
+                                                   final String beginText,
+                                                   final String endText) {
+                checkEquals("a", beginText, "beginText");
+                checkEquals("z", endText, "endText");
 
-                return Parsers.<FakeParserContext>stringCharPredicate(CharPredicates.range(begin, end), 1, 1)
-                        .setToString(token.toString())
+                return Parsers.<FakeParserContext>stringCharPredicate(
+                                CharPredicates.range(
+                                        'a',
+                                        'z'
+                                ),
+                                1,
+                                1
+                        ).setToString(token.toString())
                         .cast();
             }
 
-            private char characterForIdentifierOrTerminal(final EbnfParserToken token) {
-                return token.isTerminal() ?
-                        this.characterFromTerminal(token.cast(EbnfTerminalParserToken.class)) :
-                        token.isIdentifier() ?
-                                this.characterFromIdentifierReference(token.cast(EbnfIdentifierParserToken.class)) :
-                                failInvalidRangeBound("Invalid range bound, expected terminal or identifier indirectly pointing to a terminal but got " + token, token);
-            }
-
-            private char characterFromIdentifierReference(final EbnfIdentifierParserToken identifier) {
-                final EbnfIdentifierName identifierName = identifier.value();
-                final EbnfParserToken target = identifierToToken.get(identifierName);
-                if (null == target) {
-                    this.failInvalidRangeBound("Unknown identifier \"" + identifierName + "\"", identifier);
-                }
-                return this.characterForIdentifierOrTerminal(target);
-            }
-
-            private char characterFromTerminal(final EbnfTerminalParserToken terminal) {
-                final String value = terminal.value();
-                final CharSequence unescaped = CharSequences.unescape(value);
-                if (unescaped.length() != 1) {
-                    failInvalidRangeBound("The range terminal does not contain a single character=" + terminal, terminal);
-                }
-                return unescaped.charAt(0);
-            }
-
-            private char failInvalidRangeBound(final String message, final EbnfParserToken token) {
-                throw new EbnfTerminalParserTokenInvalidRangeBoundParserCombinatorException(message, token);
-            }
-
             @Override
-            public Parser<ParserContext> repeated(final EbnfRepeatedParserToken token, final Parser<ParserContext> parser) {
+            public Parser<FakeParserContext> repeated(final EbnfRepeatedParserToken token,
+                                                      final Parser<FakeParserContext> parser) {
+                failIfOptionalParser(
+                        parser,
+                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.repeated got " + parser
+                );
                 return parser;
             }
 
             @Override
-            public Parser<ParserContext> terminal(final EbnfTerminalParserToken token, final Parser<ParserContext> parser) {
+            public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                                                  final Parser<FakeParserContext> parser) {
+                failIfOptionalParser(
+                        parser,
+                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.rule got " + parser
+                );
+                return parser;
+            }
+
+            @Override
+            public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                                                      final Parser<FakeParserContext> parser) {
+                failIfOptionalParser(
+                        parser,
+                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.terminal got " + parser
+                );
+
                 return parser.transform((stringParserToken, contextIgnored) -> {
                     ParserToken result = stringParserToken;
                     try {
@@ -515,6 +1685,13 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
         };
     }
 
+    private void failIfOptionalParser(final Parser<?> parser,
+                                      final Supplier<String> message) {
+        if (parser instanceof EbnfParserCombinatorOptionalParser) {
+            throw new IllegalArgumentException(message.get());
+        }
+    }
+
     private BigIntegerParserToken number(final String text) {
         return ParserTokens.bigInteger(new BigInteger(text), text);
     }
@@ -523,12 +1700,45 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
         return ParserTokens.string(text, text);
     }
 
+    private SequenceParserToken sequence(final ParserToken... tokens) {
+        final List<ParserToken> list = Lists.of(
+                tokens
+        );
+
+        return ParserTokens.sequence(
+                list,
+                ParserToken.text(
+                        list
+                )
+        );
+    }
+
     @Override
     public FakeParserContext createContext() {
         return new FakeParserContext();
     }
 
-    // Class ................................................................................
+    // toString.........................................................................................................
+
+    @Test
+    public void testParserToString() {
+        this.checkEquals(
+                "\"text\"",
+                this.parseGrammarAndGetParser("TEST=\"text\";")
+                        .toString()
+        );
+    }
+
+    @Test
+    public void testParserToString2() {
+        this.checkEquals(
+                "(\"concat-terminal-1\", \"concat-terminal-2\", [\"optional-concat-3\"])",
+                this.parseGrammarAndGetParser("TEST=\"concat-terminal-1\", \"concat-terminal-2\", [\"optional-concat-3\"];")
+                        .toString()
+        );
+    }
+
+    // Class ...........................................................................................................
 
     @Override
     public Class<EbnfParserCombinators> type() {
@@ -540,10 +1750,15 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
         return JavaVisibility.PUBLIC;
     }
 
-    // PublicStaticHelperTesting................................................................
+    // PublicStaticHelperTesting........................................................................................
 
     @Override
     public boolean canHavePublicTypes(final Method method) {
         return false;
+    }
+
+    @Test
+    public void testPublicStaticMethodsWithoutMathContextParameter() {
+        this.publicStaticMethodParametersTypeCheck(MathContext.class);
     }
 }

@@ -20,78 +20,40 @@ package walkingkooka.text.cursor.parser.ebnf.combinator;
 import walkingkooka.reflect.PublicStaticHelper;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserContext;
-import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfGrammarParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierName;
-import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRuleParserToken;
 
-import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 
 public final class EbnfParserCombinators implements PublicStaticHelper {
 
     /**
-     * Accepts a {@link EbnfGrammarParserToken} and returns a {@link Map} holding all identifiers(the names) to a parser.
-     * The {@link Map} will be used as defaults, any new definitions in the grammar will replace those in the map.
+     * Accepts a {@link EbnfGrammarParserToken} and function that may be used to query parsers given an {@link EbnfIdentifierName}.
      */
-    public static <C extends ParserContext> Map<EbnfIdentifierName, Parser<C>> transform(final EbnfGrammarParserToken grammar,
-                                                                                         final Map<EbnfIdentifierName, Parser<C>> identifierToParser,
-                                                                                         final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer) {
+    public static <C extends ParserContext> Function<EbnfIdentifierName, Optional<Parser<C>>> transform(final EbnfGrammarParserToken grammar,
+                                                                                                        final Function<EbnfIdentifierName, Optional<Parser<C>>> identifierToParser,
+                                                                                                        final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer) {
         Objects.requireNonNull(grammar, "grammar");
         Objects.requireNonNull(identifierToParser, "identifierToParser");
         Objects.requireNonNull(transformer, "syntaxTreeTransformer");
 
-        return transform0(EbnfParserCombinatorParserTextCleaningEbnfParserTokenVisitor.clean(grammar),
+        final EbnfParserCombinatorContext<C> context = EbnfParserCombinatorContext.with(
                 identifierToParser,
-                transformer);
-    }
+                transformer
+        );
 
-    private static <C extends ParserContext> Map<EbnfIdentifierName, Parser<C>> transform0(final EbnfGrammarParserToken grammar,
-                                                                                           final Map<EbnfIdentifierName, Parser<C>> identifierToParser,
-                                                                                           final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer) {
+        EbnfParserCombinatorsPrepareEbnfParserTokenVisitor.with(context)
+                .accept(grammar);
 
-        grammar.checkIdentifiers(identifierToParser.keySet());
-        preloadProxies(grammar, identifierToParser);
-        EbnfParserCombinatorParserCompilingEbnfParserTokenVisitor.compile(identifierToParser,
-                transformer,
-                grammar);
-        return EbnfParserCombinatorsTransformMap.with(identifierToParser);
-    }
+        context.tryCreatingParsers(false); // ignoreCycles=false
+        context.insertProxyParsersIfEbnfIdentifierParserToken();
+        context.tryCreatingParsers(true); // ignoreCycles=true
+        context.fixIdentifierToProxyWithoutParser();
+        context.fixProxyParsers();
 
-    /**
-     * Fill the {@link Map identifierToParser} with proxies, allowing forward references in the grammar.
-     */
-    private static <C extends ParserContext> void preloadProxies(final EbnfGrammarParserToken grammar, final Map<EbnfIdentifierName, Parser<C>> identifierToParser) {
-        grammar.value()
-                .stream()
-                .map(EbnfParserCombinators::toEbnfParserToken)
-                .filter(EbnfParserToken::isRule)
-                .forEach(t -> addProxy(t.cast(EbnfRuleParserToken.class), identifierToParser));
-    }
-
-    private static EbnfParserToken toEbnfParserToken(final ParserToken token) {
-        return token.cast(EbnfParserToken.class);
-    }
-
-    private static <C extends ParserContext> void addProxy(final EbnfRuleParserToken rule, final Map<EbnfIdentifierName, Parser<C>> identifierToParser) {
-        final EbnfIdentifierParserToken identifierParserToken = rule.identifier();
-        final EbnfIdentifierName identifierName = identifierParserToken.value();
-
-        final Object existing = identifierToParser.get(identifierName);
-        if (null != existing) {
-            failDuplicateRule(rule, existing);
-        }
-
-        identifierToParser.put(identifierName, EbnfParserCombinatorProxyParser.with(identifierParserToken));
-    }
-
-    /**
-     * Reports an attempt to override a predefined rule to parser or a second rule with the same name.
-     */
-    private static void failDuplicateRule(final EbnfRuleParserToken duplicate, final Object existing) {
-        throw new EbnfParserCombinatorDuplicateRuleException("Rule with identifier " + duplicate.identifier().value() + " already exists=" + existing, duplicate);
+        return context.nameToParser();
     }
 
     /**

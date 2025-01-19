@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * A grammar holds all the rules and is the root of the graph. Note the {@link #value()} will contain a mixture of rules,
@@ -92,9 +93,13 @@ public final class EbnfGrammarParserToken extends EbnfParentParserToken<EbnfGram
         }
     }
 
-    public <C extends ParserContext> Map<EbnfIdentifierName, Parser<C>> combinator(final Map<EbnfIdentifierName, Parser<C>> identifierToParser,
-                                                                                   final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer) {
-        return EbnfParserCombinators.transform(this, identifierToParser, transformer);
+    public <C extends ParserContext> Function<EbnfIdentifierName, Optional<Parser<C>>> combinator(final Function<EbnfIdentifierName, Optional<Parser<C>>> identifierToParser,
+                                                                                                  final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer) {
+        return EbnfParserCombinators.transform(
+                this,
+                identifierToParser,
+                transformer
+        );
     }
 
     // children.........................................................................................................

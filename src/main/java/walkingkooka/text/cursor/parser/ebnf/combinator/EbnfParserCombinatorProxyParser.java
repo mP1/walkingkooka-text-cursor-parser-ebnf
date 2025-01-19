@@ -23,16 +23,18 @@ import walkingkooka.text.cursor.parser.ParserContext;
 import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierParserToken;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
- * A proxy for a {@link Parser} that is used as a placeholder for a forward reference within a grammar file.
- * All parsing requests are passed without modification to the wrapped {@link Parser}.
+ * A proxy for a {@link Parser} that is used mostly for definitions with self references.
  */
 final class EbnfParserCombinatorProxyParser<C extends ParserContext> implements Parser<C> {
 
     static <C extends ParserContext> EbnfParserCombinatorProxyParser<C> with(final EbnfIdentifierParserToken identifier) {
-        return new EbnfParserCombinatorProxyParser<>(identifier);
+        return new EbnfParserCombinatorProxyParser<>(
+                Objects.requireNonNull(identifier, "identifier")
+        );
     }
 
     private EbnfParserCombinatorProxyParser(final EbnfIdentifierParserToken identifier) {
@@ -44,11 +46,7 @@ final class EbnfParserCombinatorProxyParser<C extends ParserContext> implements 
         return this.parser.parse(cursor, context);
     }
 
-    private final EbnfIdentifierParserToken identifier;
-
-    Optional<Parser<C>> parser() {
-        return Optional.ofNullable(this.parser);
-    }
+    final EbnfIdentifierParserToken identifier;
 
     void setParser(final Parser<C> parser) {
         if (null == parser) {

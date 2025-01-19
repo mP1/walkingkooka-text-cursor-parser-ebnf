@@ -17,28 +17,24 @@
 
 package walkingkooka.text.cursor.parser.ebnf.combinator;
 
-import org.junit.jupiter.api.Test;
+import walkingkooka.Cast;
 import walkingkooka.reflect.JavaVisibility;
+import walkingkooka.text.cursor.parser.FakeParserContext;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserTokenVisitorTesting;
 
-public final class EbnfParserCombinatorParserTextCleaningEbnfParserTokenVisitorTest implements EbnfParserTokenVisitorTesting<EbnfParserCombinatorParserTextCleaningEbnfParserTokenVisitor, EbnfParserToken> {
-
-    @Test
-    public void testToString() {
-        this.toStringAndCheck(this.createVisitor(), "[],[]");
-    }
+public final class EbnfParserCombinatorsTransformEbnfParserTokenVisitorTest implements EbnfParserTokenVisitorTesting<EbnfParserCombinatorsTransformEbnfParserTokenVisitor<FakeParserContext>, EbnfParserToken> {
 
     @Override
-    public EbnfParserCombinatorParserTextCleaningEbnfParserTokenVisitor createVisitor() {
-        return new EbnfParserCombinatorParserTextCleaningEbnfParserTokenVisitor();
+    public EbnfParserCombinatorsTransformEbnfParserTokenVisitor<FakeParserContext> createVisitor() {
+        return new EbnfParserCombinatorsTransformEbnfParserTokenVisitor<>(null, null);
     }
 
-    // ClassTesting.....................................................................................................
+    // class............................................................................................................
 
     @Override
-    public Class<EbnfParserCombinatorParserTextCleaningEbnfParserTokenVisitor> type() {
-        return EbnfParserCombinatorParserTextCleaningEbnfParserTokenVisitor.class;
+    public Class<EbnfParserCombinatorsTransformEbnfParserTokenVisitor<FakeParserContext>> type() {
+        return Cast.to(EbnfParserCombinatorsTransformEbnfParserTokenVisitor.class);
     }
 
     @Override
@@ -46,10 +42,8 @@ public final class EbnfParserCombinatorParserTextCleaningEbnfParserTokenVisitorT
         return JavaVisibility.PACKAGE_PRIVATE;
     }
 
-    // TypeNameTesting..................................................................................................
-
     @Override
     public String typeNamePrefix() {
-        return "EbnfParserCombinator";
+        return "";
     }
 }
