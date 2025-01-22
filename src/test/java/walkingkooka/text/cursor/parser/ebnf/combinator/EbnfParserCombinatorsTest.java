@@ -1489,21 +1489,6 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
      * Parses the grammar file, uses the transformer to convert each rule into parsers and then returns the parser for the rule called "TEST".
      */
     private Parser<FakeParserContext> parseGrammarAndGetParser(final String grammar) {
-//        final EbnfGrammarParserToken grammarToken = this.parseGrammar(grammar);
-//
-//        final Function<EbnfIdentifierName, Optional<Parser<FakeParserContext>>> nameToParser = this.parseGrammarAndGetParsers(grammarToken);
-//        final Parser<FakeParserContext> test = nameToParser.apply(TEST)
-//                .orElse(null);
-//        failIfOptionalParser(
-//                test,
-//                () -> "OptionalParser returned by named parser lookup " + test
-//        );
-//        this.checkNotEquals(
-//                null,
-//                test,
-//                () -> "Parser " + TEST + " not found in grammar\n" + grammar
-//        );
-//        return test;
         return this.parseGrammarAndGetParser(
                 grammar,
                 this.syntaxTreeTransformer()
