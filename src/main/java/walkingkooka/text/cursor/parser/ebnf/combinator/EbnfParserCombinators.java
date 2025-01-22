@@ -81,11 +81,12 @@ public final class EbnfParserCombinators implements PublicStaticHelper {
         Objects.requireNonNull(transformer, "syntaxTreeTransformer");
         CharSequences.failIfNullOrEmpty(filename, "filename");
 
-        return (n) -> transform(
+        final Function<EbnfIdentifierName, Optional<Parser<C>>> parsers = transform(
                 grammar,
                 identifierToParser,
                 transformer
-        ).apply(n)
+        );
+        return (n) -> parsers.apply(n)
                 .orElseThrow(() -> new EbnfParserCombinatorException("Missing parser " + CharSequences.quoteAndEscape(n.value()) + " in " + CharSequences.quoteAndEscape(filename)));
     }
 
