@@ -18,11 +18,13 @@ package walkingkooka.text.cursor.parser.ebnf;
 
 import walkingkooka.Cast;
 import walkingkooka.collect.list.Lists;
+import walkingkooka.text.CharSequences;
 import walkingkooka.text.Whitespace;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserReporters;
 import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.text.cursor.parser.ParserTokenVisitor;
+import walkingkooka.text.cursor.parser.ebnf.combinator.EbnfParserCombinatorException;
 import walkingkooka.visit.Visiting;
 
 import java.util.List;
@@ -43,6 +45,21 @@ public abstract class EbnfParserToken implements ParserToken {
                         text,
                         EbnfParserContexts.basic()
                 ).cast(EbnfGrammarParserToken.class);
+    }
+
+    public static EbnfGrammarParserToken parseFile(final String text,
+                                                   final String filename) {
+        Objects.requireNonNull(text, "text");
+        CharSequences.failIfNullOrEmpty(filename, "filename");
+
+        try {
+            return parse(text);
+        } catch (final RuntimeException cause) {
+            throw new EbnfParserCombinatorException(
+                    "Unable to parse grammar in file " + CharSequences.quoteAndEscape(filename),
+                    cause
+            );
+        }
     }
 
     /**

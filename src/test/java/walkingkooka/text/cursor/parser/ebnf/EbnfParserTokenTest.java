@@ -22,7 +22,10 @@ import walkingkooka.collect.list.Lists;
 import walkingkooka.reflect.ClassTesting;
 import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.test.ParseStringTesting;
+import walkingkooka.text.cursor.parser.ebnf.combinator.EbnfParserCombinatorException;
 import walkingkooka.text.printer.TreePrintableTesting;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class EbnfParserTokenTest implements ParseStringTesting<EbnfParserToken>,
         ClassTesting<EbnfParserToken>,
@@ -80,6 +83,91 @@ public final class EbnfParserTokenTest implements ParseStringTesting<EbnfParserT
     @Override
     public RuntimeException parseStringFailedExpected(final RuntimeException thrown) {
         return thrown;
+    }
+
+    // parseFile........................................................................................................
+
+    private final static String FILENAME = "File123";
+
+    @Test
+    public void testParseFileWithNullTextFails() {
+        assertThrows(
+                NullPointerException.class,
+                () -> EbnfParserToken.parseFile(
+                        null,
+                        FILENAME
+                )
+        );
+    }
+
+    @Test
+    public void testParseFileWithNullFilenameFails() {
+        assertThrows(
+                NullPointerException.class,
+                () -> EbnfParserToken.parseFile(
+                        "",
+                        null
+                )
+        );
+    }
+
+    @Test
+    public void testParseFileWithEmptyFilenameFails() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> EbnfParserToken.parseFile(
+                        "",
+                        ""
+                )
+        );
+    }
+
+    @Test
+    public void testParseFileWithBadGrammarFails() {
+        final EbnfParserCombinatorException thrown = assertThrows(
+                EbnfParserCombinatorException.class,
+                () -> EbnfParserToken.parseFile(
+                        "Hello=\"123\";!",
+                        FILENAME
+                )
+        );
+
+        this.checkEquals(
+                "Unable to parse grammar in file \"File123\"",
+                thrown.getMessage()
+        );
+    }
+
+    @Test
+    public void testParseFile() {
+        final String text = "Hello=\"text\";";
+
+        this.checkEquals(
+                EbnfParserToken.grammar(
+                        Lists.of(
+                                EbnfParserToken.rule(
+                                        Lists.of(
+                                                EbnfParserToken.identifier(
+                                                        EbnfIdentifierName.with("Hello"),
+                                                        "Hello"
+                                                ),
+                                                EbnfParserToken.symbol("=", "="),
+                                                EbnfParserToken.terminal(
+                                                        "\"text\"",
+                                                        "text"
+                                                ),
+                                                EbnfParserToken.symbol(";", ";")
+                                        ),
+                                        text
+                                )
+                        ),
+                        text
+                ),
+                EbnfParserToken.parseFile(
+                        text,
+                        FILENAME
+                )
+        );
     }
 
     // class............................................................................................................
