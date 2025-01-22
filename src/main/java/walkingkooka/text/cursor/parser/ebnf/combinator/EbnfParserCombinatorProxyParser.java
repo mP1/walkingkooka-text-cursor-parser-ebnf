@@ -61,7 +61,7 @@ final class EbnfParserCombinatorProxyParser<C extends ParserContext> implements 
     private Parser<C> parser;
 
     /**
-     * If the parser is present return {@link Parser#toString()} otherwise return the {@link #identifier}.
+     * If the parser is present return {@link Object#toString()} otherwise return the {@link #identifier}.
      */
     @Override
     public String toString() {
