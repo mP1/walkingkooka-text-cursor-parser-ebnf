@@ -20,6 +20,7 @@ import walkingkooka.Cast;
 import walkingkooka.collect.list.Lists;
 import walkingkooka.text.Whitespace;
 import walkingkooka.text.cursor.parser.Parser;
+import walkingkooka.text.cursor.parser.ParserReporters;
 import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.text.cursor.parser.ParserTokenVisitor;
 import walkingkooka.visit.Visiting;
@@ -31,6 +32,18 @@ import java.util.Objects;
  * Represents a token within an EBNF grammar.
  */
 public abstract class EbnfParserToken implements ParserToken {
+
+    /**
+     * Parses the given EBNF grammar returning the {@link EbnfGrammarParserToken}.
+     */
+    public static EbnfGrammarParserToken parse(final String text) {
+        return EbnfParserToken.grammarParser()
+                .orFailIfCursorNotEmpty(ParserReporters.basic())
+                .parseText(
+                        text,
+                        EbnfParserContexts.basic()
+                ).cast(EbnfGrammarParserToken.class);
+    }
 
     /**
      * {@see EbnfAlternativeParserToken}
