@@ -105,14 +105,13 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
     }
 
     // Rule ABC duplicated in Grammar
-    private EbnfParserCombinatorDuplicateRuleException duplicateRule(final EbnfRuleParserToken rule,
-                                                                     final String in) {
-        throw new EbnfParserCombinatorDuplicateRuleException(
+    private EbnfParserCombinatorException duplicateRule(final EbnfRuleParserToken rule,
+                                                        final String in) {
+        throw new EbnfParserCombinatorException(
                 "Rule " +
                         CharSequences.quoteAndEscape(rule.identifier().value().value()) +
                         " duplicated in " +
-                        in,
-                rule
+                        in
         );
     }
 
@@ -123,11 +122,11 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
     Parser<C> ruleParser(final EbnfIdentifierName ruleName) {
         final EbnfParserCombinatorsProxy<C> proxy = ruleIdentifierNameToProxy.get(ruleName);
         if(null == proxy) {
-            throw new IllegalArgumentException("Missing rule for " + ruleName);
+            throw new EbnfParserCombinatorException("Missing rule for " + ruleName);
         }
 
         return proxy.parser()
-                .orElseThrow(()-> new IllegalStateException("Rule '" + ruleName + "' parser not available"));
+                .orElseThrow(()-> new EbnfParserCombinatorException("Rule '" + ruleName + "' parser not available"));
     }
 
     /**
@@ -209,7 +208,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
         do {
             final EbnfParserCombinatorsProxy<C> ruleProxy = ruleIdentifierNameToProxy.get(tempName);
             if(null == ruleProxy) {
-                throw new IllegalArgumentException("Missing rule " + tempName);
+                throw new EbnfParserCombinatorException("Missing rule " + tempName);
             }
             tempName = null;
 
@@ -239,7 +238,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
      */
     EbnfParserCombinatorsProxyGet<C> proxy(final EbnfParserToken token) {
         if(token.isGrammar()) {
-            throw new IllegalArgumentException("Proxy for grammar tokens are not supported=" + token);
+            throw new EbnfParserCombinatorException("Proxy for grammar tokens are not supported=" + token);
         }
         boolean created;
 
@@ -349,7 +348,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
             final EbnfIdentifierName name = identifierNameAndProxy.getKey();
 
             if(null != proxy.parser) {
-                throw new IllegalStateException("Parser present for " + name + " while fixing outstanding identifier references");
+                throw new EbnfParserCombinatorException("Parser present for " + name + " while fixing outstanding identifier references");
             }
             proxy.setParser(
                     this.ruleParser(name)
@@ -404,7 +403,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
                 text = token.cast(EbnfTerminalParserToken.class)
                         .value();
             } else {
-                throw new IllegalArgumentException(
+                throw new EbnfParserCombinatorException(
                         "Invalid range " +
                                 (begin? "begin" : "end") +
                                 ", expected identifier or terminal but got " + this.label(rangeBeginOrEnd) +
@@ -427,7 +426,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
 
         for(final EbnfParserCombinatorsProxy<C> proxy : this.tokenToProxy.values()) {
             if(null == proxy.parser) {
-                throw new IllegalStateException("Missing parser for " + proxy.token);
+                throw new EbnfParserCombinatorException("Missing parser for " + proxy.token);
             }
 
             final EbnfParserToken token = proxy.token;

@@ -131,7 +131,7 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
         }
 
         if (count > 0) {
-            throw new IllegalArgumentException("Alternatives given " + count + " optional(s) expected 0 got " + b);
+            throw new EbnfParserCombinatorException("Alternatives given " + count + " optional(s) expected 0 got " + b);
         }
 
         return Parsers.alternatives(parsers);
@@ -205,11 +205,11 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
                 case 2:
                     final Parser<C> left = childParsers.get(0);
                     if (left instanceof EbnfParserCombinatorOptionalParser) {
-                        throw new IllegalArgumentException("Exception left must not be optional got " + token.token());
+                        throw new EbnfParserCombinatorException("Exception left must not be optional got " + token.token());
                     }
                     final Parser<C> right = childParsers.get(1);
                     if (right instanceof EbnfParserCombinatorOptionalParser) {
-                        throw new IllegalArgumentException("Exception right must not be optional got " + token.token());
+                        throw new EbnfParserCombinatorException("Exception right must not be optional got " + token.token());
                     }
 
                     parsers = Parsers.andNot(
@@ -218,7 +218,7 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
                     );
                     break;
                 default:
-                    throw new IllegalStateException("Exception got " + count + " expected 2 parsers for " + this.proxy.token);
+                    throw new EbnfParserCombinatorException("Exception got " + count + " expected 2 parsers for " + this.proxy.token);
             }
         }
 
@@ -292,7 +292,7 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
      */
     @Override
     protected void visit(final EbnfTerminalParserToken token) {
-        throw new IllegalStateException("Terminal should already have parser created in prepare phase=" + token);
+        throw new EbnfParserCombinatorException("Terminal should already have parser created in prepare phase=" + token);
     }
 
     private Optional<Parser<C>> firstChildParser() {

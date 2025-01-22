@@ -72,11 +72,11 @@ final class EbnfParserCombinatorsProxy<C extends ParserContext> {
 
         switch (count) {
             case 0:
-                throw new IllegalStateException("Missing parsers for " + this.token);
+                throw new EbnfParserCombinatorException("Missing parsers for " + this.token);
             case 1:
                 return parsers.get(0);
             default:
-                throw new IllegalStateException("Expected 1 but got " + count + " parsers for " + this.token);
+                throw new EbnfParserCombinatorException("Expected 1 but got " + count + " parsers for " + this.token);
         }
     }
 
@@ -110,7 +110,7 @@ final class EbnfParserCombinatorsProxy<C extends ParserContext> {
 
     void setParser(final Parser<C> parser) {
         if (null != this.parser) {
-            throw new IllegalStateException("Attempt to replace parser=" + this);
+            throw new EbnfParserCombinatorException("Attempt to replace parser=" + this);
         }
 
         this.parser = parser;

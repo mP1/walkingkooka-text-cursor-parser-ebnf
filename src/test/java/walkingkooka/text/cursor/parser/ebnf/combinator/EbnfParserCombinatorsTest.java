@@ -164,7 +164,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
         this.parseGrammarAndGetParserThrows(
                 "OPTIONAL = [\"optional-xyz\"];\n" +
                         "TEST     =   \"abc\" | OPTIONAL;",
-                new IllegalArgumentException("Alternatives given 1 optional(s) expected 0 got OPTIONAL")
+                new EbnfParserCombinatorException("Alternatives given 1 optional(s) expected 0 got OPTIONAL")
         );
     }
 
@@ -672,7 +672,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
         this.parseGrammarAndGetParserThrows(
                 "OPTIONAL=[\"1\"];\n" +
                         "TEST=OPTIONAL - \"2\";",
-                new IllegalArgumentException("Exception left must not be optional got OPTIONAL")
+                new EbnfParserCombinatorException("Exception left must not be optional got OPTIONAL")
         );
     }
 
@@ -683,7 +683,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
         this.parseGrammarAndGetParserThrows(
                 "OPTIONAL=[\"2\"];\n" +
                         "TEST=\"1\" - OPTIONAL;",
-                new IllegalArgumentException("Exception right must not be optional got \"1\"")
+                new EbnfParserCombinatorException("Exception right must not be optional got \"1\"")
         );
     }
 
@@ -904,9 +904,14 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
     // DUPLICATED=   "duplicate";
     @Test
     public void testTransformIdentifierDuplicateRuleGrammarFails() {
-        assertThrows(
-                EbnfParserCombinatorDuplicateRuleException.class,
+        final EbnfParserCombinatorException thrown = assertThrows(
+                EbnfParserCombinatorException.class,
                 () -> this.parseGrammarAndGetParser("DUPLICATED=   \"duplicate\";")
+        );
+
+        this.checkEquals(
+                "Rule \"DUPLICATED\" duplicated in provided parsers",
+                thrown.getMessage()
         );
     }
 
@@ -914,12 +919,17 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
     // RULE1 = "2nd-rule-1"
     @Test
     public void testTransformIdentifierDuplicateRulePredefinedFails() {
-        assertThrows(
-                EbnfParserCombinatorDuplicateRuleException.class,
+        final EbnfParserCombinatorException thrown = assertThrows(
+                EbnfParserCombinatorException.class,
                 () -> this.parseGrammarAndGetParser(
                         "RULE1=   \"rule-1\";\n" +
                                 "RULE1=   \"2nd-rule-1\";\n"
                 )
+        );
+
+        this.checkEquals(
+                "Rule \"RULE1\" duplicated in grammar",
+                thrown.getMessage()
         );
     }
 
@@ -1285,7 +1295,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                         "TO=\"9\";\n" +
                         "\n" +
                         "TEST=FROM..TO;", // grammar
-                new IllegalArgumentException("Invalid range begin, expected identifier or terminal but got Identifier=FROM")
+                new EbnfParserCombinatorException("Invalid range begin, expected identifier or terminal but got Identifier=FROM")
         );
     }
 
@@ -1301,7 +1311,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                         "TO=\"z\";\n" +
                         "\n" +
                         "TEST=FROM..TO;", // grammar
-                new IllegalArgumentException("Invalid range begin, expected identifier or terminal but got Identifier=FROM")
+                new EbnfParserCombinatorException("Invalid range begin, expected identifier or terminal but got Identifier=FROM")
         );
     }
 
@@ -1316,7 +1326,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                         "TO=[\"z\"];\n" +
                         "\n" +
                         "TEST=FROM..TO;", // grammar
-                new IllegalArgumentException("Invalid range end, expected identifier or terminal but got Identifier=TO")
+                new EbnfParserCombinatorException("Invalid range end, expected identifier or terminal but got Identifier=TO")
         );
     }
 
@@ -1402,8 +1412,8 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
     }
 
     private void parseGrammarAndGetParserThrows(final String grammar,
-                                                final IllegalArgumentException expected) {
-        final IllegalArgumentException thrown = assertThrows(
+                                                final RuntimeException expected) {
+        final RuntimeException thrown = assertThrows(
                 expected.getClass(),
                 () -> this.parseGrammarAndGetParser(grammar)
         );
