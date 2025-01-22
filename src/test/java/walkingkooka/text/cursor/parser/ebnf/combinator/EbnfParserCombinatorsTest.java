@@ -64,6 +64,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<FakeParserContext>, FakeParserContext>,
         PublicStaticHelperTesting<EbnfParserCombinators> {
 
+    private final static String FILENAME = "File123.txt";
+
     @Test
     @Disabled("Until proper error reporting is available")
     public void testEmptyCursorFail() {
@@ -1499,12 +1501,11 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                                                                final EbnfParserCombinatorSyntaxTreeTransformer<FakeParserContext> transformer) {
         final EbnfGrammarParserToken grammarToken = this.parseGrammar(grammar);
 
-        final Function<EbnfIdentifierName, Optional<Parser<FakeParserContext>>> nameToParser = this.parseGrammarAndGetParsers(
+        final Function<EbnfIdentifierName, Parser<FakeParserContext>> nameToParser = this.parseGrammarAndGetParsers(
                 grammarToken,
                 transformer
         );
-        final Parser<FakeParserContext> test = nameToParser.apply(TEST)
-                .orElse(null);
+        final Parser<FakeParserContext> test = nameToParser.apply(TEST);
         failIfOptionalParser(
                 test,
                 () -> "OptionalParser returned by named parser lookup " + test
@@ -1529,15 +1530,15 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 .cast(EbnfGrammarParserToken.class);
     }
 
-    private Function<EbnfIdentifierName, Optional<Parser<FakeParserContext>>> parseGrammarAndGetParsers(final EbnfGrammarParserToken grammar) {
+    private Function<EbnfIdentifierName, Parser<FakeParserContext>> parseGrammarAndGetParsers(final EbnfGrammarParserToken grammar) {
         return this.parseGrammarAndGetParsers(
                 grammar,
                 this.syntaxTreeTransformer()
         );
     }
 
-    private Function<EbnfIdentifierName, Optional<Parser<FakeParserContext>>> parseGrammarAndGetParsers(final EbnfGrammarParserToken grammar,
-                                                                                                        final EbnfParserCombinatorSyntaxTreeTransformer<FakeParserContext> transformer) {
+    private Function<EbnfIdentifierName, Parser<FakeParserContext>> parseGrammarAndGetParsers(final EbnfGrammarParserToken grammar,
+                                                                                              final EbnfParserCombinatorSyntaxTreeTransformer<FakeParserContext> transformer) {
         final Map<EbnfIdentifierName, Parser<FakeParserContext>> defaults = Maps.hash();
         defaults.put(
                 EbnfIdentifierName.with("ONLY_LETTERS"),
@@ -1552,11 +1553,12 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 Parsers.fake()
         );
 
-        return grammar.combinator(
+        return grammar.combinatorForFile(
                 (n) -> Optional.ofNullable(
                         defaults.get(n)
                 ),
-                transformer
+                transformer,
+                FILENAME
         );
     }
 
@@ -1711,6 +1713,79 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
     @Override
     public FakeParserContext createContext() {
         return new FakeParserContext();
+    }
+
+    // combinatorForFile................................................................................................
+
+    @Test
+    public void testCombinatorForFileWhenParserMissingFails() {
+        final EbnfParserCombinatorException thrown = assertThrows(
+                EbnfParserCombinatorException.class,
+                () -> EbnfParserToken.parseFile(
+                        "Hello=\"123\";",
+                        FILENAME
+                ).<FakeParserContext>combinatorForFile(
+                        (n) -> Optional.empty(),
+                        new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                            @Override
+                            public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
+                                                                        final Parser<FakeParserContext> parser) {
+                                return parser;
+                            }
+
+                            @Override
+                            public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                                                                  final Parser<FakeParserContext> parser) {
+                                return parser;
+                            }
+
+                            @Override
+                            public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                                                                      final Parser<FakeParserContext> parser) {
+                                return parser;
+                            }
+                        },
+                        FILENAME
+                ).apply(EbnfIdentifierName.with("Missing123"))
+        );
+
+        this.checkEquals(
+                "Missing parser \"Missing123\" in \"File123.txt\"",
+                thrown.getMessage()
+        );
+    }
+
+    @Test
+    public void testCombinatorForFile() {
+        this.checkNotEquals(
+                null,
+                EbnfParserToken.parseFile(
+                        "Hello=\"123\";",
+                        FILENAME
+                ).<FakeParserContext>combinatorForFile(
+                        (n) -> Optional.empty(),
+                        new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                            @Override
+                            public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
+                                                                        final Parser<FakeParserContext> parser) {
+                                return parser;
+                            }
+
+                            @Override
+                            public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                                                                  final Parser<FakeParserContext> parser) {
+                                return parser;
+                            }
+
+                            @Override
+                            public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                                                                      final Parser<FakeParserContext> parser) {
+                                return parser;
+                            }
+                        },
+                        FILENAME
+                ).apply(EbnfIdentifierName.with("Hello"))
+        );
     }
 
     // toString.........................................................................................................

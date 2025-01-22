@@ -102,6 +102,20 @@ public final class EbnfGrammarParserToken extends EbnfParentParserToken<EbnfGram
         );
     }
 
+    /**
+     * Identical in functionality to {@link #combinator(Function, EbnfParserCombinatorSyntaxTreeTransformer)}, except the function return will throw if the parser requested is not found.
+     */
+    public <C extends ParserContext> Function<EbnfIdentifierName, Parser<C>> combinatorForFile(final Function<EbnfIdentifierName, Optional<Parser<C>>> identifierToParser,
+                                                                                               final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer,
+                                                                                               final String filename) {
+        return EbnfParserCombinators.transformForFile(
+                this,
+                identifierToParser,
+                transformer,
+                filename
+        );
+    }
+
     // children.........................................................................................................
 
     @Override
