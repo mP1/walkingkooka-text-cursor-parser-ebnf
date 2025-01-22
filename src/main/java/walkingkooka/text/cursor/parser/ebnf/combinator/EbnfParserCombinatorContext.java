@@ -136,14 +136,16 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
 
         final EbnfIdentifierName identifierName = identifierParserToken.value();
 
-        this.providedIdentifierToParser.apply(identifierName)
-                .ifPresentOrElse(
-                        proxy::setParser,
-                        () -> this.identifierToProxyWithoutParser.put(
-                                identifierName,
-                                proxy
-                        )
-                );
+        // GWT JRE missing Optional#ifPresentOrElse
+        final Optional<Parser<C>> parser = this.providedIdentifierToParser.apply(identifierName);
+        if (parser.isPresent()) {
+            parser.ifPresent(proxy::setParser);
+        } else {
+            this.identifierToProxyWithoutParser.put(
+                    identifierName,
+                    proxy
+            );
+        }
 
         return got;
     }
