@@ -18,6 +18,7 @@
 package walkingkooka.text.cursor.parser.ebnf.combinator;
 
 import walkingkooka.reflect.PublicStaticHelper;
+import walkingkooka.text.CharSequences;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserContext;
 import walkingkooka.text.cursor.parser.ebnf.EbnfGrammarParserToken;
@@ -66,6 +67,26 @@ public final class EbnfParserCombinators implements PublicStaticHelper {
         context.fixProxyParsers();
 
         return context.nameToParser();
+    }
+
+    /**
+     * Accepts a {@link EbnfGrammarParserToken} and function that may be used to query parsers given an {@link EbnfIdentifierName}.
+     */
+    public static <C extends ParserContext> Function<EbnfIdentifierName, Parser<C>> transformForFile(final EbnfGrammarParserToken grammar,
+                                                                                                     final Function<EbnfIdentifierName, Optional<Parser<C>>> identifierToParser,
+                                                                                                     final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer,
+                                                                                                     final String filename) {
+        Objects.requireNonNull(grammar, "grammar");
+        Objects.requireNonNull(identifierToParser, "identifierToParser");
+        Objects.requireNonNull(transformer, "syntaxTreeTransformer");
+        CharSequences.failIfNullOrEmpty(filename, "filename");
+
+        return (n) -> transform(
+                grammar,
+                identifierToParser,
+                transformer
+        ).apply(n)
+                .orElseThrow(() -> new EbnfParserCombinatorException("Missing parser " + CharSequences.quoteAndEscape(n.value()) + " in " + CharSequences.quoteAndEscape(filename)));
     }
 
     /**
