@@ -20,7 +20,7 @@ package walkingkooka.text.cursor.parser.ebnf.combinator;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserException;
 
 /**
- * General purpose base exception for combinator failures.
+ * Common exception for all EBNF grammar parsing etc.
  */
 public class EbnfParserCombinatorException extends EbnfParserException {
 

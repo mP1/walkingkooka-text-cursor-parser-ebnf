@@ -50,7 +50,7 @@ final class EbnfParserCombinatorProxyParser<C extends ParserContext> implements 
 
     void setParser(final Parser<C> parser) {
         if (null == parser) {
-            throw new IllegalStateException("Duplicate parser " + this.identifier);
+            throw new EbnfParserCombinatorException("Duplicate parser " + this.identifier);
         }
         this.parser = parser;
     }
