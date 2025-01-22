@@ -131,7 +131,7 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
         }
 
         if (count > 0) {
-            throw new EbnfParserCombinatorException("Alternatives given " + count + " optional(s) expected 0 got " + b);
+            throw new EbnfParserCombinatorException("Alternatives got " + count + " optional(s) expected 0, " + b);
         }
 
         return Parsers.alternatives(parsers);

@@ -164,7 +164,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
         this.parseGrammarAndGetParserThrows(
                 "OPTIONAL = [\"optional-xyz\"];\n" +
                         "TEST     =   \"abc\" | OPTIONAL;",
-                new EbnfParserCombinatorException("Alternatives given 1 optional(s) expected 0 got OPTIONAL")
+                new EbnfParserCombinatorException("Alternatives got 1 optional(s) expected 0, OPTIONAL")
         );
     }
 
