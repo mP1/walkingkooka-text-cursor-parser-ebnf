@@ -19,38 +19,46 @@ package test;
 import com.google.j2cl.junit.apt.J2clTestInput;
 import org.junit.Assert;
 import org.junit.Test;
+
 import walkingkooka.collect.list.Lists;
-import walkingkooka.text.CharSequences;
-import walkingkooka.text.cursor.TextCursor;
-import walkingkooka.text.cursor.TextCursors;
-import walkingkooka.text.cursor.parser.ParserReporters;
 import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierName;
-import walkingkooka.text.cursor.parser.ebnf.EbnfParserContexts;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserToken;
-
-import java.util.Optional;
 
 @J2clTestInput(JunitTest.class)
 public class JunitTest {
 
     @Test
-    public void testParseGrammar() {
+    public void testEbnfParserTokenParse() {
         final String grammar = "TEST1=\"abc\";";
 
-        final TextCursor grammarFile = TextCursors.charSequence(grammar);
-        final Optional<ParserToken> parsed = EbnfParserToken.grammarParser()
-                .orFailIfCursorNotEmpty(ParserReporters.basic())
-                .parse(grammarFile, EbnfParserContexts.basic());
+        this.checkEquals(
+                EbnfParserToken.grammar(
+                        Lists.of(
+                                EbnfParserToken.rule(
+                                        Lists.<ParserToken>of( // type param required by gwtc
+                                                EbnfParserToken.identifier(
+                                                        EbnfIdentifierName.with("TEST1"),
+                                                        "TEST1"
+                                                ),
+                                                EbnfParserToken.symbol("=", "="),
+                                                EbnfParserToken.terminal("abc", "\"abc\""),
+                                                EbnfParserToken.symbol(";", ";")
+                                        ),
+                                        grammar
+                                )
+                        ),
+                        grammar
+                ),
+                EbnfParserToken.parse(grammar)
+        );
+    }
 
-        final EbnfParserToken token = EbnfParserToken.grammar(Lists.<ParserToken>of(EbnfParserToken.rule(Lists.<ParserToken>of(EbnfParserToken.identifier(EbnfIdentifierName.with("TEST1"), "TEST1"),
-                        EbnfParserToken.symbol("=", "="),
-                        EbnfParserToken.terminal("abc", "\"abc\""),
-                        EbnfParserToken.symbol(";", ";")),
-                grammar)), grammar);
-
-        Assert.assertEquals("parsed " + CharSequences.quoteAndEscape(grammar),
-                Optional.of(token),
-                parsed);
+    private void checkEquals(final Object expected,
+                             final Object actual) {
+        Assert.assertEquals(
+                expected,
+                actual
+        );
     }
 }
