@@ -27,6 +27,18 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
+/**
+ * Simple example of EBNF grammar
+ * <pre>
+ * optional       [ token ]
+ * concat         token1 , token2, token3
+ * alternate      token1 | token2 | token3
+ * exception      token1 - token2
+ * group.         ( group )
+ * repetition     { token }
+ * rule           identifier = token
+ * </pre>
+ */
 public final class EbnfParserCombinators implements PublicStaticHelper {
 
     /**
