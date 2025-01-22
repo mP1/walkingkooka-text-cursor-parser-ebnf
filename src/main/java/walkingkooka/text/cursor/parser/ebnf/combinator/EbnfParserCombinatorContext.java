@@ -22,6 +22,7 @@ import walkingkooka.ToStringBuilder;
 import walkingkooka.ToStringBuilderOption;
 import walkingkooka.collect.map.Maps;
 import walkingkooka.collect.set.Sets;
+import walkingkooka.text.CharSequences;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserContext;
 import walkingkooka.text.cursor.parser.ParserToken;
@@ -78,9 +79,9 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
         final EbnfIdentifierName identifier = rule.identifier()
                 .value();
         if (this.providedIdentifierToParser.apply(identifier).isPresent()) {
-            throw new EbnfParserCombinatorDuplicateRuleException(
-                    "Rule " + identifier + " duplicated in provided parsers",
-                    rule
+            throw this.duplicateRule(
+                    rule,
+                    "provided parsers"
             );
         }
 
@@ -94,10 +95,25 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
                 get.proxy
         );
         if(null != duplicate) {
-            throw new EbnfParserCombinatorDuplicateRuleException("Duplicate rule definition " + identifier, rule);
+            throw this.duplicateRule(
+                    rule,
+                    "grammar"
+            );
         }
 
         return get;
+    }
+
+    // Rule ABC duplicated in Grammar
+    private EbnfParserCombinatorDuplicateRuleException duplicateRule(final EbnfRuleParserToken rule,
+                                                                     final String in) {
+        throw new EbnfParserCombinatorDuplicateRuleException(
+                "Rule " +
+                        CharSequences.quoteAndEscape(rule.identifier().value().value()) +
+                        " duplicated in " +
+                        in,
+                rule
+        );
     }
 
     /**
