@@ -45,7 +45,7 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext> {
     private static final Parser<EbnfParserContext> WHITESPACE_OR_COMMENT = whitespaceOrComment();
 
     private static Parser<EbnfParserContext> whitespaceOrComment() {
-        final Parser<EbnfParserContext> whitespace = Parsers.<EbnfParserContext>stringCharPredicate(CharPredicates.whitespace(), 1, Integer.MAX_VALUE)
+        final Parser<EbnfParserContext> whitespace = Parsers.<EbnfParserContext>charPredicateString(CharPredicates.whitespace(), 1, Integer.MAX_VALUE)
                 .transform(EbnfGrammarParser::transformWhitespace)
                 .setToString("WHITESPACE");
 
