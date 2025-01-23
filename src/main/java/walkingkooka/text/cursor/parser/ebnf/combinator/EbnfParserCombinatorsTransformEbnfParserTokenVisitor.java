@@ -371,7 +371,7 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
     private final EbnfParserCombinatorsProxy<C> proxy;
 
     /**
-     * Contains the parser returned by {@link EbnfParserCombinatorSyntaxTreeTransformer} visitXXX and the response
+     * Contains the parser returned by {@link EbnfParserCombinatorGrammarTransformer} visitXXX and the response
      */
 //    private Parser<C> parser;
 

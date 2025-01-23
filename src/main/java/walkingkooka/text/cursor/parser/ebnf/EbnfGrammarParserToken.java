@@ -22,7 +22,7 @@ import walkingkooka.collect.set.SortedSets;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserContext;
 import walkingkooka.text.cursor.parser.ParserToken;
-import walkingkooka.text.cursor.parser.ebnf.combinator.EbnfParserCombinatorSyntaxTreeTransformer;
+import walkingkooka.text.cursor.parser.ebnf.combinator.EbnfParserCombinatorGrammarTransformer;
 import walkingkooka.text.cursor.parser.ebnf.combinator.EbnfParserCombinators;
 import walkingkooka.visit.Visiting;
 
@@ -94,7 +94,7 @@ public final class EbnfGrammarParserToken extends EbnfParentParserToken<EbnfGram
     }
 
     public <C extends ParserContext> Function<EbnfIdentifierName, Optional<Parser<C>>> combinator(final Function<EbnfIdentifierName, Optional<Parser<C>>> identifierToParser,
-                                                                                                  final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer) {
+                                                                                                  final EbnfParserCombinatorGrammarTransformer<C> transformer) {
         return EbnfParserCombinators.transform(
                 this,
                 identifierToParser,
@@ -103,10 +103,10 @@ public final class EbnfGrammarParserToken extends EbnfParentParserToken<EbnfGram
     }
 
     /**
-     * Identical in functionality to {@link #combinator(Function, EbnfParserCombinatorSyntaxTreeTransformer)}, except the function return will throw if the parser requested is not found.
+     * Identical in functionality to {@link #combinator(Function, EbnfParserCombinatorGrammarTransformer)}, except the function return will throw if the parser requested is not found.
      */
     public <C extends ParserContext> Function<EbnfIdentifierName, Parser<C>> combinatorForFile(final Function<EbnfIdentifierName, Optional<Parser<C>>> identifierToParser,
-                                                                                               final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer,
+                                                                                               final EbnfParserCombinatorGrammarTransformer<C> transformer,
                                                                                                final String filename) {
         return EbnfParserCombinators.transformForFile(
                 this,

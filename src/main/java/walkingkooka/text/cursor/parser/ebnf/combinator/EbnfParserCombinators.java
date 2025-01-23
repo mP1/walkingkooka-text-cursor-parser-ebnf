@@ -47,7 +47,7 @@ public final class EbnfParserCombinators implements PublicStaticHelper {
      */
     public static <C extends ParserContext> Function<EbnfIdentifierName, Optional<Parser<C>>> transform(final EbnfGrammarParserToken grammar,
                                                                                                         final Function<EbnfIdentifierName, Optional<Parser<C>>> identifierToParser,
-                                                                                                        final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer) {
+                                                                                                        final EbnfParserCombinatorGrammarTransformer<C> transformer) {
         Objects.requireNonNull(grammar, "grammar");
         Objects.requireNonNull(identifierToParser, "identifierToParser");
         Objects.requireNonNull(transformer, "syntaxTreeTransformer");
@@ -74,7 +74,7 @@ public final class EbnfParserCombinators implements PublicStaticHelper {
      */
     public static <C extends ParserContext> Function<EbnfIdentifierName, Parser<C>> transformForFile(final EbnfGrammarParserToken grammar,
                                                                                                      final Function<EbnfIdentifierName, Optional<Parser<C>>> identifierToParser,
-                                                                                                     final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer,
+                                                                                                     final EbnfParserCombinatorGrammarTransformer<C> transformer,
                                                                                                      final String filename) {
         Objects.requireNonNull(grammar, "grammar");
         Objects.requireNonNull(identifierToParser, "identifierToParser");
