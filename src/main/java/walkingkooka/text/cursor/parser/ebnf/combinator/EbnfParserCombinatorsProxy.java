@@ -118,7 +118,7 @@ final class EbnfParserCombinatorsProxy<C extends ParserContext> {
     }
 
     /**
-     * The parser equivalent produced by the given {@link EbnfParserCombinatorSyntaxTreeTransformer}.
+     * The parser equivalent produced by the given {@link EbnfParserCombinatorGrammarTransformer}.
      * For {@link EbnfIdentifierParserToken} this will be prepopulated with a {@link EbnfParserCombinatorProxyParser}.
      */
     Parser<C> parser;

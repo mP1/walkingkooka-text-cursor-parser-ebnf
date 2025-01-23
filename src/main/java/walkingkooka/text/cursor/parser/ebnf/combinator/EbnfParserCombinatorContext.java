@@ -45,7 +45,7 @@ import java.util.function.Function;
 final class EbnfParserCombinatorContext<C extends ParserContext> implements Context {
 
     static <C extends ParserContext> EbnfParserCombinatorContext<C> with(final Function<EbnfIdentifierName, Optional<Parser<C>>> identifierToParser,
-                                                                         final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer) {
+                                                                         final EbnfParserCombinatorGrammarTransformer<C> transformer) {
         return new EbnfParserCombinatorContext<>(
                 Objects.requireNonNull(identifierToParser, "identifierToParser"),
                 Objects.requireNonNull(transformer, "transformer")
@@ -53,7 +53,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
     }
 
     private EbnfParserCombinatorContext(final Function<EbnfIdentifierName, Optional<Parser<C>>> identifierToParser,
-                                        final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer) {
+                                        final EbnfParserCombinatorGrammarTransformer<C> transformer) {
         super();
         this.providedIdentifierToParser = identifierToParser;
         this.transformer = transformer;
@@ -70,7 +70,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
     /**
      * A user provided transformer which transforms {@link EbnfParserToken} and parsers.
      */
-    final EbnfParserCombinatorSyntaxTreeTransformer<C> transformer;
+    final EbnfParserCombinatorGrammarTransformer<C> transformer;
 
     /**
      * Records a rule, detecting duplicate identifiers.
@@ -379,7 +379,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
 
     /**
      * Resolves a given {@link EbnfIdentifierName} into text, which is used to resolve the begin and end text
-     * before passing them as arguments to {@link EbnfParserCombinatorSyntaxTreeTransformer#range(EbnfRangeParserToken, String, String).}
+     * before passing them as arguments to {@link EbnfParserCombinatorGrammarTransformer#range(EbnfRangeParserToken, String, String).}
      */
     Optional<String> terminal(final EbnfRangeParserToken range,
                               final boolean begin) {

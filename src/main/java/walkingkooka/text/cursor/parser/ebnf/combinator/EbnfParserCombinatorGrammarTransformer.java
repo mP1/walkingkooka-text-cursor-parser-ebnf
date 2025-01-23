@@ -42,9 +42,7 @@ import walkingkooka.text.cursor.parser.ebnf.EbnfTerminalParserToken;
  * Note the {@link EbnfParserToken#toString()} may be set upon the {@link Parser} if the text definition from the grammar
  * file should be kept.
  */
-public interface EbnfParserCombinatorSyntaxTreeTransformer<C extends ParserContext> extends Context {
-
-    Parser<C> rule(final EbnfRuleParserToken token, final Parser<C> parser);
+public interface EbnfParserCombinatorGrammarTransformer<C extends ParserContext> extends Context {
 
     Parser<C> alternatives(final EbnfAlternativeParserToken token, final Parser<C> parser);
 
@@ -63,6 +61,8 @@ public interface EbnfParserCombinatorSyntaxTreeTransformer<C extends ParserConte
                     final String endText);
 
     Parser<C> repeated(final EbnfRepeatedParserToken token, final Parser<C> parser);
+
+    Parser<C> rule(final EbnfRuleParserToken token, final Parser<C> parser);
 
     Parser<C> terminal(final EbnfTerminalParserToken token, final Parser<C> parser);
 }

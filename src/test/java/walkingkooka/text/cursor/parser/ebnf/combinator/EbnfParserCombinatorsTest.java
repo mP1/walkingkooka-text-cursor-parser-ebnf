@@ -81,7 +81,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
 
         this.parseGrammarAndGetParser(
                 "TEST = \"abc\";",
-                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
                     public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
@@ -126,7 +126,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
 
         this.parseGrammarAndGetParser(
                 "TEST = \"abc\" | \"def\";",
-                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                new FakeEbnfParserCombinatorGrammarTransformer<>() {
                     @Override
                     public Parser<FakeParserContext> alternatives(final EbnfAlternativeParserToken token,
                                                                   final Parser<FakeParserContext> parser) {
@@ -215,7 +215,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
 
         this.parseGrammarAndGetParser(
                 "TEST = \"abc\" , \"def\";",
-                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                new FakeEbnfParserCombinatorGrammarTransformer<>() {
                     @Override
                     public Parser<FakeParserContext> concatenation(final EbnfConcatenationParserToken token,
                                                                    final Parser<FakeParserContext> parser) {
@@ -633,7 +633,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
 
         this.parseGrammarAndGetParser(
                 "TEST = \"abc\" - \"def\";",
-                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
                     public Parser<FakeParserContext> exception(final EbnfExceptionParserToken token,
@@ -716,7 +716,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
 
         this.parseGrammarAndGetParser(
                 "TEST = (\"abc\");",
-                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
                     public Parser<FakeParserContext> group(final EbnfGroupParserToken token,
@@ -778,7 +778,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
         this.parseGrammarAndGetParser(
                 "BACK_REFERENCE = \"abc\";  \n" +
                         "TEST = BACK_REFERENCE;\n",
-                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
                     public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
@@ -821,7 +821,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
         this.parseGrammarAndGetParser(
                 "TEST = FORWARD_REFERENCE;\n" +
                         "FORWARD_REFERENCE = \"abc\";  \n",
-                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
                     public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
@@ -862,7 +862,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
 
         this.parseGrammarAndGetParser(
                 "TEST = \"abc\", TEST;",
-                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
                     public Parser<FakeParserContext> concatenation(final EbnfConcatenationParserToken token,
@@ -1063,7 +1063,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
 
         this.parseGrammarAndGetParser(
                 "TEST = [\"abc\"];",
-                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
                     public Parser<FakeParserContext> optional(final EbnfOptionalParserToken token,
@@ -1166,7 +1166,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
 
         this.parseGrammarAndGetParser(
                 "TEST = \"a\"..\"b\";",
-                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
                     public Parser<FakeParserContext> range(final EbnfRangeParserToken token,
@@ -1341,7 +1341,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
 
         this.parseGrammarAndGetParser(
                 "TEST={\"abc\"};",
-                new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
                     public Parser<FakeParserContext> repeated(final EbnfRepeatedParserToken token,
@@ -1498,7 +1498,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
     }
 
     private Parser<FakeParserContext> parseGrammarAndGetParser(final String grammar,
-                                                               final EbnfParserCombinatorSyntaxTreeTransformer<FakeParserContext> transformer) {
+                                                               final EbnfParserCombinatorGrammarTransformer<FakeParserContext> transformer) {
         final EbnfGrammarParserToken grammarToken = this.parseGrammar(grammar);
 
         final Function<EbnfIdentifierName, Parser<FakeParserContext>> nameToParser = this.parseGrammarAndGetParsers(
@@ -1538,7 +1538,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
     }
 
     private Function<EbnfIdentifierName, Parser<FakeParserContext>> parseGrammarAndGetParsers(final EbnfGrammarParserToken grammar,
-                                                                                              final EbnfParserCombinatorSyntaxTreeTransformer<FakeParserContext> transformer) {
+                                                                                              final EbnfParserCombinatorGrammarTransformer<FakeParserContext> transformer) {
         final Map<EbnfIdentifierName, Parser<FakeParserContext>> defaults = Maps.hash();
         defaults.put(
                 EbnfIdentifierName.with("ONLY_LETTERS"),
@@ -1562,14 +1562,14 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
         );
     }
 
-    private EbnfParserCombinatorSyntaxTreeTransformer<FakeParserContext> syntaxTreeTransformer() {
-        return new EbnfParserCombinatorSyntaxTreeTransformer<>() {
+    private EbnfParserCombinatorGrammarTransformer<FakeParserContext> syntaxTreeTransformer() {
+        return new EbnfParserCombinatorGrammarTransformer<>() {
             @Override
             public Parser<FakeParserContext> alternatives(final EbnfAlternativeParserToken token,
                                                           final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
-                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.alternatives got " + parser
+                        () -> "EbnfParserCombinatorGrammarTransformer.alternatives got " + parser
                 );
                 return parser;
             }
@@ -1579,7 +1579,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                                                            final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
-                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.concatenation got " + parser
+                        () -> "EbnfParserCombinatorGrammarTransformer.concatenation got " + parser
                 );
                 return parser.transform((sequenceParserToken, fakeParserContext) -> sequenceParserToken);
             }
@@ -1589,7 +1589,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                                                        final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
-                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.exception got " + parser
+                        () -> "EbnfParserCombinatorGrammarTransformer.exception got " + parser
                 );
                 return parser;
             }
@@ -1599,7 +1599,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                                                    final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
-                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.group got " + parser
+                        () -> "EbnfParserCombinatorGrammarTransformer.group got " + parser
                 );
                 return parser;
             }
@@ -1609,7 +1609,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                                                         final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
-                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.identifier got " + parser
+                        () -> "EbnfParserCombinatorGrammarTransformer.identifier got " + parser
                 );
                 return parser;
             }
@@ -1619,7 +1619,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                                                       final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
-                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.optional got " + parser
+                        () -> "EbnfParserCombinatorGrammarTransformer.optional got " + parser
                 );
                 return parser;
             }
@@ -1647,7 +1647,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                                                       final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
-                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.repeated got " + parser
+                        () -> "EbnfParserCombinatorGrammarTransformer.repeated got " + parser
                 );
                 return parser;
             }
@@ -1657,7 +1657,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                                                   final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
-                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.rule got " + parser
+                        () -> "EbnfParserCombinatorGrammarTransformer.rule got " + parser
                 );
                 return parser;
             }
@@ -1667,7 +1667,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                                                       final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
-                        () -> "EbnfParserCombinatorSyntaxTreeTransformer.terminal got " + parser
+                        () -> "EbnfParserCombinatorGrammarTransformer.terminal got " + parser
                 );
 
                 return parser.transform((stringParserToken, contextIgnored) -> {
@@ -1726,7 +1726,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                         FILENAME
                 ).<FakeParserContext>combinatorForFile(
                         (n) -> Optional.empty(),
-                        new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                        new FakeEbnfParserCombinatorGrammarTransformer<>() {
                             @Override
                             public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
                                                                         final Parser<FakeParserContext> parser) {
@@ -1764,7 +1764,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                         FILENAME
                 ).<FakeParserContext>combinatorForFile(
                         (n) -> Optional.empty(),
-                        new FakeEbnfParserCombinatorSyntaxTreeTransformer<>() {
+                        new FakeEbnfParserCombinatorGrammarTransformer<>() {
                             @Override
                             public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
                                                                         final Parser<FakeParserContext> parser) {

@@ -31,9 +31,9 @@ import walkingkooka.text.cursor.parser.ebnf.EbnfRepeatedParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfRuleParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfTerminalParserToken;
 
-public class FakeEbnfParserCombinatorSyntaxTreeTransformer<C extends ParserContext> implements EbnfParserCombinatorSyntaxTreeTransformer<C> {
+public class FakeEbnfParserCombinatorGrammarTransformer<C extends ParserContext> implements EbnfParserCombinatorGrammarTransformer<C> {
 
-    public FakeEbnfParserCombinatorSyntaxTreeTransformer() {
+    public FakeEbnfParserCombinatorGrammarTransformer() {
         super();
     }
 

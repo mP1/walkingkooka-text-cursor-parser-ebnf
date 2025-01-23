@@ -32,7 +32,7 @@ public final class EbnfParserCombinatorsPrepareEbnfParserTokenVisitorTest implem
                         (n) -> {
                             throw new UnsupportedOperationException();
                         },
-                        new FakeEbnfParserCombinatorSyntaxTreeTransformer<>()
+                        new FakeEbnfParserCombinatorGrammarTransformer<>()
                 )
         );
     }
