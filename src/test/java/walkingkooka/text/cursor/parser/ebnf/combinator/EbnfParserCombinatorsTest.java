@@ -1542,7 +1542,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
         final Map<EbnfIdentifierName, Parser<FakeParserContext>> defaults = Maps.hash();
         defaults.put(
                 EbnfIdentifierName.with("ONLY_LETTERS"),
-                Parsers.stringCharPredicate(
+                Parsers.charPredicateString(
                         CharPredicates.letter(),
                         1,
                         Integer.MAX_VALUE
@@ -1631,7 +1631,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 checkEquals("a", beginText, "beginText");
                 checkEquals("z", endText, "endText");
 
-                return Parsers.<FakeParserContext>stringCharPredicate(
+                return Parsers.<FakeParserContext>charPredicateString(
                                 CharPredicates.range(
                                         'a',
                                         'z'
