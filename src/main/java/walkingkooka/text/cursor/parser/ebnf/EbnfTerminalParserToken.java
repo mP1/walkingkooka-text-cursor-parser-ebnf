@@ -38,11 +38,4 @@ public final class EbnfTerminalParserToken extends EbnfLeafParserToken<String> {
     public void accept(final EbnfParserTokenVisitor visitor) {
         visitor.visit(this);
     }
-
-    // Object...........................................................................................................
-
-    @Override
-    boolean canBeEqual(final Object other) {
-        return other instanceof EbnfTerminalParserToken;
-    }
 }

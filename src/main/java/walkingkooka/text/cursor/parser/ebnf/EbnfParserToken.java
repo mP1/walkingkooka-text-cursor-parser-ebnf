@@ -336,14 +336,10 @@ public abstract class EbnfParserToken implements ParserToken {
     }
 
     @Override
-    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     public final boolean equals(final Object other) {
         return this == other ||
-                this.canBeEqual(other) &&
-                        this.equals0((EbnfParserToken) other);
+                null != other && this.getClass() == other.getClass() && this.equals0((EbnfParserToken) other);
     }
-
-    abstract boolean canBeEqual(final Object other);
 
     private boolean equals0(final EbnfParserToken other) {
         return this.text.equals(other.text) &&

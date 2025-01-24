@@ -93,12 +93,4 @@ final public class EbnfRangeParserToken extends EbnfParentParserToken<EbnfRangeP
         }
         visitor.endVisit(this);
     }
-
-    // Object...........................................................................................................
-
-    @Override
-    boolean canBeEqual(final Object other) {
-        return other instanceof EbnfRangeParserToken;
-    }
-
 }
