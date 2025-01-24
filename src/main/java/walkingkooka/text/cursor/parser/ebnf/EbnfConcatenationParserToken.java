@@ -55,12 +55,4 @@ public final class EbnfConcatenationParserToken extends EbnfParentParserToken<Eb
         }
         visitor.endVisit(this);
     }
-
-    // Object...........................................................................................................
-
-    @Override
-    boolean canBeEqual(final Object other) {
-        return other instanceof EbnfConcatenationParserToken;
-    }
-
 }

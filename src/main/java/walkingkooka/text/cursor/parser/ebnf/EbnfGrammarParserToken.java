@@ -136,11 +136,4 @@ public final class EbnfGrammarParserToken extends EbnfParentParserToken<EbnfGram
         }
         visitor.endVisit(this);
     }
-
-    // Object...........................................................................................................
-
-    @Override
-    boolean canBeEqual(final Object other) {
-        return other instanceof EbnfGrammarParserToken;
-    }
 }

@@ -55,11 +55,4 @@ final public class EbnfAlternativeParserToken extends EbnfParentParserToken<Ebnf
         }
         visitor.endVisit(this);
     }
-
-    // Object...........................................................................................................
-
-    @Override
-    boolean canBeEqual(final Object other) {
-        return other instanceof EbnfAlternativeParserToken;
-    }
 }

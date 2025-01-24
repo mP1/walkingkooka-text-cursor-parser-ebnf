@@ -93,11 +93,4 @@ public final class EbnfRuleParserToken extends EbnfParentParserToken<EbnfRulePar
         }
         visitor.endVisit(this);
     }
-
-    // Object...........................................................................................................
-
-    @Override
-    boolean canBeEqual(final Object other) {
-        return other instanceof EbnfRuleParserToken;
-    }
 }
