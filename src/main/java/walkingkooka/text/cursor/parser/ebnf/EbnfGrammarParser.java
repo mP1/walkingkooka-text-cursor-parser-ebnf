@@ -25,6 +25,7 @@ import walkingkooka.text.cursor.parser.ParserContext;
 import walkingkooka.text.cursor.parser.ParserReporters;
 import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.text.cursor.parser.Parsers;
+import walkingkooka.text.cursor.parser.RequiredParser;
 import walkingkooka.text.cursor.parser.SequenceParserToken;
 import walkingkooka.text.cursor.parser.StringParserToken;
 
@@ -37,7 +38,8 @@ import java.util.function.BiFunction;
  * <br>
  * <a href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">EBNF</a>
  */
-final class EbnfGrammarParser implements Parser<EbnfParserContext> {
+final class EbnfGrammarParser implements Parser<EbnfParserContext>,
+        RequiredParser<EbnfParserContext> {
 
     /**
      * This needs to be initialized before references below to avoid forward reference problems.
@@ -117,6 +119,18 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext> {
         public Optional<ParserToken> parse(final TextCursor cursor,
                                            final EbnfParserContext context) {
             return rhs().parse(cursor, context);
+        }
+
+        @Override
+        public int minCount() {
+            return rhs()
+                    .minCount();
+        }
+
+        @Override
+        public int maxCount() {
+            return rhs()
+                    .maxCount();
         }
 
         public String toString() {

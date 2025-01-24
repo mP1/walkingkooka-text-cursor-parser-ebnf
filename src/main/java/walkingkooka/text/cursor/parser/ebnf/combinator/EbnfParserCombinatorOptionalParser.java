@@ -71,6 +71,16 @@ final class EbnfParserCombinatorOptionalParser<C extends ParserContext> implemen
         throw new UnsupportedOperationException(this.token.toString());
     }
 
+    @Override
+    public int minCount() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int maxCount() {
+        throw new UnsupportedOperationException();
+    }
+
     final Parser<C> parser;
 
     @Override

@@ -21,13 +21,15 @@ import walkingkooka.text.cursor.TextCursor;
 import walkingkooka.text.cursor.TextCursorSavePoint;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserToken;
+import walkingkooka.text.cursor.parser.RequiredParser;
 
 import java.util.Optional;
 
 /**
  * Handles parsing a terminal literal, including support for backslash escape sequence and unicode sequences.
  */
-final class EbnfTerminalParser implements Parser<EbnfParserContext> {
+final class EbnfTerminalParser implements Parser<EbnfParserContext>,
+        RequiredParser<EbnfParserContext> {
 
     /**
      * Singleton instance

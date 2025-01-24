@@ -42,11 +42,20 @@ final class EbnfParserCombinatorProxyParser<C extends ParserContext> implements 
     }
 
     @Override
-    public Optional<ParserToken> parse(final TextCursor cursor, final C context) {
+    public Optional<ParserToken> parse(final TextCursor cursor,
+                                       final C context) {
         return this.parser.parse(cursor, context);
     }
 
-    final EbnfIdentifierParserToken identifier;
+    @Override
+    public int minCount() {
+        return this.parser.minCount();
+    }
+
+    @Override
+    public int maxCount() {
+        return this.parser.maxCount();
+    }
 
     void setParser(final Parser<C> parser) {
         if (null == parser) {
@@ -71,4 +80,6 @@ final class EbnfParserCombinatorProxyParser<C extends ParserContext> implements 
                 parser.toString() :
                 this.identifier.toString();
     }
+
+    final EbnfIdentifierParserToken identifier;
 }
