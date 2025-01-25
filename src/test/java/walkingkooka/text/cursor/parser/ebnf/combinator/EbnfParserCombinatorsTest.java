@@ -537,9 +537,17 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                         "TEST    =   INITIAL, PART, {PART}, LAST;"
         );
 
-        this.parseFailAndCheck(
+        final String text = "InitialPart";
+
+        this.parseAndCheck(
                 parser,
-                "InitialPart"
+                text,
+                sequence(
+                        string("Initial"),
+                        string("Part")
+                ),
+                text,
+                ""
         );
     }
 
@@ -1802,7 +1810,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
     @Test
     public void testParserToString2() {
         this.checkEquals(
-                "(\"concat-terminal-1\", \"concat-terminal-2\", [\"optional-concat-3\"])",
+                "\"concat-terminal-1\", \"concat-terminal-2\", [\"optional-concat-3\"]",
                 this.parseGrammarAndGetParser("TEST=\"concat-terminal-1\", \"concat-terminal-2\", [\"optional-concat-3\"];")
                         .toString()
         );
