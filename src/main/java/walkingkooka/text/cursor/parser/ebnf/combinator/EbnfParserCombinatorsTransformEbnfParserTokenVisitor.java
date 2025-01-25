@@ -20,7 +20,6 @@ package walkingkooka.text.cursor.parser.ebnf.combinator;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserContext;
 import walkingkooka.text.cursor.parser.Parsers;
-import walkingkooka.text.cursor.parser.SequenceParserBuilder;
 import walkingkooka.text.cursor.parser.ebnf.EbnfAlternativeParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfConcatenationParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfExceptionParserToken;
@@ -149,30 +148,30 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
         this.tryCreateAndTransformParser(
                 token,
                 (c) -> {
-                    SequenceParserBuilder<C> b = Parsers.sequenceParserBuilder();
+                    Parser<C> parser = null;
 
                     for (final EbnfParserCombinatorsProxy<C> child : this.proxy.children) {
                         final Optional<Parser<C>> maybeChildParser = child.parser();
                         if (maybeChildParser.isPresent()) {
-                            final Parser<C> childParser = maybeChildParser.get();
+                            Parser<C> childParser = maybeChildParser.get();
+
                             if (childParser instanceof EbnfParserCombinatorOptionalParser) {
-                                b.optional(
-                                        EbnfParserCombinatorOptionalParser.unwrapIfNecessary(childParser)
-                                );
+                                childParser = EbnfParserCombinatorOptionalParser.unwrapIfNecessary(childParser)
+                                        .optional();
+                            }
+
+                            if (null == parser) {
+                                parser = childParser;
                             } else {
-                                b.required(childParser);
+                                parser = parser.and(childParser);
                             }
                         } else {
-                            b = null;
+                            parser = null;
                             break;
                         }
                     }
 
-                    return Optional.ofNullable(
-                            null != b ?
-                                    b.build() :
-                                    null
-                    );
+                    return Optional.ofNullable(parser);
                 }, // parser
                 this.context.transformer::concatenation
         );

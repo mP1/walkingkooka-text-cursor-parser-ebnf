@@ -18,6 +18,7 @@
 package walkingkooka.text.cursor.parser.ebnf;
 
 import walkingkooka.text.cursor.parser.CharacterParserToken;
+import walkingkooka.text.cursor.parser.ParserContext;
 import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.text.cursor.parser.ParserTokenVisitor;
 
@@ -26,7 +27,8 @@ import walkingkooka.text.cursor.parser.ParserTokenVisitor;
  */
 final class EbnfGrammarParserIdentifierParserTokenVisitor extends ParserTokenVisitor {
 
-    static EbnfIdentifierParserToken ebnfIdentifierParserToken(final ParserToken token, final EbnfParserContext context) {
+    static EbnfIdentifierParserToken ebnfIdentifierParserToken(final ParserToken token,
+                                                               final ParserContext context) {
         final EbnfGrammarParserIdentifierParserTokenVisitor visitor = new EbnfGrammarParserIdentifierParserTokenVisitor();
         visitor.accept(token);
         return EbnfParserToken.identifier(EbnfIdentifierName.with(visitor.text.toString()), token.text());

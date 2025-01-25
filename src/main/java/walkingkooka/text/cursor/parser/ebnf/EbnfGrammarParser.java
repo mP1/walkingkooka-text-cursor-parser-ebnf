@@ -74,17 +74,16 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
      * identifier = letter , { letter | digit | "_" } ;
      * </pre>
      */
-    final static Parser<EbnfParserContext> IDENTIFIER = Parsers.<EbnfParserContext>sequenceParserBuilder()
-                .required(Parsers.character(EbnfIdentifierName.INITIAL))
-                .required(
+    final static Parser<EbnfParserContext> IDENTIFIER = Parsers.character(EbnfIdentifierName.INITIAL)
+                .and(
                         Parsers.character(EbnfIdentifierName.PART)
                                 .repeating()
                                 .orReport(
                                         ParserReporters.basic()
-                                ).cast()
-                ).build()
-                .transform(EbnfGrammarParserIdentifierParserTokenVisitor::ebnfIdentifierParserToken)
-                .setToString("IDENTIFIER");
+                                )
+                ).transform(EbnfGrammarParserIdentifierParserTokenVisitor::ebnfIdentifierParserToken)
+                .setToString("IDENTIFIER")
+            .cast();
 
     /**
      * <pre>
@@ -155,13 +154,10 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
                 "optional_close"
         );
 
-        return Parsers.<EbnfParserContext>sequenceParserBuilder()
-                .required(open)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RHS)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(close)
-                .build()
+        return open.and(WHITESPACE_OR_COMMENT.optional())
+                .and(RHS)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(close)
                 .transform(filterAndWrap(EbnfParserToken::optional));
     }
 
@@ -182,13 +178,10 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
                 "repetition_close"
         );
 
-        return Parsers.<EbnfParserContext>sequenceParserBuilder()
-                .required(open)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RHS)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(close)
-                .build()
+        return open.and(WHITESPACE_OR_COMMENT.optional())
+                .and(RHS)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(close)
                 .transform(filterAndWrap(EbnfParserToken::repeated));
     }
 
@@ -209,13 +202,11 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
                 "group_close"
         );
 
-        return Parsers.<EbnfParserContext>sequenceParserBuilder()
-                .required(open)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RHS)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(close)
-                .build()
+        return open
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(RHS)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(close)
                 .transform(filterAndWrap(EbnfParserToken::group));
     }
 
@@ -245,27 +236,21 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
                 "alt_separator"
         );
 
-        final Parser<EbnfParserContext> required = Parsers.<EbnfParserContext>sequenceParserBuilder()
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RHS2)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(separator)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RHS2)
-                .build();
-        final Parser<EbnfParserContext> optionalRepeating = Parsers.<EbnfParserContext>sequenceParserBuilder()
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(separator)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RHS2)
-                .build()
+        final Parser<EbnfParserContext> required = WHITESPACE_OR_COMMENT.optional()
+                .and(RHS2)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(separator)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(RHS2);
+
+        final Parser<EbnfParserContext> optionalRepeating = WHITESPACE_OR_COMMENT.optional()
+                .and(separator)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(RHS2)
                 .repeating();
-        final Parser<EbnfParserContext> all = Parsers.sequenceParserBuilder()
-                .required(required.cast())
-                .optional(optionalRepeating.cast())
-                .build()
-                .cast();
-        return all
+
+        return required
+                .and(optionalRepeating)
                 .transform(filterAndWrap(EbnfParserToken::alternative));
     }
 
@@ -283,27 +268,20 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
                 "concat_separator"
         );
 
-        final Parser<EbnfParserContext> required = Parsers.<EbnfParserContext>sequenceParserBuilder()
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RHS2)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(separator)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RHS2)
-                .build();
-        final Parser<EbnfParserContext> optionalRepeating = Parsers.<EbnfParserContext>sequenceParserBuilder()
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(separator)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RHS2)
-                .build()
+        final Parser<EbnfParserContext> required = WHITESPACE_OR_COMMENT.optional()
+                .and(RHS2)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(separator)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(RHS2);
+
+        final Parser<EbnfParserContext> optionalRepeating = WHITESPACE_OR_COMMENT.optional()
+                .and(separator)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(RHS2)
                 .repeating();
-        final Parser<EbnfParserContext> all = Parsers.sequenceParserBuilder()
-                .required(required.cast())
-                .optional(optionalRepeating.cast())
-                .build()
-                .cast();
-        return all
+
+        return required.and(optionalRepeating)
                 .transform(filterAndWrap(EbnfParserToken::concatenation));
     }
 
@@ -320,15 +298,15 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
                 "exception_separator"
         );
 
-        return Parsers.<EbnfParserContext>sequenceParserBuilder()
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RHS2)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(separator)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RHS2)
-                .build()
-                .transform(filterAndWrap(EbnfParserToken::exception));
+        return WHITESPACE_OR_COMMENT.optional()
+                .and(RHS2)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(separator)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(RHS2)
+                .transform(
+                        filterAndWrap(EbnfParserToken::exception)
+                );
     }
 
     /**
@@ -344,15 +322,15 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
                 "range_separator"
         );
 
-        return Parsers.<EbnfParserContext>sequenceParserBuilder()
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RHS2)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(separator)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RHS2)
-                .build()
-                .transform(filterAndWrap(EbnfParserToken::range));
+        return WHITESPACE_OR_COMMENT.optional()
+                .and(RHS2)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(separator)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(RHS2)
+                .transform(
+                        filterAndWrap(EbnfParserToken::range)
+                );
     }
 
     /**
@@ -372,17 +350,17 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
                 "termination"
         ).orReport(ParserReporters.basic());
 
-        return Parsers.<EbnfParserContext>sequenceParserBuilder()
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(LHS)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(assign)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RHS)
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(termination)
-                .build()
-                .transform(filterAndWrap(EbnfParserToken::rule));
+        return WHITESPACE_OR_COMMENT.optional()
+                .and(LHS)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(assign)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(RHS)
+                .and(WHITESPACE_OR_COMMENT.optional())
+                .and(termination)
+                .transform(
+                        filterAndWrap(EbnfParserToken::rule)
+                );
     }
 
     /**
@@ -464,12 +442,10 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
     final static Parser<EbnfParserContext> GRAMMAR = grammar();
 
     private static Parser<EbnfParserContext> grammar() {
-        return Parsers.<EbnfParserContext>sequenceParserBuilder()
-                .optional(WHITESPACE_OR_COMMENT)
-                .required(RULE.orReport(ParserReporters.basic()))
-                .optional(RULE.repeating().cast())
-                .optional(WHITESPACE_OR_COMMENT)
-                .build()
+        return WHITESPACE_OR_COMMENT.optional()
+                .and(RULE.orReport(ParserReporters.basic()))
+                .and(RULE.repeating().optional())
+                .and(WHITESPACE_OR_COMMENT.optional())
                 .transform(EbnfGrammarParser::grammarParserToken);
     }
 
