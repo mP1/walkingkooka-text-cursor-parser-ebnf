@@ -143,9 +143,9 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
      * "[" , rhs , "]"
      * </pre>
      */
-    final static Parser<EbnfParserContext> OPTIONAL = optional();
+    final static Parser<EbnfParserContext> OPTIONAL = optionalParser();
 
-    private static Parser<EbnfParserContext> optional() {
+    private static Parser<EbnfParserContext> optionalParser() {
         final Parser<EbnfParserContext> open = symbol(
                 EbnfGrammar.OPTIONAL_OPEN,
                 "optional_open"
