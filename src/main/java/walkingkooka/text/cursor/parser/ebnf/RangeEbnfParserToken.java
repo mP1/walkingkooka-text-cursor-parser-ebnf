@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Represents a list of alternative token in the grammar.
  */
-final public class RangeEbnfParserToken extends ParentEbnfParserToken<RangeEbnfParserToken> {
+final public class RangeEbnfParserToken extends ParentEbnfParserToken {
 
     static RangeEbnfParserToken with(final List<ParserToken> tokens, final String text) {
         final List<ParserToken> copy = copyAndCheckTokens(tokens);

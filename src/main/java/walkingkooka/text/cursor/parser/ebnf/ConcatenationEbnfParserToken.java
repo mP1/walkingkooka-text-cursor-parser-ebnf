@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Represents a concatenation of tokens in the grammar.
  */
-public final class ConcatenationEbnfParserToken extends ParentEbnfParserToken<ConcatenationEbnfParserToken> {
+public final class ConcatenationEbnfParserToken extends ParentEbnfParserToken {
 
     static ConcatenationEbnfParserToken with(final List<ParserToken> tokens, final String text) {
         return new ConcatenationEbnfParserToken(copyAndCheckTokens(tokens), checkText(text));

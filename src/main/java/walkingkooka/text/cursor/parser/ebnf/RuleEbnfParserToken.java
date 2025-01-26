@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Represents a single rule definition within a grammar.
  */
-public final class RuleEbnfParserToken extends ParentEbnfParserToken<RuleEbnfParserToken> {
+public final class RuleEbnfParserToken extends ParentEbnfParserToken {
 
     static RuleEbnfParserToken with(final List<ParserToken> tokens, final String text) {
         final List<ParserToken> copy = copyAndCheckTokens(tokens);

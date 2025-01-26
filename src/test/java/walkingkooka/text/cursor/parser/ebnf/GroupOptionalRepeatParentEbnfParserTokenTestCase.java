@@ -24,7 +24,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public abstract class GroupOptionalRepeatParentEbnfParserTokenTestCase<T extends ParentEbnfParserToken<T>> extends ParentEbnfParserTokenTestCase2<T> {
+public abstract class GroupOptionalRepeatParentEbnfParserTokenTestCase<T extends ParentEbnfParserToken> extends ParentEbnfParserTokenTestCase2<T> {
 
     GroupOptionalRepeatParentEbnfParserTokenTestCase() {
         super();

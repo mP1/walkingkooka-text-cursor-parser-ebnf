@@ -37,7 +37,7 @@ import java.util.function.Function;
  * A grammar holds all the rules and is the root of the graph. Note the {@link #value()} will contain a mixture of rules,
  * comments and whitespace.
  */
-public final class GrammarEbnfParserToken extends ParentEbnfParserToken<GrammarEbnfParserToken> {
+public final class GrammarEbnfParserToken extends ParentEbnfParserToken {
 
     static GrammarEbnfParserToken with(final List<ParserToken> tokens, final String text) {
         Objects.requireNonNull(tokens, "tokens");

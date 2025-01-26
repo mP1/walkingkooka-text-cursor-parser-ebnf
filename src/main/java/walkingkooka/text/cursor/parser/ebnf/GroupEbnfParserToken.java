@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Represents an grouped token in the grammar.
  */
-public final class GroupEbnfParserToken extends ParentEbnfParserToken<GroupEbnfParserToken> {
+public final class GroupEbnfParserToken extends ParentEbnfParserToken {
 
     static GroupEbnfParserToken with(final List<ParserToken> tokens, final String text) {
         return new GroupEbnfParserToken(copyAndCheckTokens(tokens), checkText(text));

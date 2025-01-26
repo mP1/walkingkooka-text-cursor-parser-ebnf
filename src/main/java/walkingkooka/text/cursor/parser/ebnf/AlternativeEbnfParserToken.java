@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Represents a list of alternative token in the grammar.
  */
-final public class AlternativeEbnfParserToken extends ParentEbnfParserToken<AlternativeEbnfParserToken> {
+final public class AlternativeEbnfParserToken extends ParentEbnfParserToken {
 
     static AlternativeEbnfParserToken with(final List<ParserToken> tokens, final String text) {
         return new AlternativeEbnfParserToken(copyAndCheckTokens(tokens), checkText(text));

@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Represents an optional token in the grammar.
  */
-public final class OptionalEbnfParserToken extends ParentEbnfParserToken<OptionalEbnfParserToken> {
+public final class OptionalEbnfParserToken extends ParentEbnfParserToken {
 
     static OptionalEbnfParserToken with(final List<ParserToken> tokens, final String text) {
         return new OptionalEbnfParserToken(copyAndCheckTokens(tokens), checkText(text));
