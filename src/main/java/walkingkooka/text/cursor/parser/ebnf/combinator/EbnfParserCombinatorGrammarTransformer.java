@@ -20,23 +20,23 @@ package walkingkooka.text.cursor.parser.ebnf.combinator;
 import walkingkooka.Context;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserContext;
-import walkingkooka.text.cursor.parser.ebnf.EbnfAlternativeParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfConcatenationParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfExceptionParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfGroupParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfOptionalParserToken;
+import walkingkooka.text.cursor.parser.ebnf.AlternativeEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.ConcatenationEbnfParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRangeParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRepeatedParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRuleParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfTerminalParserToken;
+import walkingkooka.text.cursor.parser.ebnf.ExceptionEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.GroupEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.IdentifierEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.OptionalEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.RangeEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.RepeatedEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.RuleEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.TerminalEbnfParserToken;
 
 /**
  * The {@link Context} that provides callbacks for a grammar that defines multiple {@link Parser parses}.
  * <br>
- * Note if a different parser object is returned by {@link #terminal(EbnfTerminalParserToken, Parser)},
- * it will be ignored by {@link #range(EbnfRangeParserToken, String, String)} which reads the
+ * Note if a different parser object is returned by {@link #terminal(TerminalEbnfParserToken, Parser)},
+ * it will be ignored by {@link #range(RangeEbnfParserToken, String, String)} which reads the
  * tokens from the range token.
  * <br>
  * Note the {@link EbnfParserToken#toString()} may be set upon the {@link Parser} if the text definition from the grammar
@@ -44,25 +44,25 @@ import walkingkooka.text.cursor.parser.ebnf.EbnfTerminalParserToken;
  */
 public interface EbnfParserCombinatorGrammarTransformer<C extends ParserContext> extends Context {
 
-    Parser<C> alternatives(final EbnfAlternativeParserToken token, final Parser<C> parser);
+    Parser<C> alternatives(final AlternativeEbnfParserToken token, final Parser<C> parser);
 
-    Parser<C> concatenation(final EbnfConcatenationParserToken token, final Parser<C> parser);
+    Parser<C> concatenation(final ConcatenationEbnfParserToken token, final Parser<C> parser);
 
-    Parser<C> exception(final EbnfExceptionParserToken token, final Parser<C> parser);
+    Parser<C> exception(final ExceptionEbnfParserToken token, final Parser<C> parser);
 
-    Parser<C> group(final EbnfGroupParserToken token, final Parser<C> parser);
+    Parser<C> group(final GroupEbnfParserToken token, final Parser<C> parser);
 
-    Parser<C> identifier(final EbnfIdentifierParserToken token, final Parser<C> parser);
+    Parser<C> identifier(final IdentifierEbnfParserToken token, final Parser<C> parser);
 
-    Parser<C> optional(final EbnfOptionalParserToken token, final Parser<C> parser);
+    Parser<C> optional(final OptionalEbnfParserToken token, final Parser<C> parser);
 
-    Parser<C> range(final EbnfRangeParserToken token,
+    Parser<C> range(final RangeEbnfParserToken token,
                     final String beginText,
                     final String endText);
 
-    Parser<C> repeated(final EbnfRepeatedParserToken token, final Parser<C> parser);
+    Parser<C> repeated(final RepeatedEbnfParserToken token, final Parser<C> parser);
 
-    Parser<C> rule(final EbnfRuleParserToken token, final Parser<C> parser);
+    Parser<C> rule(final RuleEbnfParserToken token, final Parser<C> parser);
 
-    Parser<C> terminal(final EbnfTerminalParserToken token, final Parser<C> parser);
+    Parser<C> terminal(final TerminalEbnfParserToken token, final Parser<C> parser);
 }

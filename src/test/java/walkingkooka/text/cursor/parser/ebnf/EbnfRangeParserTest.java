@@ -21,7 +21,7 @@ import walkingkooka.collect.list.Lists;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserToken;
 
-public final class EbnfRangeParserTest extends EbnfParserTestCase2<EbnfRangeParserToken> {
+public final class EbnfRangeParserTest extends EbnfParserTestCase2<RangeEbnfParserToken> {
 
     @Test
     public void testParseBeginOnlyFails() {
@@ -146,16 +146,16 @@ public final class EbnfRangeParserTest extends EbnfParserTestCase2<EbnfRangePars
     }
 
     @Override
-    EbnfRangeParserToken token(final String text) {
+    RangeEbnfParserToken token(final String text) {
         return token(text,
                 terminal1(),
                 between(),
                 terminal2());
     }
 
-    private EbnfRangeParserToken token(final String text,
+    private RangeEbnfParserToken token(final String text,
                                        final ParserToken... tokens) {
-        return EbnfRangeParserToken.with(
+        return RangeEbnfParserToken.with(
                 Lists.of(tokens),
                 text
         );

@@ -20,8 +20,9 @@ package walkingkooka.text.cursor.parser.ebnf.combinator;
 import walkingkooka.collect.list.Lists;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserContext;
-import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierParserToken;
+import walkingkooka.text.cursor.parser.ebnf.AlternativeEbnfParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.IdentifierEbnfParserToken;
 
 import java.util.List;
 import java.util.Objects;
@@ -104,7 +105,7 @@ final class EbnfParserCombinatorsProxy<C extends ParserContext> {
     private final EbnfParserCombinatorContext<C> context;
 
     /**
-     * Proxies for each child. This can contain between one and many with examples of the later being an {@link walkingkooka.text.cursor.parser.ebnf.EbnfAlternativeParserToken}.
+     * Proxies for each child. This can contain between one and many with examples of the later being an {@link AlternativeEbnfParserToken}.
      */
     final List<EbnfParserCombinatorsProxy<C>> children = Lists.array();
 
@@ -119,7 +120,7 @@ final class EbnfParserCombinatorsProxy<C extends ParserContext> {
 
     /**
      * The parser equivalent produced by the given {@link EbnfParserCombinatorGrammarTransformer}.
-     * For {@link EbnfIdentifierParserToken} this will be prepopulated with a {@link EbnfParserCombinatorProxyParser}.
+     * For {@link IdentifierEbnfParserToken} this will be prepopulated with a {@link EbnfParserCombinatorProxyParser}.
      */
     Parser<C> parser;
 

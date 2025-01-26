@@ -18,7 +18,7 @@ package walkingkooka.text.cursor.parser.ebnf;
 
 import walkingkooka.text.cursor.parser.Parser;
 
-public final class EbnfIdentifierParserTest extends EbnfParserTestCase3<EbnfIdentifierParserToken> {
+public final class EbnfIdentifierParserTest extends EbnfParserTestCase3<IdentifierEbnfParserToken> {
 
     @Override
     public Parser<EbnfParserContext> createParser() {
@@ -31,8 +31,8 @@ public final class EbnfIdentifierParserTest extends EbnfParserTestCase3<EbnfIden
     }
 
     @Override
-    EbnfIdentifierParserToken token(final String text) {
-        return EbnfIdentifierParserToken.with(
+    IdentifierEbnfParserToken token(final String text) {
+        return IdentifierEbnfParserToken.with(
                 EbnfIdentifierName.with(this.text()),
                 text);
     }

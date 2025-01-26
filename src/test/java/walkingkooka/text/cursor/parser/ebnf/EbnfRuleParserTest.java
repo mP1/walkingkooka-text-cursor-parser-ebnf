@@ -21,7 +21,7 @@ import walkingkooka.collect.list.Lists;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserToken;
 
-public final class EbnfRuleParserTest extends EbnfParserTestCase2<EbnfRuleParserToken> {
+public final class EbnfRuleParserTest extends EbnfParserTestCase2<RuleEbnfParserToken> {
 
     @Test
     public void testParseIdentifierOnlyFails() {
@@ -456,7 +456,7 @@ public final class EbnfRuleParserTest extends EbnfParserTestCase2<EbnfRuleParser
     }
 
     @Override
-    EbnfRuleParserToken token(final String text) {
+    RuleEbnfParserToken token(final String text) {
         return rule(text,
                 EbnfParserToken.identifier(IDENTIFIER1, IDENTIFIER1_TEXT),
                 assignmentToken(),

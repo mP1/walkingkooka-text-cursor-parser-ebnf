@@ -21,7 +21,7 @@ import walkingkooka.text.cursor.parser.ParserToken;
 
 import java.util.List;
 
-public final class EbnfConcatenationParserTest extends EbnfAlternativeOrConcatenationParserTestCase<EbnfConcatenationParserToken> {
+public final class EbnfConcatenationParserTest extends EbnfAlternativeOrConcatenationParserTestCase<ConcatenationEbnfParserToken> {
 
     @Override
     public Parser<EbnfParserContext> createParser() {
@@ -34,7 +34,7 @@ public final class EbnfConcatenationParserTest extends EbnfAlternativeOrConcaten
     }
 
     @Override
-    EbnfConcatenationParserToken token(final String text,
+    ConcatenationEbnfParserToken token(final String text,
                                        final List<ParserToken> tokens) {
         return EbnfParserToken.concatenation(tokens, text);
     }

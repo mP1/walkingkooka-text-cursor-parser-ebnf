@@ -24,117 +24,117 @@ import walkingkooka.visit.Visiting;
 abstract class FakeEbnfParserTokenVisitor extends EbnfParserTokenVisitor implements Fake {
 
     @Override
-    protected Visiting startVisit(final EbnfGrammarParserToken token) {
+    protected Visiting startVisit(final GrammarEbnfParserToken token) {
         return super.startVisit(token);
     }
 
     @Override
-    protected void endVisit(final EbnfGrammarParserToken token) {
+    protected void endVisit(final GrammarEbnfParserToken token) {
         super.endVisit(token);
     }
 
     @Override
-    protected Visiting startVisit(final EbnfAlternativeParserToken token) {
+    protected Visiting startVisit(final AlternativeEbnfParserToken token) {
         return super.startVisit(token);
     }
 
     @Override
-    protected void endVisit(final EbnfAlternativeParserToken token) {
+    protected void endVisit(final AlternativeEbnfParserToken token) {
         super.endVisit(token);
     }
 
     @Override
-    protected Visiting startVisit(final EbnfConcatenationParserToken token) {
+    protected Visiting startVisit(final ConcatenationEbnfParserToken token) {
         return super.startVisit(token);
     }
 
     @Override
-    protected void endVisit(final EbnfConcatenationParserToken token) {
+    protected void endVisit(final ConcatenationEbnfParserToken token) {
         super.endVisit(token);
     }
 
     @Override
-    protected Visiting startVisit(final EbnfExceptionParserToken token) {
+    protected Visiting startVisit(final ExceptionEbnfParserToken token) {
         return super.startVisit(token);
     }
 
     @Override
-    protected void endVisit(final EbnfExceptionParserToken token) {
+    protected void endVisit(final ExceptionEbnfParserToken token) {
         super.endVisit(token);
     }
 
     @Override
-    protected Visiting startVisit(final EbnfGroupParserToken token) {
+    protected Visiting startVisit(final GroupEbnfParserToken token) {
         return super.startVisit(token);
     }
 
     @Override
-    protected void endVisit(final EbnfGroupParserToken token) {
+    protected void endVisit(final GroupEbnfParserToken token) {
         super.endVisit(token);
     }
 
     @Override
-    protected Visiting startVisit(final EbnfOptionalParserToken token) {
+    protected Visiting startVisit(final OptionalEbnfParserToken token) {
         return super.startVisit(token);
     }
 
     @Override
-    protected void endVisit(final EbnfOptionalParserToken token) {
+    protected void endVisit(final OptionalEbnfParserToken token) {
         super.endVisit(token);
     }
 
     @Override
-    protected Visiting startVisit(final EbnfRangeParserToken token) {
+    protected Visiting startVisit(final RangeEbnfParserToken token) {
         return super.startVisit(token);
     }
 
     @Override
-    protected void endVisit(final EbnfRangeParserToken token) {
+    protected void endVisit(final RangeEbnfParserToken token) {
         super.endVisit(token);
     }
 
     @Override
-    protected Visiting startVisit(final EbnfRepeatedParserToken token) {
+    protected Visiting startVisit(final RepeatedEbnfParserToken token) {
         return super.startVisit(token);
     }
 
     @Override
-    protected void endVisit(final EbnfRepeatedParserToken token) {
+    protected void endVisit(final RepeatedEbnfParserToken token) {
         super.endVisit(token);
     }
 
     @Override
-    protected Visiting startVisit(final EbnfRuleParserToken token) {
+    protected Visiting startVisit(final RuleEbnfParserToken token) {
         return super.startVisit(token);
     }
 
     @Override
-    protected void endVisit(final EbnfRuleParserToken token) {
+    protected void endVisit(final RuleEbnfParserToken token) {
         super.endVisit(token);
     }
 
     @Override
-    protected void visit(final EbnfCommentParserToken token) {
+    protected void visit(final CommentEbnfParserToken token) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected void visit(final EbnfIdentifierParserToken token) {
+    protected void visit(final IdentifierEbnfParserToken token) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected void visit(final EbnfSymbolParserToken token) {
+    protected void visit(final SymbolEbnfParserToken token) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected void visit(final EbnfTerminalParserToken token) {
+    protected void visit(final TerminalEbnfParserToken token) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected void visit(final EbnfWhitespaceParserToken token) {
+    protected void visit(final WhitespaceEbnfParserToken token) {
         throw new UnsupportedOperationException();
     }
 

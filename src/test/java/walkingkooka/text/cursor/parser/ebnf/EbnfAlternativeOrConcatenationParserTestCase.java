@@ -235,7 +235,7 @@ public abstract class EbnfAlternativeOrConcatenationParserTestCase<T extends Ebn
 
     abstract String separator();
 
-    final EbnfSymbolParserToken separatorCharToken() {
+    final SymbolEbnfParserToken separatorCharToken() {
         final String separator = this.separator();
         return EbnfParserToken.symbol(separator, separator);
     }

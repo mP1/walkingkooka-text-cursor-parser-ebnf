@@ -23,130 +23,130 @@ import walkingkooka.visit.Visiting;
 
 public abstract class EbnfParserTokenVisitor extends ParserTokenVisitor {
 
-    // EbnfGrammarParserToken....................................................................................
+    // GrammarEbnfParserToken....................................................................................
 
-    protected Visiting startVisit(final EbnfGrammarParserToken token) {
+    protected Visiting startVisit(final GrammarEbnfParserToken token) {
         return Visiting.CONTINUE;
     }
 
-    protected void endVisit(final EbnfGrammarParserToken token) {
+    protected void endVisit(final GrammarEbnfParserToken token) {
         // nop
     }
 
     // EbnfParentParserTokens.........................................................................................
 
-    // EbnfAlternativeParserToken ....................................................................................
+    // AlternativeEbnfParserToken ....................................................................................
 
-    protected Visiting startVisit(final EbnfAlternativeParserToken token) {
+    protected Visiting startVisit(final AlternativeEbnfParserToken token) {
         return Visiting.CONTINUE;
     }
 
-    protected void endVisit(final EbnfAlternativeParserToken token) {
+    protected void endVisit(final AlternativeEbnfParserToken token) {
         // nop
     }
 
-    // EbnfConcatenationParserToken....................................................................................
+    // ConcatenationEbnfParserToken....................................................................................
 
-    protected Visiting startVisit(final EbnfConcatenationParserToken token) {
+    protected Visiting startVisit(final ConcatenationEbnfParserToken token) {
         return Visiting.CONTINUE;
     }
 
-    protected void endVisit(final EbnfConcatenationParserToken token) {
+    protected void endVisit(final ConcatenationEbnfParserToken token) {
         // nop
     }
 
-    // EbnfExceptionParserToken....................................................................................
+    // ExceptionEbnfParserToken....................................................................................
 
-    protected Visiting startVisit(final EbnfExceptionParserToken token) {
+    protected Visiting startVisit(final ExceptionEbnfParserToken token) {
         return Visiting.CONTINUE;
     }
 
-    protected void endVisit(final EbnfExceptionParserToken token) {
+    protected void endVisit(final ExceptionEbnfParserToken token) {
         // nop
     }
 
-    // EbnfGroupParserToken....................................................................................
+    // GroupEbnfParserToken....................................................................................
 
-    protected Visiting startVisit(final EbnfGroupParserToken token) {
+    protected Visiting startVisit(final GroupEbnfParserToken token) {
         return Visiting.CONTINUE;
     }
 
-    protected void endVisit(final EbnfGroupParserToken token) {
+    protected void endVisit(final GroupEbnfParserToken token) {
         // nop
     }
 
-    // EbnfOptionalParserToken....................................................................................
+    // OptionalEbnfParserToken....................................................................................
 
-    protected Visiting startVisit(final EbnfOptionalParserToken token) {
+    protected Visiting startVisit(final OptionalEbnfParserToken token) {
         return Visiting.CONTINUE;
     }
 
-    protected void endVisit(final EbnfOptionalParserToken token) {
+    protected void endVisit(final OptionalEbnfParserToken token) {
         // nop
     }
 
-    // EbnfRangeParserToken....................................................................................
+    // RangeEbnfParserToken....................................................................................
 
-    protected Visiting startVisit(final EbnfRangeParserToken token) {
+    protected Visiting startVisit(final RangeEbnfParserToken token) {
         return Visiting.CONTINUE;
     }
 
-    protected void endVisit(final EbnfRangeParserToken token) {
+    protected void endVisit(final RangeEbnfParserToken token) {
         // nop
     }
 
-    // EbnfRepeatedParserToken....................................................................................
+    // RepeatedEbnfParserToken....................................................................................
 
-    protected Visiting startVisit(final EbnfRepeatedParserToken token) {
+    protected Visiting startVisit(final RepeatedEbnfParserToken token) {
         return Visiting.CONTINUE;
     }
 
-    protected void endVisit(final EbnfRepeatedParserToken token) {
+    protected void endVisit(final RepeatedEbnfParserToken token) {
         // nop
     }
 
-    // EbnfRuleParserToken....................................................................................
+    // RuleEbnfParserToken....................................................................................
 
-    protected Visiting startVisit(final EbnfRuleParserToken token) {
+    protected Visiting startVisit(final RuleEbnfParserToken token) {
         return Visiting.CONTINUE;
     }
 
-    protected void endVisit(final EbnfRuleParserToken token) {
+    protected void endVisit(final RuleEbnfParserToken token) {
         // nop
     }
 
-    // EbnfLeafParserToken ....................................................................................
+    // LeafEbnfParserToken ....................................................................................
 
-    final void acceptComment(final EbnfCommentParserToken token) {
+    final void acceptComment(final CommentEbnfParserToken token) {
         if (Visiting.CONTINUE == this.startVisit(token)) {
             this.visit(token);
         }
     }
 
-    protected void visit(final EbnfCommentParserToken token) {
+    protected void visit(final CommentEbnfParserToken token) {
         // nop
     }
 
-    final void acceptIdentifier(final EbnfIdentifierParserToken token) {
+    final void acceptIdentifier(final IdentifierEbnfParserToken token) {
         if (Visiting.CONTINUE == this.startVisit(token)) {
             this.visit(token);
         }
         this.endVisit(token);
     }
 
-    protected void visit(final EbnfIdentifierParserToken token) {
+    protected void visit(final IdentifierEbnfParserToken token) {
         // nop
     }
 
-    protected void visit(final EbnfSymbolParserToken token) {
+    protected void visit(final SymbolEbnfParserToken token) {
         // nop
     }
 
-    protected void visit(final EbnfTerminalParserToken token) {
+    protected void visit(final TerminalEbnfParserToken token) {
         // nop
     }
 
-    protected void visit(final EbnfWhitespaceParserToken token) {
+    protected void visit(final WhitespaceEbnfParserToken token) {
         // nop
     }
 

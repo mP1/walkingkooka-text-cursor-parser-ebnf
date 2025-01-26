@@ -27,11 +27,11 @@ import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserContext;
 import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierName;
-import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRangeParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRuleParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfTerminalParserToken;
+import walkingkooka.text.cursor.parser.ebnf.IdentifierEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.RangeEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.RuleEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.TerminalEbnfParserToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +75,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
     /**
      * Records a rule, detecting duplicate identifiers.
      */
-    EbnfParserCombinatorsProxyGet<C> addRule(final EbnfRuleParserToken rule) {
+    EbnfParserCombinatorsProxyGet<C> addRule(final RuleEbnfParserToken rule) {
         final EbnfIdentifierName identifier = rule.identifier()
                 .value();
         if (this.providedIdentifierToParser.apply(identifier).isPresent()) {
@@ -105,7 +105,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
     }
 
     // Rule ABC duplicated in Grammar
-    private EbnfParserCombinatorException duplicateRule(final EbnfRuleParserToken rule,
+    private EbnfParserCombinatorException duplicateRule(final RuleEbnfParserToken rule,
                                                         final String in) {
         throw new EbnfParserCombinatorException(
                 "Rule " +
@@ -116,8 +116,8 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
     }
 
     /**
-     * Assumes the {@link EbnfIdentifierName} belongs to a {@link EbnfRuleParserToken} and tries to return a {@link Parser}.
-     * This is useful for resolving {@link EbnfIdentifierParserToken} to rules and its parser.
+     * Assumes the {@link EbnfIdentifierName} belongs to a {@link RuleEbnfParserToken} and tries to return a {@link Parser}.
+     * This is useful for resolving {@link IdentifierEbnfParserToken} to rules and its parser.
      */
     Parser<C> ruleParser(final EbnfIdentifierName ruleName) {
         final EbnfParserCombinatorsProxy<C> proxy = ruleIdentifierNameToProxy.get(ruleName);
@@ -130,16 +130,16 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
     }
 
     /**
-     * {@link EbnfRuleParserToken#identifier()} to {@link EbnfParserCombinatorsProxy}.
+     * {@link RuleEbnfParserToken#identifier()} to {@link EbnfParserCombinatorsProxy}.
      */
     private final Map<EbnfIdentifierName, EbnfParserCombinatorsProxy<C>> ruleIdentifierNameToProxy = Maps.sorted();
 
     /**
-     * This should be called once for each {@link EbnfIdentifierParserToken} that appears within a grammar by
-     * {@link EbnfParserCombinatorsPrepareEbnfParserTokenVisitor#visit(EbnfIdentifierParserToken)}. The visit method
+     * This should be called once for each {@link IdentifierEbnfParserToken} that appears within a grammar by
+     * {@link EbnfParserCombinatorsPrepareEbnfParserTokenVisitor#visit(IdentifierEbnfParserToken)}. The visit method
      * has a guard as identifiers may appear multiple times within a grammar.
      */
-    EbnfParserCombinatorsProxyGet<C> addIdentifier(final EbnfIdentifierParserToken identifierParserToken) {
+    EbnfParserCombinatorsProxyGet<C> addIdentifier(final IdentifierEbnfParserToken identifierParserToken) {
         final EbnfIdentifierName identifier = identifierParserToken.value();
 
         final EbnfParserCombinatorsProxyGet<C> got = this.add(
@@ -165,7 +165,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
         return got;
     }
 
-    Optional<Parser<C>> tryIdentifierParser(final EbnfIdentifierParserToken token) {
+    Optional<Parser<C>> tryIdentifierParser(final IdentifierEbnfParserToken token) {
         Optional<Parser<C>> parser = Optional.empty();
 
         final EbnfIdentifierName name = token.value();
@@ -197,7 +197,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
     }
 
     /**
-     * This method is used to resolve identifiers to {@link EbnfTerminalParserToken} or {@link Parser}.
+     * This method is used to resolve identifiers to {@link TerminalEbnfParserToken} or {@link Parser}.
      */
     Optional<EbnfParserToken> tryFindNonIdentifierToken(final EbnfIdentifierName name) {
         final Map<EbnfIdentifierName, EbnfParserCombinatorsProxy<C>> ruleIdentifierNameToProxy = this.ruleIdentifierNameToProxy;
@@ -212,11 +212,11 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
             }
             tempName = null;
 
-            notNameToken = ruleProxy.token.cast(EbnfRuleParserToken.class)
+            notNameToken = ruleProxy.token.cast(RuleEbnfParserToken.class)
                     .assignment();
 
             if(notNameToken.isIdentifier()) {
-                tempName = notNameToken.cast(EbnfIdentifierParserToken.class)
+                tempName = notNameToken.cast(IdentifierEbnfParserToken.class)
                         .value();
                 notNameToken = null;
             }
@@ -261,7 +261,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
             );
             this.missingParserCount++;
 
-            // maybe create a proxy if an EbnfIdentifierParserToken
+            // maybe create a proxy if an IdentifierEbnfParserToken
             created = true;
         }
 
@@ -315,7 +315,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
             final EbnfParserToken token = tokenAndProxy.getKey();
             if(token.isIdentifier()) {
                 final EbnfParserCombinatorProxyParser<C> proxyParser = EbnfParserCombinatorProxyParser.with(
-                        token.cast(EbnfIdentifierParserToken.class)
+                        token.cast(IdentifierEbnfParserToken.class)
                 );
                 tokenAndProxy.getValue()
                         .setParser(proxyParser);
@@ -328,7 +328,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
     void missingParserCreated(final EbnfParserToken token) {
         if(token.isIdentifier()) {
             this.identifierToProxyWithoutParser.remove(
-                token.cast(EbnfIdentifierParserToken.class).value()
+                token.cast(IdentifierEbnfParserToken.class).value()
             );
         }
         this.missingParserCount--;
@@ -358,7 +358,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
 
     void fixProxyParsers() {
         for(final EbnfParserCombinatorProxyParser<C> proxyParser : this.proxyParsers) {
-            final EbnfIdentifierParserToken identifierParserToken = proxyParser.identifier;
+            final IdentifierEbnfParserToken identifierParserToken = proxyParser.identifier;
             final EbnfIdentifierName name = identifierParserToken.value();
 
             final Parser<C> parser = EbnfParserCombinatorOptionalParser.unwrapIfNecessary(
@@ -379,9 +379,9 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
 
     /**
      * Resolves a given {@link EbnfIdentifierName} into text, which is used to resolve the begin and end text
-     * before passing them as arguments to {@link EbnfParserCombinatorGrammarTransformer#range(EbnfRangeParserToken, String, String).}
+     * before passing them as arguments to {@link EbnfParserCombinatorGrammarTransformer#range(RangeEbnfParserToken, String, String).}
      */
-    Optional<String> terminal(final EbnfRangeParserToken range,
+    Optional<String> terminal(final RangeEbnfParserToken range,
                               final boolean begin) {
         String text = null;
 
@@ -392,7 +392,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
         EbnfParserToken token = rangeBeginOrEnd;
         if (rangeBeginOrEnd.isIdentifier()) {
             token = this.tryFindNonIdentifierToken(
-                    rangeBeginOrEnd.cast(EbnfIdentifierParserToken.class)
+                    rangeBeginOrEnd.cast(IdentifierEbnfParserToken.class)
                             .value()
             ).orElse(null);
         }
@@ -400,7 +400,7 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
         if (null != token ) {
             if( token.isTerminal()) {
                 // the raw value as #text will include the double quotes etc, so use #value
-                text = token.cast(EbnfTerminalParserToken.class)
+                text = token.cast(TerminalEbnfParserToken.class)
                         .value();
             } else {
                 throw new EbnfParserCombinatorException(
@@ -433,10 +433,10 @@ final class EbnfParserCombinatorContext<C extends ParserContext> implements Cont
             EbnfIdentifierName name = null;
 
             if(token.isIdentifier()) {
-                name = token.cast(EbnfIdentifierParserToken.class).value();
+                name = token.cast(IdentifierEbnfParserToken.class).value();
             }
             if(token.isRule()) {
-                name = token.cast(EbnfRuleParserToken.class)
+                name = token.cast(RuleEbnfParserToken.class)
                         .identifier()
                         .value();
             }

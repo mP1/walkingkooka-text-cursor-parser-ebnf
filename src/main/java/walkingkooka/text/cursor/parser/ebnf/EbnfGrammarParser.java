@@ -34,7 +34,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 
 /**
- * A parser that accepts a grammar and returns a {@link EbnfGrammarParserToken}.
+ * A parser that accepts a grammar and returns a {@link GrammarEbnfParserToken}.
  * <br>
  * <a href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">EBNF</a>
  */
@@ -62,11 +62,11 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
     }
 
     private static ParserToken transformWhitespace(final ParserToken token, ParserContext context) {
-        return EbnfWhitespaceParserToken.with(((StringParserToken) token).value(), token.text());
+        return WhitespaceEbnfParserToken.with(((StringParserToken) token).value(), token.text());
     }
 
     private static ParserToken transformComment(final ParserToken token, ParserContext context) {
-        return EbnfCommentParserToken.with(((StringParserToken) token).value(), token.text());
+        return CommentEbnfParserToken.with(((StringParserToken) token).value(), token.text());
     }
 
     /**
@@ -92,7 +92,7 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
      * </pre>
      * The above definition isnt actually correct, a terminal must be either single or quoted, and supports backslash, and unicode sequences within.
      */
-    final static Parser<EbnfParserContext> TERMINAL = EbnfTerminalParser.INSTANCE;
+    final static Parser<EbnfParserContext> TERMINAL = TerminalEbnfParser.INSTANCE;
 
     /**
      * <pre>
@@ -385,7 +385,7 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
     private static Parser<EbnfParserContext> RHS_CACHE;
 
     /**
-     * Creates a parser that matches the given character(s) and wraps it inside a {@link EbnfSymbolParserToken}
+     * Creates a parser that matches the given character(s) and wraps it inside a {@link SymbolEbnfParserToken}
      */
     private static Parser<EbnfParserContext> symbol(final String symbol,
                                                     final String name) {
@@ -413,7 +413,7 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
 
     private static ParserToken transformSymbolCharacter(final ParserToken token,
                                                         final ParserContext context) {
-        return EbnfSymbolParserToken.with(
+        return SymbolEbnfParserToken.with(
                 ((CharacterParserToken) token)
                         .value()
                         .toString(),
@@ -423,7 +423,7 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
 
     private static ParserToken transformSymbolString(final ParserToken token,
                                                      final ParserContext context) {
-        return EbnfSymbolParserToken.with(
+        return SymbolEbnfParserToken.with(
                 ((StringParserToken) token)
                         .value(),
                 token.text()
@@ -431,7 +431,7 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
     }
 
     private static BiFunction<ParserToken, EbnfParserContext, ParserToken> filterAndWrap(final BiFunction<List<ParserToken>, String, ParserToken> wrapper) {
-        return (token, context) -> EbnfGrammarParserWrapperParserTokenVisitor.wrap(token, wrapper);
+        return (token, context) -> EbnfGrammarParserWrapperEbnfParserTokenVisitor.wrap(token, wrapper);
     }
 
     /**
@@ -449,8 +449,8 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
                 .transform(EbnfGrammarParser::grammarParserToken);
     }
 
-    private static EbnfGrammarParserToken grammarParserToken(final ParserToken sequence, final EbnfParserContext context) {
-        return EbnfGrammarParserToken.with(((SequenceParserToken) sequence).flat()
+    private static GrammarEbnfParserToken grammarParserToken(final ParserToken sequence, final EbnfParserContext context) {
+        return GrammarEbnfParserToken.with(((SequenceParserToken) sequence).flat()
                         .value(),
                 sequence.text());
     }

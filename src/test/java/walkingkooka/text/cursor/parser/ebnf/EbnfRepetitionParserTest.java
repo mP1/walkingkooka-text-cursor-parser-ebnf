@@ -21,7 +21,7 @@ import walkingkooka.text.cursor.parser.ParserToken;
 
 import java.util.List;
 
-public final class EbnfRepetitionParserTest extends EbnfParserTestCase4<EbnfRepeatedParserToken> {
+public final class EbnfRepetitionParserTest extends EbnfParserTestCase4<RepeatedEbnfParserToken> {
 
     @Override
     public Parser<EbnfParserContext> createParser() {
@@ -39,7 +39,7 @@ public final class EbnfRepetitionParserTest extends EbnfParserTestCase4<EbnfRepe
     }
 
     @Override
-    EbnfRepeatedParserToken token(final String text, final List<ParserToken> tokens) {
+    RepeatedEbnfParserToken token(final String text, final List<ParserToken> tokens) {
         return EbnfParserToken.repeated(tokens, text);
     }
 }

@@ -23,11 +23,11 @@ import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.text.cursor.parser.ParserTokenVisitor;
 
 /**
- * A {@link ParserTokenVisitor} that turns tokens into a {@link EbnfIdentifierParserToken}.
+ * A {@link ParserTokenVisitor} that turns tokens into a {@link IdentifierEbnfParserToken}.
  */
 final class EbnfGrammarParserIdentifierParserTokenVisitor extends ParserTokenVisitor {
 
-    static EbnfIdentifierParserToken ebnfIdentifierParserToken(final ParserToken token,
+    static IdentifierEbnfParserToken ebnfIdentifierParserToken(final ParserToken token,
                                                                final ParserContext context) {
         final EbnfGrammarParserIdentifierParserTokenVisitor visitor = new EbnfGrammarParserIdentifierParserTokenVisitor();
         visitor.accept(token);

@@ -71,7 +71,7 @@ public final class EbnfParserTokenTest implements ParseStringTesting<EbnfParserT
     }
 
     @Override
-    public EbnfGrammarParserToken parseString(final String text) {
+    public GrammarEbnfParserToken parseString(final String text) {
         return EbnfParserToken.parse(text);
     }
 
