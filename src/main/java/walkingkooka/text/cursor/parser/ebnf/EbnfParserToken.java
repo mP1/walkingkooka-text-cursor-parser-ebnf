@@ -36,18 +36,18 @@ import java.util.Objects;
 public abstract class EbnfParserToken implements ParserToken {
 
     /**
-     * Parses the given EBNF grammar returning the {@link EbnfGrammarParserToken}.
+     * Parses the given EBNF grammar returning the {@link GrammarEbnfParserToken}.
      */
-    public static EbnfGrammarParserToken parse(final String text) {
+    public static GrammarEbnfParserToken parse(final String text) {
         return EbnfParserToken.grammarParser()
                 .orFailIfCursorNotEmpty(ParserReporters.basic())
                 .parseText(
                         text,
                         EbnfParserContexts.basic()
-                ).cast(EbnfGrammarParserToken.class);
+                ).cast(GrammarEbnfParserToken.class);
     }
 
-    public static EbnfGrammarParserToken parseFile(final String text,
+    public static GrammarEbnfParserToken parseFile(final String text,
                                                    final String filename) {
         Objects.requireNonNull(text, "text");
         CharSequences.failIfNullOrEmpty(filename, "filename");
@@ -63,101 +63,101 @@ public abstract class EbnfParserToken implements ParserToken {
     }
 
     /**
-     * {@see EbnfAlternativeParserToken}
+     * {@see AlternativeEbnfParserToken}
      */
-    public static EbnfAlternativeParserToken alternative(final List<ParserToken> tokens, final String text) {
-        return EbnfAlternativeParserToken.with(tokens, text);
+    public static AlternativeEbnfParserToken alternative(final List<ParserToken> tokens, final String text) {
+        return AlternativeEbnfParserToken.with(tokens, text);
     }
 
     /**
-     * {@see EbnfCommentParserToken}
+     * {@see CommentEbnfParserToken}
      */
-    public static EbnfCommentParserToken comment(final String value, final String text) {
-        return EbnfCommentParserToken.with(value, text);
+    public static CommentEbnfParserToken comment(final String value, final String text) {
+        return CommentEbnfParserToken.with(value, text);
     }
 
     /**
-     * {@see EbnfConcatenationParserToken}
+     * {@see ConcatenationEbnfParserToken}
      */
-    public static EbnfConcatenationParserToken concatenation(final List<ParserToken> tokens, final String text) {
-        return EbnfConcatenationParserToken.with(tokens, text);
+    public static ConcatenationEbnfParserToken concatenation(final List<ParserToken> tokens, final String text) {
+        return ConcatenationEbnfParserToken.with(tokens, text);
     }
 
     /**
-     * {@see EbnfExceptionParserToken}
+     * {@see ExceptionEbnfParserToken}
      */
-    public static EbnfExceptionParserToken exception(final List<ParserToken> tokens, final String text) {
-        return EbnfExceptionParserToken.with(tokens, text);
+    public static ExceptionEbnfParserToken exception(final List<ParserToken> tokens, final String text) {
+        return ExceptionEbnfParserToken.with(tokens, text);
     }
 
     /**
-     * {@see EbnfGrammarParserToken}
+     * {@see GrammarEbnfParserToken}
      */
-    public static EbnfGrammarParserToken grammar(final List<ParserToken> tokens, final String text) {
-        return EbnfGrammarParserToken.with(tokens, text);
+    public static GrammarEbnfParserToken grammar(final List<ParserToken> tokens, final String text) {
+        return GrammarEbnfParserToken.with(tokens, text);
     }
 
     /**
-     * {@see EbnfGroupParserToken}
+     * {@see GroupEbnfParserToken}
      */
-    public static EbnfGroupParserToken group(final List<ParserToken> tokens, final String text) {
-        return EbnfGroupParserToken.with(tokens, text);
+    public static GroupEbnfParserToken group(final List<ParserToken> tokens, final String text) {
+        return GroupEbnfParserToken.with(tokens, text);
     }
 
     /**
-     * {@see EbnfIdentifierParserToken}
+     * {@see IdentifierEbnfParserToken}
      */
-    public static EbnfIdentifierParserToken identifier(final EbnfIdentifierName value, final String text) {
-        return EbnfIdentifierParserToken.with(value, text);
+    public static IdentifierEbnfParserToken identifier(final EbnfIdentifierName value, final String text) {
+        return IdentifierEbnfParserToken.with(value, text);
     }
 
     /**
-     * {@see EbnfOptionalParserToken}
+     * {@see OptionalEbnfParserToken}
      */
-    public static EbnfOptionalParserToken optional(final List<ParserToken> tokens, final String text) {
-        return EbnfOptionalParserToken.with(tokens, text);
+    public static OptionalEbnfParserToken optional(final List<ParserToken> tokens, final String text) {
+        return OptionalEbnfParserToken.with(tokens, text);
     }
 
     /**
-     * {@see EbnfRangeParserToken}
+     * {@see RangeEbnfParserToken}
      */
-    public static EbnfRangeParserToken range(final List<ParserToken> tokens, final String text) {
-        return EbnfRangeParserToken.with(tokens, text);
+    public static RangeEbnfParserToken range(final List<ParserToken> tokens, final String text) {
+        return RangeEbnfParserToken.with(tokens, text);
     }
 
     /**
-     * {@see EbnfRepeatedParserToken}
+     * {@see RepeatedEbnfParserToken}
      */
-    public static EbnfRepeatedParserToken repeated(final List<ParserToken> tokens, final String text) {
-        return EbnfRepeatedParserToken.with(tokens, text);
+    public static RepeatedEbnfParserToken repeated(final List<ParserToken> tokens, final String text) {
+        return RepeatedEbnfParserToken.with(tokens, text);
     }
 
     /**
-     * {@see EbnfRuleParserToken}
+     * {@see RuleEbnfParserToken}
      */
-    public static EbnfRuleParserToken rule(final List<ParserToken> tokens, final String text) {
-        return EbnfRuleParserToken.with(tokens, text);
+    public static RuleEbnfParserToken rule(final List<ParserToken> tokens, final String text) {
+        return RuleEbnfParserToken.with(tokens, text);
     }
 
     /**
-     * {@see EbnfSymbolParserToken}
+     * {@see SymbolEbnfParserToken}
      */
-    public static EbnfSymbolParserToken symbol(final String value, final String text) {
-        return EbnfSymbolParserToken.with(value, text);
+    public static SymbolEbnfParserToken symbol(final String value, final String text) {
+        return SymbolEbnfParserToken.with(value, text);
     }
 
     /**
-     * {@see EbnfTerminalParserToken}
+     * {@see TerminalEbnfParserToken}
      */
-    public static EbnfTerminalParserToken terminal(final String value, final String text) {
-        return EbnfTerminalParserToken.with(value, text);
+    public static TerminalEbnfParserToken terminal(final String value, final String text) {
+        return TerminalEbnfParserToken.with(value, text);
     }
 
     /**
-     * {@see EbnfWhitespaceParserToken}
+     * {@see WhitespaceEbnfParserToken}
      */
-    public static EbnfWhitespaceParserToken whitespace(final String value, final String text) {
-        return EbnfWhitespaceParserToken.with(value, text);
+    public static WhitespaceEbnfParserToken whitespace(final String value, final String text) {
+        return WhitespaceEbnfParserToken.with(value, text);
     }
 
     static List<ParserToken> copyAndCheckTokens(final List<ParserToken> tokens) {
@@ -202,7 +202,7 @@ public abstract class EbnfParserToken implements ParserToken {
 
     @Override
     public final boolean isLeaf() {
-        return this instanceof EbnfLeafParserToken;
+        return this instanceof LeafEbnfParserToken;
     }
 
     @Override
@@ -216,77 +216,77 @@ public abstract class EbnfParserToken implements ParserToken {
      * Only alternative tokens return true
      */
     public final boolean isAlternative() {
-        return this instanceof EbnfAlternativeParserToken;
+        return this instanceof AlternativeEbnfParserToken;
     }
 
     /**
      * Only comment tokens return true
      */
     public final boolean isComment() {
-        return this instanceof EbnfCommentParserToken;
+        return this instanceof CommentEbnfParserToken;
     }
 
     /**
      * Only concatenation tokens return true
      */
     public final boolean isConcatenation() {
-        return this instanceof EbnfConcatenationParserToken;
+        return this instanceof ConcatenationEbnfParserToken;
     }
 
     /**
      * Only exception tokens return true
      */
     public final boolean isException() {
-        return this instanceof EbnfExceptionParserToken;
+        return this instanceof ExceptionEbnfParserToken;
     }
 
     /**
      * Only grouping tokens return true
      */
     public final boolean isGroup() {
-        return this instanceof EbnfGroupParserToken;
+        return this instanceof GroupEbnfParserToken;
     }
 
     /**
      * Only grammar tokens return true
      */
     public final boolean isGrammar() {
-        return this instanceof EbnfGrammarParserToken;
+        return this instanceof GrammarEbnfParserToken;
     }
 
     /**
      * Only identifiers return true
      */
     public final boolean isIdentifier() {
-        return this instanceof EbnfIdentifierParserToken;
+        return this instanceof IdentifierEbnfParserToken;
     }
 
     /**
      * Only optional tokens return true
      */
     public final boolean isOptional() {
-        return this instanceof EbnfOptionalParserToken;
+        return this instanceof OptionalEbnfParserToken;
     }
 
     /**
      * Only range tokens return true
      */
     public final boolean isRange() {
-        return this instanceof EbnfRangeParserToken;
+        return this instanceof RangeEbnfParserToken;
     }
 
     /**
      * Only repeating tokens return true
      */
     public final boolean isRepeated() {
-        return this instanceof EbnfRepeatedParserToken;
+        return this instanceof RepeatedEbnfParserToken;
     }
 
     /**
      * Only rule tokens return true
      */
     public final boolean isRule() {
-        return this instanceof EbnfRuleParserToken;
+        return this instanceof RuleEbnfParserToken;
     }
 
     /**
@@ -294,22 +294,22 @@ public abstract class EbnfParserToken implements ParserToken {
      */
     @Override
     public final boolean isSymbol() {
-        return this instanceof EbnfSymbolParserToken || this.isWhitespace();
+        return this instanceof SymbolEbnfParserToken || this.isWhitespace();
     }
 
     /**
      * Only terminals return true
      */
     public final boolean isTerminal() {
-        return this instanceof EbnfTerminalParserToken;
+        return this instanceof TerminalEbnfParserToken;
     }
 
     /**
-     * Only {@link EbnfWhitespaceParserToken} return true
+     * Only {@link WhitespaceEbnfParserToken} return true
      */
     @Override
     public final boolean isWhitespace() {
-        return this instanceof EbnfWhitespaceParserToken;
+        return this instanceof WhitespaceEbnfParserToken;
     }
 
     // EbnfParserTokenVisitor............................................................................................

@@ -20,19 +20,19 @@ package walkingkooka.text.cursor.parser.ebnf.combinator;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserContext;
 import walkingkooka.text.cursor.parser.Parsers;
-import walkingkooka.text.cursor.parser.ebnf.EbnfAlternativeParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfConcatenationParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfExceptionParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfGrammarParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfGroupParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfOptionalParserToken;
+import walkingkooka.text.cursor.parser.ebnf.AlternativeEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.ConcatenationEbnfParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserTokenVisitor;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRangeParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRepeatedParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRuleParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfTerminalParserToken;
+import walkingkooka.text.cursor.parser.ebnf.ExceptionEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.GrammarEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.GroupEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.IdentifierEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.OptionalEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.RangeEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.RepeatedEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.RuleEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.TerminalEbnfParserToken;
 import walkingkooka.visit.Visiting;
 
 import java.util.List;
@@ -67,19 +67,19 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
     // GRAMMAR..........................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfGrammarParserToken token) {
+    protected Visiting startVisit(final GrammarEbnfParserToken token) {
         throw new UnsupportedOperationException(token.toString());
     }
 
     // RULE ............................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfRuleParserToken token) {
+    protected Visiting startVisit(final RuleEbnfParserToken token) {
         final EbnfParserToken assignment = token.assignment();
 
         this.tryCreateAndTransformParser(
                 token,
-                (final EbnfRuleParserToken rule) -> {
+                (final RuleEbnfParserToken rule) -> {
                     Parser<C> parser = null;
 
                     final EbnfParserCombinatorsProxyGet<C> ruleGot = this.context.proxy(rule);
@@ -99,15 +99,15 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
     // ALT .............................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfAlternativeParserToken token) {
+    protected Visiting startVisit(final AlternativeEbnfParserToken token) {
         return Visiting.SKIP; // dont visit children
     }
 
     @Override
-    protected void endVisit(final EbnfAlternativeParserToken token) {
+    protected void endVisit(final AlternativeEbnfParserToken token) {
         this.tryCreateAndTransformParser(
                 token,
-                (final EbnfAlternativeParserToken a) -> this.proxy.childParsers()
+                (final AlternativeEbnfParserToken a) -> this.proxy.childParsers()
                         .map(this::alternatives), // parser
                 this.context.transformer::alternatives
         );
@@ -139,12 +139,12 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
     // CONCAT ..........................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfConcatenationParserToken token) {
+    protected Visiting startVisit(final ConcatenationEbnfParserToken token) {
         return Visiting.SKIP; // dont visit children
     }
 
     @Override
-    protected void endVisit(final EbnfConcatenationParserToken token) {
+    protected void endVisit(final ConcatenationEbnfParserToken token) {
         this.tryCreateAndTransformParser(
                 token,
                 (c) -> {
@@ -180,12 +180,12 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
     // EXCEPTION ........................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfExceptionParserToken token) {
+    protected Visiting startVisit(final ExceptionEbnfParserToken token) {
         return Visiting.SKIP; // dont visit children
     }
 
     @Override
-    protected void endVisit(final EbnfExceptionParserToken token) {
+    protected void endVisit(final ExceptionEbnfParserToken token) {
         this.tryCreateAndTransformParser(
                 token,
                 this::exceptionParser, // parser
@@ -193,7 +193,7 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
         );
     }
 
-    private Optional<Parser<C>> exceptionParser(final EbnfExceptionParserToken token) {
+    private Optional<Parser<C>> exceptionParser(final ExceptionEbnfParserToken token) {
         Parser<C> parsers = null;
 
         final List<Parser<C>> childParsers = this.proxy.childParsers()
@@ -227,12 +227,12 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
     // GROUP ...........................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfGroupParserToken token) {
+    protected Visiting startVisit(final GroupEbnfParserToken token) {
         return Visiting.SKIP; // dont visit children
     }
 
     @Override
-    protected void endVisit(final EbnfGroupParserToken token) {
+    protected void endVisit(final GroupEbnfParserToken token) {
         this.tryCreateAndTransformParser(
                 token,
                 t -> this.firstChildParser(),
@@ -243,12 +243,12 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
     // OPT .............................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfOptionalParserToken token) {
+    protected Visiting startVisit(final OptionalEbnfParserToken token) {
         return Visiting.SKIP; // dont visit children
     }
 
     @Override
-    protected void endVisit(final EbnfOptionalParserToken token) {
+    protected void endVisit(final OptionalEbnfParserToken token) {
         this.tryCreateAndTransformParser(
                 token,
                 t -> this.firstChildParser(),
@@ -259,12 +259,12 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
     // REPEAT ..........................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfRepeatedParserToken token) {
+    protected Visiting startVisit(final RepeatedEbnfParserToken token) {
         return Visiting.SKIP; // dont visit children
     }
 
     @Override
-    protected void endVisit(final EbnfRepeatedParserToken token) {
+    protected void endVisit(final RepeatedEbnfParserToken token) {
         this.tryCreateAndTransformParser(
                 token,
                 (t) -> this.firstChildParser()
@@ -276,7 +276,7 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
     // IDENTIFIER ......................................................................................................
 
     @Override
-    protected void visit(final EbnfIdentifierParserToken token) {
+    protected void visit(final IdentifierEbnfParserToken token) {
         this.tryCreateAndTransformParser(
                 token,
                 this.context::tryIdentifierParser, // parser
@@ -287,10 +287,10 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
     // TERMINAL ........................................................................................................
 
     /**
-     * The {@link EbnfParserCombinatorsProxy#parser} for this token should have already been created by {@link EbnfParserCombinatorsPrepareEbnfParserTokenVisitor#visit(EbnfTerminalParserToken)}.
+     * The {@link EbnfParserCombinatorsProxy#parser} for this token should have already been created by {@link EbnfParserCombinatorsPrepareEbnfParserTokenVisitor#visit(TerminalEbnfParserToken)}.
      */
     @Override
-    protected void visit(final EbnfTerminalParserToken token) {
+    protected void visit(final TerminalEbnfParserToken token) {
         throw new EbnfParserCombinatorException("Terminal should already have parser created in prepare phase=" + token);
     }
 
@@ -332,12 +332,12 @@ final class EbnfParserCombinatorsTransformEbnfParserTokenVisitor<C extends Parse
 
     // range is different & and has a different endVisit
     @Override
-    protected Visiting startVisit(final EbnfRangeParserToken token) {
+    protected Visiting startVisit(final RangeEbnfParserToken token) {
         return Visiting.SKIP; // dont visit children
     }
 
     @Override
-    protected void endVisit(final EbnfRangeParserToken token) {
+    protected void endVisit(final RangeEbnfParserToken token) {
         final EbnfParserCombinatorContext<C> context = this.context;
 
         final Optional<String> maybeBeginText = context.terminal(

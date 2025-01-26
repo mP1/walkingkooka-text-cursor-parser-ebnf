@@ -21,7 +21,7 @@ import walkingkooka.collect.list.Lists;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserToken;
 
-public final class EbnfExceptionParserTest extends EbnfParserTestCase2<EbnfExceptionParserToken> {
+public final class EbnfExceptionParserTest extends EbnfParserTestCase2<ExceptionEbnfParserToken> {
 
     @Test
     public void testParseExceptionFails() {
@@ -126,11 +126,11 @@ public final class EbnfExceptionParserTest extends EbnfParserTestCase2<EbnfExcep
         return EbnfGrammarParser.EXCEPTION;
     }
 
-    @Override EbnfExceptionParserToken token(final String text) {
+    @Override ExceptionEbnfParserToken token(final String text) {
         return token(text, exceptionToken(), this.identifier1());
     }
 
-    private EbnfExceptionParserToken token(final String text, final ParserToken... tokens) {
+    private ExceptionEbnfParserToken token(final String text, final ParserToken... tokens) {
         return EbnfParserToken.exception(Lists.of(tokens), text);
     }
 }

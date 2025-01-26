@@ -21,7 +21,6 @@ import walkingkooka.reflect.ClassTesting2;
 import walkingkooka.reflect.IsMethodTesting;
 import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.reflect.PublicStaticFactoryTesting;
-import walkingkooka.text.cursor.parser.ParserToken;
 import walkingkooka.text.cursor.parser.ParserTokenTesting;
 
 import java.util.function.Predicate;
@@ -40,8 +39,8 @@ public abstract class EbnfParserTokenTestCase<T extends EbnfParserToken> impleme
     @Override
     public final void testPublicStaticFactoryMethod() {
         PublicStaticFactoryTesting.checkFactoryMethods(EbnfParserToken.class,
-                "Ebnf",
-                ParserToken.class.getSimpleName(),
+                "",
+                EbnfParserToken.class.getSimpleName(),
                 this.type());
     }
 
@@ -53,7 +52,7 @@ public abstract class EbnfParserTokenTestCase<T extends EbnfParserToken> impleme
         );
     }
 
-    static EbnfSymbolParserToken symbol(final String s) {
+    static SymbolEbnfParserToken symbol(final String s) {
         return EbnfParserToken.symbol(s, s);
     }
 
@@ -66,12 +65,12 @@ public abstract class EbnfParserTokenTestCase<T extends EbnfParserToken> impleme
 
     @Override
     public final String isMethodTypeNamePrefix() {
-        return "Ebnf";
+        return "";
     }
 
     @Override
     public final String isMethodTypeNameSuffix() {
-        return ParserToken.class.getSimpleName();
+        return EbnfParserToken.class.getSimpleName();
     }
 
     @Override
@@ -88,5 +87,10 @@ public abstract class EbnfParserTokenTestCase<T extends EbnfParserToken> impleme
     @Override
     public final JavaVisibility typeVisibility() {
         return JavaVisibility.PUBLIC;
+    }
+
+    @Override
+    public final String typeNameSuffix() {
+        return EbnfParserToken.class.getSimpleName();
     }
 }

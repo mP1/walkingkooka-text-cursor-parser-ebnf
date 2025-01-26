@@ -21,7 +21,7 @@ import walkingkooka.text.cursor.parser.ParserToken;
 
 import java.util.List;
 
-public final class EbnfOptionalParserTest extends EbnfParserTestCase4<EbnfOptionalParserToken> {
+public final class EbnfOptionalParserTest extends EbnfParserTestCase4<OptionalEbnfParserToken> {
 
     @Override
     public Parser<EbnfParserContext> createParser() {
@@ -39,7 +39,7 @@ public final class EbnfOptionalParserTest extends EbnfParserTestCase4<EbnfOption
     }
 
     @Override
-    EbnfOptionalParserToken token(final String text, final List<ParserToken> tokens) {
+    OptionalEbnfParserToken token(final String text, final List<ParserToken> tokens) {
         return EbnfParserToken.optional(tokens, text);
     }
 }

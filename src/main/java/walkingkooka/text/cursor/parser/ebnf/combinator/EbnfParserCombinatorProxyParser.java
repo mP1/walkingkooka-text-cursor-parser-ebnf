@@ -21,7 +21,7 @@ import walkingkooka.text.cursor.TextCursor;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserContext;
 import walkingkooka.text.cursor.parser.ParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierParserToken;
+import walkingkooka.text.cursor.parser.ebnf.IdentifierEbnfParserToken;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -31,13 +31,13 @@ import java.util.Optional;
  */
 final class EbnfParserCombinatorProxyParser<C extends ParserContext> implements Parser<C> {
 
-    static <C extends ParserContext> EbnfParserCombinatorProxyParser<C> with(final EbnfIdentifierParserToken identifier) {
+    static <C extends ParserContext> EbnfParserCombinatorProxyParser<C> with(final IdentifierEbnfParserToken identifier) {
         return new EbnfParserCombinatorProxyParser<>(
                 Objects.requireNonNull(identifier, "identifier")
         );
     }
 
-    private EbnfParserCombinatorProxyParser(final EbnfIdentifierParserToken identifier) {
+    private EbnfParserCombinatorProxyParser(final IdentifierEbnfParserToken identifier) {
         this.identifier = identifier;
     }
 
@@ -81,5 +81,5 @@ final class EbnfParserCombinatorProxyParser<C extends ParserContext> implements 
                 this.identifier.toString();
     }
 
-    final EbnfIdentifierParserToken identifier;
+    final IdentifierEbnfParserToken identifier;
 }

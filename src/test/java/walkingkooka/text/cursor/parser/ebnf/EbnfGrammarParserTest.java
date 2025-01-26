@@ -22,7 +22,7 @@ import walkingkooka.collect.list.Lists;
 import walkingkooka.text.cursor.parser.Parser;
 
 // TODO EbnfGrammarParser - ClassTesting2
-public final class EbnfGrammarParserTest extends EbnfParserTestCase<EbnfGrammarParserToken> {
+public final class EbnfGrammarParserTest extends EbnfParserTestCase<GrammarEbnfParserToken> {
 
     private final static String RULE1 = IDENTIFIER1 + "=" + TERMINAL1_TEXT + ";";
     private final static String RULE2 = IDENTIFIER2 + "=" + TERMINAL2_TEXT + ";";
@@ -153,15 +153,15 @@ public final class EbnfGrammarParserTest extends EbnfParserTestCase<EbnfGrammarP
         );
     }
 
-    private EbnfGrammarParserToken grammar(final String text,
+    private GrammarEbnfParserToken grammar(final String text,
                                            final EbnfParserToken... rules) {
-        return EbnfGrammarParserToken.with(
+        return GrammarEbnfParserToken.with(
                 Lists.of(rules),
                 text
         );
     }
 
-    private EbnfRuleParserToken rule1() {
+    private RuleEbnfParserToken rule1() {
         return rule(
                 RULE1,
                 identifier1(),
@@ -171,7 +171,7 @@ public final class EbnfGrammarParserTest extends EbnfParserTestCase<EbnfGrammarP
         );
     }
 
-    private EbnfRuleParserToken rule2() {
+    private RuleEbnfParserToken rule2() {
         return rule(
                 RULE2,
                 identifier2(),

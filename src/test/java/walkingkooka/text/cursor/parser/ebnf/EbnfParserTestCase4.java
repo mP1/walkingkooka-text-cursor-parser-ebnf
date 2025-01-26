@@ -104,17 +104,17 @@ public abstract class EbnfParserTestCase4<T extends EbnfParserToken> extends Ebn
 
     abstract String beginChar();
 
-    private EbnfSymbolParserToken beginCharToken() {
+    private SymbolEbnfParserToken beginCharToken() {
         return symbolToken(this.beginChar());
     }
 
     abstract String endChar();
 
-    private EbnfSymbolParserToken endCharToken() {
+    private SymbolEbnfParserToken endCharToken() {
         return symbolToken(this.endChar());
     }
 
-    private EbnfSymbolParserToken symbolToken(final String s) {
+    private SymbolEbnfParserToken symbolToken(final String s) {
         return EbnfParserToken.symbol(s, s);
     }
 

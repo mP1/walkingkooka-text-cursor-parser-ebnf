@@ -23,18 +23,18 @@ import walkingkooka.collect.stack.Stacks;
 import walkingkooka.text.CaseSensitivity;
 import walkingkooka.text.cursor.parser.ParserContext;
 import walkingkooka.text.cursor.parser.Parsers;
-import walkingkooka.text.cursor.parser.ebnf.EbnfAlternativeParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfConcatenationParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfExceptionParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfGroupParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfOptionalParserToken;
+import walkingkooka.text.cursor.parser.ebnf.AlternativeEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.ConcatenationEbnfParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserTokenVisitor;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRangeParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRepeatedParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRuleParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfTerminalParserToken;
+import walkingkooka.text.cursor.parser.ebnf.ExceptionEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.GroupEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.IdentifierEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.OptionalEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.RangeEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.RepeatedEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.RuleEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.TerminalEbnfParserToken;
 import walkingkooka.visit.Visiting;
 
 import java.util.Objects;
@@ -63,7 +63,7 @@ final class EbnfParserCombinatorsPrepareEbnfParserTokenVisitor<C extends ParserC
     // RULE ............................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfRuleParserToken rule) {
+    protected Visiting startVisit(final RuleEbnfParserToken rule) {
         this.context.addRule(rule);
 
         this.pushParentAndCreateProxy(rule);
@@ -75,7 +75,7 @@ final class EbnfParserCombinatorsPrepareEbnfParserTokenVisitor<C extends ParserC
     }
 
     @Override
-    protected void endVisit(final EbnfRuleParserToken token) {
+    protected void endVisit(final RuleEbnfParserToken token) {
         this.popParent();
     }
 
@@ -83,98 +83,98 @@ final class EbnfParserCombinatorsPrepareEbnfParserTokenVisitor<C extends ParserC
     // ALT .............................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfAlternativeParserToken token) {
+    protected Visiting startVisit(final AlternativeEbnfParserToken token) {
         return this.pushParentAndCreateProxy(token)
                 .toVisiting();
     }
 
     @Override
-    protected void endVisit(final EbnfAlternativeParserToken token) {
+    protected void endVisit(final AlternativeEbnfParserToken token) {
         this.popParent();
     }
 
     // CONCAT ..........................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfConcatenationParserToken token) {
+    protected Visiting startVisit(final ConcatenationEbnfParserToken token) {
         return this.pushParentAndCreateProxy(token)
                 .toVisiting();
     }
 
     @Override
-    protected void endVisit(final EbnfConcatenationParserToken token) {
+    protected void endVisit(final ConcatenationEbnfParserToken token) {
         this.popParent();
     }
 
     // EXCEPTION ........................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfExceptionParserToken token) {
+    protected Visiting startVisit(final ExceptionEbnfParserToken token) {
         return this.pushParentAndCreateProxy(token)
                 .toVisiting();
     }
 
     @Override
-    protected void endVisit(final EbnfExceptionParserToken token) {
+    protected void endVisit(final ExceptionEbnfParserToken token) {
         this.popParent();
     }
 
     // GROUP ...........................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfGroupParserToken token) {
+    protected Visiting startVisit(final GroupEbnfParserToken token) {
         return this.pushParentAndCreateProxy(token)
                 .toVisiting();
     }
 
     @Override
-    protected void endVisit(final EbnfGroupParserToken token) {
+    protected void endVisit(final GroupEbnfParserToken token) {
         this.popParent();
     }
 
     // OPT .............................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfOptionalParserToken token) {
+    protected Visiting startVisit(final OptionalEbnfParserToken token) {
         return this.pushParentAndCreateProxy(token)
                 .toVisiting();
     }
 
     @Override
-    protected void endVisit(final EbnfOptionalParserToken token) {
+    protected void endVisit(final OptionalEbnfParserToken token) {
         this.popParent();
     }
 
     // RANGE ...........................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfRangeParserToken token) {
+    protected Visiting startVisit(final RangeEbnfParserToken token) {
         return this.pushParentAndCreateProxy(token)
                 .toVisiting();
     }
 
     @Override
-    protected void endVisit(final EbnfRangeParserToken token) {
+    protected void endVisit(final RangeEbnfParserToken token) {
         this.popParent();
     }
 
     // REPEAT ........................................................................................................
 
     @Override
-    protected Visiting startVisit(final EbnfRepeatedParserToken token) {
+    protected Visiting startVisit(final RepeatedEbnfParserToken token) {
         return this.pushParentAndCreateProxy(token)
                 .toVisiting();
     }
 
     @Override
-    protected void endVisit(final EbnfRepeatedParserToken token) {
+    protected void endVisit(final RepeatedEbnfParserToken token) {
         this.popParent();
     }
 
     // IDENTIFIER .......................................................................................................
 
     @Override
-    protected void visit(final EbnfIdentifierParserToken token) {
+    protected void visit(final IdentifierEbnfParserToken token) {
         if(this.proxy(token).created) {
             this.context.addIdentifier(token);
         }
@@ -183,7 +183,7 @@ final class EbnfParserCombinatorsPrepareEbnfParserTokenVisitor<C extends ParserC
     // TERMINAL ........................................................................................................
 
     @Override
-    protected void visit(final EbnfTerminalParserToken token) {
+    protected void visit(final TerminalEbnfParserToken token) {
         this.proxy(token)
                 .proxy
                 .setParser(

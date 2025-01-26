@@ -21,7 +21,7 @@ import walkingkooka.text.cursor.parser.ParserToken;
 
 import java.util.List;
 
-public final class EbnfGroupingParserTest extends EbnfParserTestCase4<EbnfGroupParserToken> {
+public final class EbnfGroupingParserTest extends EbnfParserTestCase4<GroupEbnfParserToken> {
 
     @Override
     public Parser<EbnfParserContext> createParser() {
@@ -39,7 +39,7 @@ public final class EbnfGroupingParserTest extends EbnfParserTestCase4<EbnfGroupP
     }
 
     @Override
-    EbnfGroupParserToken token(final String text, final List<ParserToken> tokens) {
+    GroupEbnfParserToken token(final String text, final List<ParserToken> tokens) {
         return EbnfParserToken.group(tokens, text);
     }
 }

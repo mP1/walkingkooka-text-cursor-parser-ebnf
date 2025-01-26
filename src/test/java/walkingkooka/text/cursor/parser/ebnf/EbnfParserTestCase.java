@@ -97,71 +97,71 @@ public abstract class EbnfParserTestCase<T extends EbnfParserToken> implements P
         return EbnfParserToken.whitespace(WHITESPACE2, WHITESPACE2);
     }
 
-    static EbnfSymbolParserToken symbol(final String symbol) {
+    static SymbolEbnfParserToken symbol(final String symbol) {
         return EbnfParserToken.symbol(symbol, symbol);
     }
 
-    static EbnfRuleParserToken rule(final String text, final EbnfParserToken... tokens) {
+    static RuleEbnfParserToken rule(final String text, final EbnfParserToken... tokens) {
         return EbnfParserToken.rule(Lists.of(tokens), text);
     }
 
-    static EbnfRangeParserToken range(final String text, final EbnfParserToken... tokens) {
+    static RangeEbnfParserToken range(final String text, final EbnfParserToken... tokens) {
         return EbnfParserToken.range(Lists.of(tokens), text);
     }
 
-    static EbnfSymbolParserToken assignmentToken() {
+    static SymbolEbnfParserToken assignmentToken() {
         return symbol(ASSIGNMENT);
     }
 
-    static EbnfSymbolParserToken altToken() {
+    static SymbolEbnfParserToken altToken() {
         return symbol(ALTERNATIVE);
     }
 
-    static EbnfSymbolParserToken concatToken() {
+    static SymbolEbnfParserToken concatToken() {
         return symbol(CONCAT);
     }
 
-    static EbnfSymbolParserToken exceptionToken() {
+    static SymbolEbnfParserToken exceptionToken() {
         return symbol(EXCEPTION);
     }
 
-    static EbnfTerminalParserToken terminal1() {
+    static TerminalEbnfParserToken terminal1() {
         return EbnfParserToken.terminal(TERMINAL1, TERMINAL1_TEXT);
     }
 
-    static EbnfTerminalParserToken terminal2() {
+    static TerminalEbnfParserToken terminal2() {
         return EbnfParserToken.terminal(TERMINAL2, TERMINAL2_TEXT);
     }
 
-    static EbnfSymbolParserToken terminatorToken() {
+    static SymbolEbnfParserToken terminatorToken() {
         return symbol(";");
     }
 
-    static EbnfSymbolParserToken between() {
+    static SymbolEbnfParserToken between() {
         return symbol(BETWEEN);
     }
 
-    static EbnfSymbolParserToken openGroupToken() {
+    static SymbolEbnfParserToken openGroupToken() {
         return symbol(OPEN_GROUP);
     }
 
-    static EbnfSymbolParserToken closeGroupToken() {
+    static SymbolEbnfParserToken closeGroupToken() {
         return symbol(CLOSE_GROUP);
     }
 
-    static EbnfSymbolParserToken openOptionalToken() {
+    static SymbolEbnfParserToken openOptionalToken() {
         return symbol(OPEN_OPTIONAL);
     }
 
-    static EbnfSymbolParserToken closeOptionalToken() {
+    static SymbolEbnfParserToken closeOptionalToken() {
         return symbol(CLOSE_OPTIONAL);
     }
 
-    static EbnfSymbolParserToken openRepeatToken() {
+    static SymbolEbnfParserToken openRepeatToken() {
         return symbol(OPEN_REPEAT);
     }
 
-    static EbnfSymbolParserToken closeRepeatToken() {
+    static SymbolEbnfParserToken closeRepeatToken() {
         return symbol(CLOSE_REPEAT);
     }
 

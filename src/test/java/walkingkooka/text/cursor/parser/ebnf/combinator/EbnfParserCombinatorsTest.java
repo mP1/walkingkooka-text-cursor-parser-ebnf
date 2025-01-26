@@ -35,20 +35,20 @@ import walkingkooka.text.cursor.parser.ParserTokens;
 import walkingkooka.text.cursor.parser.Parsers;
 import walkingkooka.text.cursor.parser.SequenceParserToken;
 import walkingkooka.text.cursor.parser.StringParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfAlternativeParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfConcatenationParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfExceptionParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfGrammarParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfGroupParserToken;
+import walkingkooka.text.cursor.parser.ebnf.AlternativeEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.ConcatenationEbnfParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierName;
-import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfOptionalParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserContexts;
 import walkingkooka.text.cursor.parser.ebnf.EbnfParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRangeParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRepeatedParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfRuleParserToken;
-import walkingkooka.text.cursor.parser.ebnf.EbnfTerminalParserToken;
+import walkingkooka.text.cursor.parser.ebnf.ExceptionEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.GrammarEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.GroupEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.IdentifierEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.OptionalEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.RangeEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.RepeatedEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.RuleEbnfParserToken;
+import walkingkooka.text.cursor.parser.ebnf.TerminalEbnfParserToken;
 
 import java.lang.reflect.Method;
 import java.math.BigInteger;
@@ -84,14 +84,14 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
-                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                    public Parser<FakeParserContext> terminal(final TerminalEbnfParserToken token,
                                                               final Parser<FakeParserContext> parser) {
                         b.append("TERMINAL " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                    public Parser<FakeParserContext> rule(final RuleEbnfParserToken token,
                                                           final Parser<FakeParserContext> parser) {
                         b.append("RULE\n");
                         return parser;
@@ -128,21 +128,21 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 "TEST = \"abc\" | \"def\";",
                 new FakeEbnfParserCombinatorGrammarTransformer<>() {
                     @Override
-                    public Parser<FakeParserContext> alternatives(final EbnfAlternativeParserToken token,
+                    public Parser<FakeParserContext> alternatives(final AlternativeEbnfParserToken token,
                                                                   final Parser<FakeParserContext> parser) {
                         b.append("ALTERNATIVES " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                    public Parser<FakeParserContext> terminal(final TerminalEbnfParserToken token,
                                                               final Parser<FakeParserContext> parser) {
                         b.append("TERMINAL " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                    public Parser<FakeParserContext> rule(final RuleEbnfParserToken token,
                                                           final Parser<FakeParserContext> parser) {
                         b.append("RULE\n");
                         return parser;
@@ -217,21 +217,21 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 "TEST = \"abc\" , \"def\";",
                 new FakeEbnfParserCombinatorGrammarTransformer<>() {
                     @Override
-                    public Parser<FakeParserContext> concatenation(final EbnfConcatenationParserToken token,
+                    public Parser<FakeParserContext> concatenation(final ConcatenationEbnfParserToken token,
                                                                    final Parser<FakeParserContext> parser) {
                         b.append("CONCAT " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                    public Parser<FakeParserContext> terminal(final TerminalEbnfParserToken token,
                                                               final Parser<FakeParserContext> parser) {
                         b.append("TERMINAL " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                    public Parser<FakeParserContext> rule(final RuleEbnfParserToken token,
                                                           final Parser<FakeParserContext> parser) {
                         b.append("RULE\n");
                         return parser;
@@ -644,21 +644,21 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
-                    public Parser<FakeParserContext> exception(final EbnfExceptionParserToken token,
+                    public Parser<FakeParserContext> exception(final ExceptionEbnfParserToken token,
                                                                final Parser<FakeParserContext> parser) {
                         b.append("EXCEPTION " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                    public Parser<FakeParserContext> terminal(final TerminalEbnfParserToken token,
                                                               final Parser<FakeParserContext> parser) {
                         b.append("TERMINAL " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                    public Parser<FakeParserContext> rule(final RuleEbnfParserToken token,
                                                           final Parser<FakeParserContext> parser) {
                         b.append("RULE\n");
                         return parser;
@@ -727,21 +727,21 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
-                    public Parser<FakeParserContext> group(final EbnfGroupParserToken token,
+                    public Parser<FakeParserContext> group(final GroupEbnfParserToken token,
                                                            final Parser<FakeParserContext> parser) {
                         b.append("GROUP " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                    public Parser<FakeParserContext> terminal(final TerminalEbnfParserToken token,
                                                               final Parser<FakeParserContext> parser) {
                         b.append("TERMINAL " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                    public Parser<FakeParserContext> rule(final RuleEbnfParserToken token,
                                                           final Parser<FakeParserContext> parser) {
                         b.append("RULE\n");
                         return parser;
@@ -789,21 +789,21 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
-                    public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
+                    public Parser<FakeParserContext> identifier(final IdentifierEbnfParserToken token,
                                                                 final Parser<FakeParserContext> parser) {
                         b.append("IDENTIFIER " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                    public Parser<FakeParserContext> terminal(final TerminalEbnfParserToken token,
                                                               final Parser<FakeParserContext> parser) {
                         b.append("TERMINAL " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                    public Parser<FakeParserContext> rule(final RuleEbnfParserToken token,
                                                           final Parser<FakeParserContext> parser) {
                         b.append("RULE " + token.toString().replace("\n", "") + "\n");
                         return parser;
@@ -832,21 +832,21 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
-                    public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
+                    public Parser<FakeParserContext> identifier(final IdentifierEbnfParserToken token,
                                                                 final Parser<FakeParserContext> parser) {
                         b.append("IDENTIFIER " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                    public Parser<FakeParserContext> terminal(final TerminalEbnfParserToken token,
                                                               final Parser<FakeParserContext> parser) {
                         b.append("TERMINAL " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                    public Parser<FakeParserContext> rule(final RuleEbnfParserToken token,
                                                           final Parser<FakeParserContext> parser) {
                         b.append("RULE " + token.toString().replace("\n", "") + "\n");
                         return parser;
@@ -873,28 +873,28 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
-                    public Parser<FakeParserContext> concatenation(final EbnfConcatenationParserToken token,
+                    public Parser<FakeParserContext> concatenation(final ConcatenationEbnfParserToken token,
                                                                    final Parser<FakeParserContext> parser) {
                         b.append("CONCAT " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
+                    public Parser<FakeParserContext> identifier(final IdentifierEbnfParserToken token,
                                                                 final Parser<FakeParserContext> parser) {
                         b.append("IDENTIFIER " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                    public Parser<FakeParserContext> terminal(final TerminalEbnfParserToken token,
                                                               final Parser<FakeParserContext> parser) {
                         b.append("TERMINAL " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                    public Parser<FakeParserContext> rule(final RuleEbnfParserToken token,
                                                           final Parser<FakeParserContext> parser) {
                         b.append("RULE " + token.toString().replace("\n", "") + "\n");
                         return parser;
@@ -1074,21 +1074,21 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
-                    public Parser<FakeParserContext> optional(final EbnfOptionalParserToken token,
+                    public Parser<FakeParserContext> optional(final OptionalEbnfParserToken token,
                                                               final Parser<FakeParserContext> parser) {
                         b.append("OPTIONAL " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                    public Parser<FakeParserContext> terminal(final TerminalEbnfParserToken token,
                                                               final Parser<FakeParserContext> parser) {
                         b.append("TERMINAL " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                    public Parser<FakeParserContext> rule(final RuleEbnfParserToken token,
                                                           final Parser<FakeParserContext> parser) {
                         b.append("RULE\n");
                         return parser;
@@ -1177,7 +1177,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
-                    public Parser<FakeParserContext> range(final EbnfRangeParserToken token,
+                    public Parser<FakeParserContext> range(final RangeEbnfParserToken token,
                                                            final String beginText,
                                                            final String endText) {
                         b.append("RANGE " + token + " " + beginText + " " + endText + "\n");
@@ -1185,14 +1185,14 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                     }
 
                     @Override
-                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                    public Parser<FakeParserContext> terminal(final TerminalEbnfParserToken token,
                                                               final Parser<FakeParserContext> parser) {
                         b.append("TERMINAL " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                    public Parser<FakeParserContext> rule(final RuleEbnfParserToken token,
                                                           final Parser<FakeParserContext> parser) {
                         b.append("RULE\n");
                         return parser;
@@ -1352,21 +1352,21 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                 new FakeEbnfParserCombinatorGrammarTransformer<>() {
 
                     @Override
-                    public Parser<FakeParserContext> repeated(final EbnfRepeatedParserToken token,
+                    public Parser<FakeParserContext> repeated(final RepeatedEbnfParserToken token,
                                                               final Parser<FakeParserContext> parser) {
                         b.append("REPEATED " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                    public Parser<FakeParserContext> terminal(final TerminalEbnfParserToken token,
                                                               final Parser<FakeParserContext> parser) {
                         b.append("TERMINAL " + token + "\n");
                         return parser;
                     }
 
                     @Override
-                    public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                    public Parser<FakeParserContext> rule(final RuleEbnfParserToken token,
                                                           final Parser<FakeParserContext> parser) {
                         b.append("RULE\n");
                         return parser;
@@ -1507,7 +1507,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
 
     private Parser<FakeParserContext> parseGrammarAndGetParser(final String grammar,
                                                                final EbnfParserCombinatorGrammarTransformer<FakeParserContext> transformer) {
-        final EbnfGrammarParserToken grammarToken = this.parseGrammar(grammar);
+        final GrammarEbnfParserToken grammarToken = this.parseGrammar(grammar);
 
         final Function<EbnfIdentifierName, Parser<FakeParserContext>> nameToParser = this.parseGrammarAndGetParsers(
                 grammarToken,
@@ -1528,24 +1528,24 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
 
     private final static EbnfIdentifierName TEST = EbnfIdentifierName.with("TEST");
 
-    private EbnfGrammarParserToken parseGrammar(final String grammar) {
+    private GrammarEbnfParserToken parseGrammar(final String grammar) {
         return EbnfParserToken.grammarParser()
                 .orFailIfCursorNotEmpty(ParserReporters.basic())
                 .parse(
                         TextCursors.charSequence(grammar),
                         EbnfParserContexts.basic()
                 ).get()
-                .cast(EbnfGrammarParserToken.class);
+                .cast(GrammarEbnfParserToken.class);
     }
 
-    private Function<EbnfIdentifierName, Parser<FakeParserContext>> parseGrammarAndGetParsers(final EbnfGrammarParserToken grammar) {
+    private Function<EbnfIdentifierName, Parser<FakeParserContext>> parseGrammarAndGetParsers(final GrammarEbnfParserToken grammar) {
         return this.parseGrammarAndGetParsers(
                 grammar,
                 this.syntaxTreeTransformer()
         );
     }
 
-    private Function<EbnfIdentifierName, Parser<FakeParserContext>> parseGrammarAndGetParsers(final EbnfGrammarParserToken grammar,
+    private Function<EbnfIdentifierName, Parser<FakeParserContext>> parseGrammarAndGetParsers(final GrammarEbnfParserToken grammar,
                                                                                               final EbnfParserCombinatorGrammarTransformer<FakeParserContext> transformer) {
         final Map<EbnfIdentifierName, Parser<FakeParserContext>> defaults = Maps.hash();
         defaults.put(
@@ -1573,7 +1573,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
     private EbnfParserCombinatorGrammarTransformer<FakeParserContext> syntaxTreeTransformer() {
         return new EbnfParserCombinatorGrammarTransformer<>() {
             @Override
-            public Parser<FakeParserContext> alternatives(final EbnfAlternativeParserToken token,
+            public Parser<FakeParserContext> alternatives(final AlternativeEbnfParserToken token,
                                                           final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
@@ -1583,7 +1583,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
             }
 
             @Override
-            public Parser<FakeParserContext> concatenation(final EbnfConcatenationParserToken token,
+            public Parser<FakeParserContext> concatenation(final ConcatenationEbnfParserToken token,
                                                            final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
@@ -1593,7 +1593,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
             }
 
             @Override
-            public Parser<FakeParserContext> exception(final EbnfExceptionParserToken token,
+            public Parser<FakeParserContext> exception(final ExceptionEbnfParserToken token,
                                                        final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
@@ -1603,7 +1603,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
             }
 
             @Override
-            public Parser<FakeParserContext> group(final EbnfGroupParserToken token,
+            public Parser<FakeParserContext> group(final GroupEbnfParserToken token,
                                                    final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
@@ -1613,7 +1613,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
             }
 
             @Override
-            public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
+            public Parser<FakeParserContext> identifier(final IdentifierEbnfParserToken token,
                                                         final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
@@ -1623,7 +1623,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
             }
 
             @Override
-            public Parser<FakeParserContext> optional(final EbnfOptionalParserToken token,
+            public Parser<FakeParserContext> optional(final OptionalEbnfParserToken token,
                                                       final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
@@ -1633,7 +1633,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
             }
 
             @Override
-            public Parser<FakeParserContext> range(final EbnfRangeParserToken token,
+            public Parser<FakeParserContext> range(final RangeEbnfParserToken token,
                                                    final String beginText,
                                                    final String endText) {
                 checkEquals("a", beginText, "beginText");
@@ -1651,7 +1651,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
             }
 
             @Override
-            public Parser<FakeParserContext> repeated(final EbnfRepeatedParserToken token,
+            public Parser<FakeParserContext> repeated(final RepeatedEbnfParserToken token,
                                                       final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
@@ -1661,7 +1661,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
             }
 
             @Override
-            public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+            public Parser<FakeParserContext> rule(final RuleEbnfParserToken token,
                                                   final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
@@ -1671,7 +1671,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
             }
 
             @Override
-            public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+            public Parser<FakeParserContext> terminal(final TerminalEbnfParserToken token,
                                                       final Parser<FakeParserContext> parser) {
                 failIfOptionalParser(
                         parser,
@@ -1736,19 +1736,19 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                         (n) -> Optional.empty(),
                         new FakeEbnfParserCombinatorGrammarTransformer<>() {
                             @Override
-                            public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
+                            public Parser<FakeParserContext> identifier(final IdentifierEbnfParserToken token,
                                                                         final Parser<FakeParserContext> parser) {
                                 return parser;
                             }
 
                             @Override
-                            public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                            public Parser<FakeParserContext> rule(final RuleEbnfParserToken token,
                                                                   final Parser<FakeParserContext> parser) {
                                 return parser;
                             }
 
                             @Override
-                            public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                            public Parser<FakeParserContext> terminal(final TerminalEbnfParserToken token,
                                                                       final Parser<FakeParserContext> parser) {
                                 return parser;
                             }
@@ -1774,19 +1774,19 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
                         (n) -> Optional.empty(),
                         new FakeEbnfParserCombinatorGrammarTransformer<>() {
                             @Override
-                            public Parser<FakeParserContext> identifier(final EbnfIdentifierParserToken token,
+                            public Parser<FakeParserContext> identifier(final IdentifierEbnfParserToken token,
                                                                         final Parser<FakeParserContext> parser) {
                                 return parser;
                             }
 
                             @Override
-                            public Parser<FakeParserContext> rule(final EbnfRuleParserToken token,
+                            public Parser<FakeParserContext> rule(final RuleEbnfParserToken token,
                                                                   final Parser<FakeParserContext> parser) {
                                 return parser;
                             }
 
                             @Override
-                            public Parser<FakeParserContext> terminal(final EbnfTerminalParserToken token,
+                            public Parser<FakeParserContext> terminal(final TerminalEbnfParserToken token,
                                                                       final Parser<FakeParserContext> parser) {
                                 return parser;
                             }

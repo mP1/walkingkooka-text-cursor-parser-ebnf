@@ -21,8 +21,8 @@ import walkingkooka.reflect.PublicStaticHelper;
 import walkingkooka.text.CharSequences;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserContext;
-import walkingkooka.text.cursor.parser.ebnf.EbnfGrammarParserToken;
 import walkingkooka.text.cursor.parser.ebnf.EbnfIdentifierName;
+import walkingkooka.text.cursor.parser.ebnf.GrammarEbnfParserToken;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -43,9 +43,9 @@ import java.util.function.Function;
 public final class EbnfParserCombinators implements PublicStaticHelper {
 
     /**
-     * Accepts a {@link EbnfGrammarParserToken} and function that may be used to query parsers given an {@link EbnfIdentifierName}.
+     * Accepts a {@link GrammarEbnfParserToken} and function that may be used to query parsers given an {@link EbnfIdentifierName}.
      */
-    public static <C extends ParserContext> Function<EbnfIdentifierName, Optional<Parser<C>>> transform(final EbnfGrammarParserToken grammar,
+    public static <C extends ParserContext> Function<EbnfIdentifierName, Optional<Parser<C>>> transform(final GrammarEbnfParserToken grammar,
                                                                                                         final Function<EbnfIdentifierName, Optional<Parser<C>>> identifierToParser,
                                                                                                         final EbnfParserCombinatorGrammarTransformer<C> transformer) {
         Objects.requireNonNull(grammar, "grammar");
@@ -70,9 +70,9 @@ public final class EbnfParserCombinators implements PublicStaticHelper {
     }
 
     /**
-     * Accepts a {@link EbnfGrammarParserToken} and function that may be used to query parsers given an {@link EbnfIdentifierName}.
+     * Accepts a {@link GrammarEbnfParserToken} and function that may be used to query parsers given an {@link EbnfIdentifierName}.
      */
-    public static <C extends ParserContext> Function<EbnfIdentifierName, Parser<C>> transformForFile(final EbnfGrammarParserToken grammar,
+    public static <C extends ParserContext> Function<EbnfIdentifierName, Parser<C>> transformForFile(final GrammarEbnfParserToken grammar,
                                                                                                      final Function<EbnfIdentifierName, Optional<Parser<C>>> identifierToParser,
                                                                                                      final EbnfParserCombinatorGrammarTransformer<C> transformer,
                                                                                                      final String filename) {
