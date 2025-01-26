@@ -24,7 +24,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public abstract class AlternativeConcatenationParentEbnfParserTokenTestCase<T extends ParentEbnfParserToken<T>> extends ParentEbnfParserTokenTestCase2<T> {
+public abstract class AlternativeConcatenationParentEbnfParserTokenTestCase<T extends ParentEbnfParserToken> extends ParentEbnfParserTokenTestCase2<T> {
 
     AlternativeConcatenationParentEbnfParserTokenTestCase() {
         super();

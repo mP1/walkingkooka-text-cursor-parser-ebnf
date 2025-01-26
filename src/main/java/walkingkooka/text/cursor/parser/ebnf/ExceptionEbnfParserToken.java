@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Represents an exception token in the grammar. Note the grammar requires an exception to follow another token.
  */
-public final class ExceptionEbnfParserToken extends ParentEbnfParserToken<ExceptionEbnfParserToken> {
+public final class ExceptionEbnfParserToken extends ParentEbnfParserToken {
 
     static ExceptionEbnfParserToken with(final List<ParserToken> tokens, final String text) {
         return new ExceptionEbnfParserToken(copyAndCheckTokens(tokens), checkText(text));

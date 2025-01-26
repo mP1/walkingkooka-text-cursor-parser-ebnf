@@ -25,7 +25,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public abstract class ParentEbnfParserTokenTestCase<T extends ParentEbnfParserToken<T>> extends EbnfParserTokenTestCase<T> {
+public abstract class ParentEbnfParserTokenTestCase<T extends ParentEbnfParserToken> extends EbnfParserTokenTestCase<T> {
 
     final static String COMMENT1 = "(*comment-1*)";
     final static String COMMENT2 = "(*comment-2*)";
@@ -128,11 +128,11 @@ public abstract class ParentEbnfParserTokenTestCase<T extends ParentEbnfParserTo
         return symbol(";");
     }
 
-    final void checkValue(final ParentEbnfParserToken<?> parent, final ParserToken... values) {
+    final void checkValue(final ParentEbnfParserToken parent, final ParserToken... values) {
         checkValue(parent, Lists.of(values));
     }
 
-    final void checkValue(final ParentEbnfParserToken<?> parent, final List<ParserToken> values) {
+    final void checkValue(final ParentEbnfParserToken parent, final List<ParserToken> values) {
         this.checkEquals(values, parent.value(), "value");
     }
 }

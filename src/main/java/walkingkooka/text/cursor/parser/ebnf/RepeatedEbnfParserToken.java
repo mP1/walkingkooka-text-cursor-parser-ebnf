@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Represents an repeated token in the grammar.
  */
-public final class RepeatedEbnfParserToken extends ParentEbnfParserToken<RepeatedEbnfParserToken> {
+public final class RepeatedEbnfParserToken extends ParentEbnfParserToken {
 
     static RepeatedEbnfParserToken with(final List<ParserToken> tokens, final String text) {
         return new RepeatedEbnfParserToken(copyAndCheckTokens(tokens), checkText(text));

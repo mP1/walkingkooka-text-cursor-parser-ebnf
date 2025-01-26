@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public abstract class ParentEbnfParserTokenTestCase2<T extends ParentEbnfParserToken<T>> extends ParentEbnfParserTokenTestCase<T> {
+public abstract class ParentEbnfParserTokenTestCase2<T extends ParentEbnfParserToken> extends ParentEbnfParserTokenTestCase<T> {
 
     ParentEbnfParserTokenTestCase2() {
         super();
