@@ -76,7 +76,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
 
     // TEST = "abc";
     @Test
-    public void testTransformEbnfParserCombinatorSyntaxTreeTransformerTerminal() {
+    public void testTransformEbnfParserCombinatorGrammarTransformerTerminal() {
         final StringBuilder b = new StringBuilder();
 
         this.parseGrammarAndGetParser(
@@ -1501,7 +1501,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
     private Parser<FakeParserContext> parseGrammarAndGetParser(final String grammar) {
         return this.parseGrammarAndGetParser(
                 grammar,
-                this.syntaxTreeTransformer()
+                this.transformer()
         );
     }
 
@@ -1541,7 +1541,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
     private Function<EbnfIdentifierName, Parser<FakeParserContext>> parseGrammarAndGetParsers(final GrammarEbnfParserToken grammar) {
         return this.parseGrammarAndGetParsers(
                 grammar,
-                this.syntaxTreeTransformer()
+                this.transformer()
         );
     }
 
@@ -1570,7 +1570,7 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
         );
     }
 
-    private EbnfParserCombinatorGrammarTransformer<FakeParserContext> syntaxTreeTransformer() {
+    private EbnfParserCombinatorGrammarTransformer<FakeParserContext> transformer() {
         return new EbnfParserCombinatorGrammarTransformer<>() {
             @Override
             public Parser<FakeParserContext> alternatives(final AlternativeEbnfParserToken token,
