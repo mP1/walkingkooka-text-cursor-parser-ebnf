@@ -64,22 +64,21 @@ public abstract class EbnfParserTokenTestCase<T extends EbnfParserToken> impleme
     }
 
     @Override
-    public final String isMethodTypeNamePrefix() {
-        return "";
-    }
-
-    @Override
-    public final String isMethodTypeNameSuffix() {
-        return EbnfParserToken.class.getSimpleName();
-    }
-
-    @Override
     public final Predicate<String> isMethodIgnoreMethodFilter() {
         return (m) -> m.equals("isLeaf") ||
                 m.equals("isNoise") ||
                 m.equals("isParent") ||
                 m.equals("isEmpty") ||
                 m.equals("isNotEmpty");
+    }
+
+    @Override
+    public final String toIsMethodName(final String typeName) {
+        return this.toIsMethodNameWithPrefixSuffix(
+                typeName,
+                "",
+                EbnfParserToken.class.getSimpleName()
+        );
     }
 
     // ClassTestCase.................................................................................................
