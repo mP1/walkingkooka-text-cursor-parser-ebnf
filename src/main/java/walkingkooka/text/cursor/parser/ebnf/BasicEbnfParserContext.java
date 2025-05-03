@@ -16,7 +16,11 @@
  */
 package walkingkooka.text.cursor.parser.ebnf;
 
+import walkingkooka.InvalidCharacterException;
 import walkingkooka.ToStringBuilder;
+import walkingkooka.text.cursor.TextCursor;
+import walkingkooka.text.cursor.parser.InvalidCharacterExceptionFactory;
+import walkingkooka.text.cursor.parser.Parser;
 
 import java.math.MathContext;
 import java.time.LocalDateTime;
@@ -63,6 +67,15 @@ final class BasicEbnfParserContext implements EbnfParserContext {
     @Override
     public char groupSeparator() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public InvalidCharacterException invalidCharacterException(final Parser<?> parser,
+                                                               final TextCursor cursor) {
+        return InvalidCharacterExceptionFactory.COLUMN_AND_LINE_EXPECTED.apply(
+                parser,
+                cursor
+        );
     }
 
     @Override
