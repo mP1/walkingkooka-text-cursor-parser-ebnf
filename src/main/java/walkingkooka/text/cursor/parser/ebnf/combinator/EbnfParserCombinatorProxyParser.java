@@ -49,12 +49,20 @@ final class EbnfParserCombinatorProxyParser<C extends ParserContext> implements 
 
     @Override
     public int minCount() {
-        return this.parser.minCount();
+        // to avoid NPE, default to 1 when parser is missing.
+        final Parser<C> parser = this.parser;
+        return null != parser ?
+                parser.minCount() :
+                1;
     }
 
     @Override
     public int maxCount() {
-        return this.parser.maxCount();
+        // to avoid NPE, default to 1 when parser is missing.
+        final Parser<C> parser = this.parser;
+        return null != parser ?
+                parser.maxCount() :
+                1;
     }
 
     void setParser(final Parser<C> parser) {
