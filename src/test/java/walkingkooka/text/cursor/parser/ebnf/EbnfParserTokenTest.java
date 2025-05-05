@@ -18,6 +18,7 @@
 package walkingkooka.text.cursor.parser.ebnf;
 
 import org.junit.jupiter.api.Test;
+import walkingkooka.InvalidCharacterException;
 import walkingkooka.collect.list.Lists;
 import walkingkooka.reflect.ClassTesting;
 import walkingkooka.reflect.JavaVisibility;
@@ -35,9 +36,14 @@ public final class EbnfParserTokenTest implements ParseStringTesting<EbnfParserT
 
     @Test
     public void testParseWithInvalidGrammarFails() {
-        this.parseStringInvalidCharacterFails(
-                "Hello= \"text\"; Bad!",
-                '!'
+        final String text = "Hello= \"text\"; Bad!";
+
+        this.parseStringFails(
+                text,
+                new InvalidCharacterException(
+                        text,
+                        text.indexOf("!")
+                ).appendToMessage("expected assign")
         );
     }
 
