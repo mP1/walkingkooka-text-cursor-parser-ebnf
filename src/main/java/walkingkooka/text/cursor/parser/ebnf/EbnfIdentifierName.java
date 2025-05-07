@@ -61,9 +61,14 @@ final public class EbnfIdentifierName implements Name,
      * Factory that creates a {@link EbnfIdentifierName}
      */
     public static EbnfIdentifierName with(final String name) {
-        CharPredicates.failIfNullOrEmptyOrInitialAndPartFalse(name, "Identifier", INITIAL, PART);
-
-        return new EbnfIdentifierName(name);
+        return new EbnfIdentifierName(
+                CharPredicates.failIfNullOrEmptyOrInitialAndPartFalse(
+                        name,
+                        "Identifier",
+                        INITIAL,
+                        PART
+                )
+        );
     }
 
     /**
