@@ -29,16 +29,11 @@ public interface EbnfParserContextTesting<C extends EbnfParserContext> extends P
 
     @Test
     default void testLocaleFails() {
-        assertThrows(UnsupportedOperationException.class, () -> this.createContext().locale());
-    }
-
-    @Override
-    default void testMathContext() {
-    }
-
-    @Test
-    default void testMathContextFails() {
-        assertThrows(UnsupportedOperationException.class, () -> this.createContext().mathContext());
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> this.createContext()
+                        .locale()
+        );
     }
 
     @Override

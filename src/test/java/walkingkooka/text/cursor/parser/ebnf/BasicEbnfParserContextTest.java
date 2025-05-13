@@ -19,6 +19,7 @@ package walkingkooka.text.cursor.parser.ebnf;
 
 import org.junit.jupiter.api.Test;
 import walkingkooka.math.DecimalNumberContext;
+import walkingkooka.math.DecimalNumberContextDelegator;
 import walkingkooka.math.DecimalNumberContexts;
 import walkingkooka.reflect.ClassTesting2;
 import walkingkooka.reflect.JavaVisibility;
@@ -26,7 +27,8 @@ import walkingkooka.reflect.JavaVisibility;
 import java.math.MathContext;
 
 public final class BasicEbnfParserContextTest implements ClassTesting2<BasicEbnfParserContext>,
-        EbnfParserContextTesting<BasicEbnfParserContext> {
+        EbnfParserContextTesting<BasicEbnfParserContext>,
+        DecimalNumberContextDelegator {
 
     @Override
     public void testCurrencySymbol() {
@@ -51,24 +53,11 @@ public final class BasicEbnfParserContextTest implements ClassTesting2<BasicEbnf
         return BasicEbnfParserContext.instance();
     }
 
-    @Override
-    public String currencySymbol() {
-        return this.decimalNumberContext().currencySymbol();
-    }
+    // DecimalNumberContext.............................................................................................
 
     @Override
-    public char decimalSeparator() {
-        return this.decimalNumberContext().decimalSeparator();
-    }
-
-    @Override
-    public String exponentSymbol() {
-        return this.decimalNumberContext().exponentSymbol();
-    }
-
-    @Override
-    public char groupSeparator() {
-        return this.decimalNumberContext().groupSeparator();
+    public DecimalNumberContext decimalNumberContext() {
+        return DecimalNumberContexts.american(this.mathContext());
     }
 
     @Override
@@ -76,24 +65,7 @@ public final class BasicEbnfParserContextTest implements ClassTesting2<BasicEbnf
         return MathContext.DECIMAL32;
     }
 
-    @Override
-    public char negativeSign() {
-        return this.decimalNumberContext().negativeSign();
-    }
-
-    @Override
-    public char percentSymbol() {
-        return this.decimalNumberContext().percentSymbol();
-    }
-
-    @Override
-    public char positiveSign() {
-        return this.decimalNumberContext().positiveSign();
-    }
-
-    private DecimalNumberContext decimalNumberContext() {
-        return DecimalNumberContexts.american(this.mathContext());
-    }
+    // class............................................................................................................
 
     @Override
     public Class<BasicEbnfParserContext> type() {

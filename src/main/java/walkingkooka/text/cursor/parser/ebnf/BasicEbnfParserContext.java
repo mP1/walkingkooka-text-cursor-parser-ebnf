@@ -18,6 +18,9 @@ package walkingkooka.text.cursor.parser.ebnf;
 
 import walkingkooka.InvalidCharacterException;
 import walkingkooka.ToStringBuilder;
+import walkingkooka.math.DecimalNumberContext;
+import walkingkooka.math.DecimalNumberContextDelegator;
+import walkingkooka.math.DecimalNumberContexts;
 import walkingkooka.text.cursor.TextCursor;
 import walkingkooka.text.cursor.parser.InvalidCharacterExceptionFactory;
 import walkingkooka.text.cursor.parser.Parser;
@@ -27,7 +30,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
-final class BasicEbnfParserContext implements EbnfParserContext {
+final class BasicEbnfParserContext implements EbnfParserContext,
+        DecimalNumberContextDelegator {
 
     static BasicEbnfParserContext instance() {
         return INSTANCE;
@@ -45,23 +49,8 @@ final class BasicEbnfParserContext implements EbnfParserContext {
     }
 
     @Override
-    public String currencySymbol() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public char decimalSeparator() {
-        return '.';
-    }
-
-    @Override
     public int defaultYear() {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String exponentSymbol() {
-        return "E";
     }
 
     @Override
@@ -84,16 +73,6 @@ final class BasicEbnfParserContext implements EbnfParserContext {
     }
 
     @Override
-    public MathContext mathContext() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public char negativeSign() {
-        return '-';
-    }
-
-    @Override
     public List<String> monthNames() {
         throw new UnsupportedOperationException();
     }
@@ -106,16 +85,6 @@ final class BasicEbnfParserContext implements EbnfParserContext {
     @Override
     public LocalDateTime now() {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public char percentSymbol() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public char positiveSign() {
-        return '+';
     }
 
     @Override
@@ -132,6 +101,17 @@ final class BasicEbnfParserContext implements EbnfParserContext {
     public List<String> weekDayNameAbbreviations() {
         throw new UnsupportedOperationException();
     }
+
+    // DecimalNumberContextDelegator....................................................................................
+
+    @Override
+    public DecimalNumberContext decimalNumberContext() {
+        return DECIMAL_NUMBER_CONTEXT;
+    }
+
+    private final static DecimalNumberContext DECIMAL_NUMBER_CONTEXT = DecimalNumberContexts.american(
+            MathContext.DECIMAL32
+    );
 
     @Override
     public String toString() {
