@@ -109,7 +109,7 @@ final class BasicEbnfParserContext implements EbnfParserContext {
     }
 
     @Override
-    public char percentageSymbol() {
+    public char percentSymbol() {
         throw new UnsupportedOperationException();
     }
 
