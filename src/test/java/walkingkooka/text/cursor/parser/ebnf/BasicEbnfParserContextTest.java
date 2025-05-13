@@ -37,7 +37,7 @@ public final class BasicEbnfParserContextTest implements ClassTesting2<BasicEbnf
     }
 
     @Override
-    public void testPercentageSymbol() {
+    public void testPercentSymbol() {
     }
 
     @Test
@@ -82,8 +82,8 @@ public final class BasicEbnfParserContextTest implements ClassTesting2<BasicEbnf
     }
 
     @Override
-    public char percentageSymbol() {
-        return this.decimalNumberContext().percentageSymbol();
+    public char percentSymbol() {
+        return this.decimalNumberContext().percentSymbol();
     }
 
     @Override
