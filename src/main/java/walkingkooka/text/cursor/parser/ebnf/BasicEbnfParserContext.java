@@ -18,6 +18,7 @@ package walkingkooka.text.cursor.parser.ebnf;
 
 import walkingkooka.InvalidCharacterException;
 import walkingkooka.ToStringBuilder;
+import walkingkooka.datetime.DateTimeSymbols;
 import walkingkooka.math.DecimalNumberContext;
 import walkingkooka.math.DecimalNumberContextDelegator;
 import walkingkooka.math.DecimalNumberContexts;
@@ -99,6 +100,11 @@ final class BasicEbnfParserContext implements EbnfParserContext,
 
     @Override
     public List<String> weekDayNameAbbreviations() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public DateTimeSymbols dateTimeSymbols() {
         throw new UnsupportedOperationException();
     }
 
