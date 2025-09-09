@@ -60,7 +60,7 @@ final class BasicEbnfParserContext implements EbnfParserContext,
     }
 
     @Override
-    public boolean isGroupSeparatorWithinNumbersSupported() {
+    public boolean canNumbersHaveGroupSeparator() {
         return false;
     }
 
