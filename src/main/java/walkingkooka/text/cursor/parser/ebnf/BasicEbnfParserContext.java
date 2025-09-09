@@ -45,21 +45,6 @@ final class BasicEbnfParserContext implements EbnfParserContext,
     }
 
     @Override
-    public List<String> ampms() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public int defaultYear() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public char groupSeparator() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean canNumbersHaveGroupSeparator() {
         return false;
     }
@@ -75,6 +60,18 @@ final class BasicEbnfParserContext implements EbnfParserContext,
 
     @Override
     public char valueSeparator() {
+        throw new UnsupportedOperationException();
+    }
+
+    // DateTimeContext..................................................................................................
+
+    @Override
+    public List<String> ampms() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int defaultYear() {
         throw new UnsupportedOperationException();
     }
 
