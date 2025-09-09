@@ -74,6 +74,11 @@ final class BasicEbnfParserContext implements EbnfParserContext,
     }
 
     @Override
+    public char valueSeparator() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Locale locale() {
         throw new UnsupportedOperationException();
     }
