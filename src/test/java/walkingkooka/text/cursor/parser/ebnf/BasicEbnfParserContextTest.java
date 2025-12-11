@@ -56,6 +56,12 @@ public final class BasicEbnfParserContextTest implements ClassTesting2<BasicEbnf
     // DecimalNumberContext.............................................................................................
 
     @Override
+    public int decimalNumberDigitCount() {
+        return this.decimalNumberContext()
+                .decimalNumberDigitCount();
+    }
+
+    @Override
     public DecimalNumberContext decimalNumberContext() {
         return DecimalNumberContexts.american(this.mathContext());
     }
