@@ -55,8 +55,11 @@ public abstract class ParentEbnfParserTokenTestCase<T extends ParentEbnfParserTo
         final String text = this.text();
         final T token = this.createToken(text, tokens);
         this.textAndCheck(token, text);
-        this.checkValue(token, tokens);
-        this.checkEquals(tokens, token.value(), "tokens");
+        this.valueAndCheck(token, tokens);
+        this.valueAndCheck(
+                token,
+                tokens
+        );
     }
 
     @Override
@@ -128,11 +131,11 @@ public abstract class ParentEbnfParserTokenTestCase<T extends ParentEbnfParserTo
         return symbol(";");
     }
 
-    final void checkValue(final ParentEbnfParserToken parent, final ParserToken... values) {
-        checkValue(parent, Lists.of(values));
-    }
-
-    final void checkValue(final ParentEbnfParserToken parent, final List<ParserToken> values) {
-        this.checkEquals(values, parent.value(), "value");
+    final void valueAndCheck(final ParentEbnfParserToken parent,
+                             final ParserToken... values) {
+        valueAndCheck(
+                parent,
+                Lists.of(values)
+        );
     }
 }
