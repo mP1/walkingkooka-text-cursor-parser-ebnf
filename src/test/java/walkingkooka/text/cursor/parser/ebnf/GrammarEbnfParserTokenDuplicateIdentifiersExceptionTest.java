@@ -50,7 +50,10 @@ public final class GrammarEbnfParserTokenDuplicateIdentifiersExceptionTest imple
         final String message = "message 123";
         final Set<RuleEbnfParserToken> duplicates = this.duplicates();
         final GrammarEbnfParserTokenDuplicateIdentifiersException exception = new GrammarEbnfParserTokenDuplicateIdentifiersException(message, duplicates);
-        checkMessage(exception, message);
+        this.getMessageAndCheck(
+                exception,
+                message
+        );
         this.checkEquals(duplicates, exception.duplicates(), "duplicates");
     }
 

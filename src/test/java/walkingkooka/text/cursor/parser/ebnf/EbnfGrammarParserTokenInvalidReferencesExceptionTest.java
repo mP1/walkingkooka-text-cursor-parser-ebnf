@@ -49,7 +49,10 @@ public final class EbnfGrammarParserTokenInvalidReferencesExceptionTest implemen
         final String message = "abc";
         final Set<EbnfIdentifierName> references = this.references();
         final EbnfGrammarParserTokenInvalidReferencesException exception = new EbnfGrammarParserTokenInvalidReferencesException(message, references);
-        checkMessage(exception, message);
+        this.getMessageAndCheck(
+                exception,
+                message
+        );
         this.checkEquals(references, exception.references(), "references");
     }
 
