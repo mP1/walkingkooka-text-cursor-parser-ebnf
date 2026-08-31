@@ -18,14 +18,14 @@
 package walkingkooka.text.cursor.parser.ebnf;
 
 import org.junit.jupiter.api.Test;
-import walkingkooka.text.cursor.parser.ParserContextTesting;
+import walkingkooka.text.cursor.parser.ParserContextTesting2;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Mixing testing interface for {@link EbnfParserContext}
  */
-public interface EbnfParserContextTesting<C extends EbnfParserContext> extends ParserContextTesting<C> {
+public interface EbnfParserContextTesting<C extends EbnfParserContext> extends ParserContextTesting2<C> {
 
     @Test
     default void testLocaleFails() {
