@@ -27,7 +27,7 @@ import walkingkooka.reflect.JavaVisibility;
 import java.math.MathContext;
 
 public final class BasicEbnfParserContextTest implements ClassTesting2<BasicEbnfParserContext>,
-        EbnfParserContextTesting<BasicEbnfParserContext>,
+        EbnfParserContextTesting2<BasicEbnfParserContext>,
         DecimalNumberContextDelegator {
 
     @Override
