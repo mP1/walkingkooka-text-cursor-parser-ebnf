@@ -18,7 +18,6 @@
 package walkingkooka.text.cursor.parser.ebnf;
 
 import walkingkooka.reflect.ConstantsTesting;
-import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.reflect.PublicStaticHelperTesting;
 
 import java.lang.reflect.Method;
@@ -39,11 +38,6 @@ public final class EbnfGrammarTest implements PublicStaticHelperTesting<EbnfGram
     @Override
     public Class<EbnfGrammar> type() {
         return EbnfGrammar.class;
-    }
-
-    @Override
-    public JavaVisibility typeVisibility() {
-        return JavaVisibility.PUBLIC;
     }
 
     @Override

@@ -22,7 +22,6 @@ import org.junit.jupiter.api.Test;
 import walkingkooka.collect.list.Lists;
 import walkingkooka.collect.map.Maps;
 import walkingkooka.predicate.character.CharPredicates;
-import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.reflect.PublicStaticHelperTesting;
 import walkingkooka.text.cursor.TextCursors;
 import walkingkooka.text.cursor.parser.BigIntegerParserToken;
@@ -1821,11 +1820,6 @@ public final class EbnfParserCombinatorsTest implements ParserTesting2<Parser<Fa
     @Override
     public Class<EbnfParserCombinators> type() {
         return EbnfParserCombinators.class;
-    }
-
-    @Override
-    public JavaVisibility typeVisibility() {
-        return JavaVisibility.PUBLIC;
     }
 
     // PublicStaticHelperTesting........................................................................................
