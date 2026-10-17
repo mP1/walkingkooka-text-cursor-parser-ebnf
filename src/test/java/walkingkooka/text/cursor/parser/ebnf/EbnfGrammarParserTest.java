@@ -17,12 +17,12 @@
 package walkingkooka.text.cursor.parser.ebnf;
 
 import org.junit.jupiter.api.Test;
-import walkingkooka.Cast;
 import walkingkooka.collect.list.Lists;
-import walkingkooka.text.cursor.parser.Parser;
+import walkingkooka.text.printer.TreePrintableTesting;
 
 // TODO EbnfGrammarParser - ClassTesting2
-public final class EbnfGrammarParserTest extends EbnfParserTestCase {
+public final class EbnfGrammarParserTest extends EbnfParserTestCase
+        implements TreePrintableTesting {
 
     private final static String RULE1 = IDENTIFIER1 + "=" + TERMINAL1_TEXT + ";";
     private final static String RULE2 = IDENTIFIER2 + "=" + TERMINAL2_TEXT + ";";
@@ -182,7 +182,18 @@ public final class EbnfGrammarParserTest extends EbnfParserTestCase {
     }
 
     @Override
-    public Parser<EbnfParserContext> createParser() {
-        return Cast.to(EbnfGrammarParser.GRAMMAR);
+    public EbnfGrammarParser createParser() {
+        return new EbnfGrammarParser();
+    }
+
+    // TreePrintable....................................................................................................
+
+    @Test
+    public void testTreePrintable() {
+        this.treePrintAndCheck(
+                this.createParser(),
+                "EbnfGrammarParser\n" +
+                        "  {WHITESPACE | COMMENT}, ({WHITESPACE | COMMENT}, IDENTIFIER, {WHITESPACE | COMMENT}, (assign | assign | Fail), {WHITESPACE | COMMENT}, rhs, {WHITESPACE | COMMENT}, (termination | termination | Fail) | {WHITESPACE | COMMENT}, IDENTIFIER, {WHITESPACE | COMMENT}, (assign | assign | Fail), {WHITESPACE | COMMENT}, rhs, {WHITESPACE | COMMENT}, (termination | termination | Fail) | Fail), {{WHITESPACE | COMMENT}, IDENTIFIER, {WHITESPACE | COMMENT}, (assign | assign | Fail), {WHITESPACE | COMMENT}, rhs, {WHITESPACE | COMMENT}, (termination | termination | Fail)}, {WHITESPACE | COMMENT} (walkingkooka.text.cursor.parser.TransformingParser)\n"
+        );
     }
 }
