@@ -193,7 +193,345 @@ public final class EbnfGrammarParserTest extends EbnfParserTestCase
         this.treePrintAndCheck(
                 this.createParser(),
                 "EbnfGrammarParser\n" +
-                        "  {WHITESPACE | COMMENT}, ({WHITESPACE | COMMENT}, IDENTIFIER, {WHITESPACE | COMMENT}, (assign | assign | Fail), {WHITESPACE | COMMENT}, rhs, {WHITESPACE | COMMENT}, (termination | termination | Fail) | {WHITESPACE | COMMENT}, IDENTIFIER, {WHITESPACE | COMMENT}, (assign | assign | Fail), {WHITESPACE | COMMENT}, rhs, {WHITESPACE | COMMENT}, (termination | termination | Fail) | Fail), {{WHITESPACE | COMMENT}, IDENTIFIER, {WHITESPACE | COMMENT}, (assign | assign | Fail), {WHITESPACE | COMMENT}, rhs, {WHITESPACE | COMMENT}, (termination | termination | Fail)}, {WHITESPACE | COMMENT} (walkingkooka.text.cursor.parser.TransformingParser)\n"
+                        "  TransformingParser\n" +
+                        "    parser\n" +
+                        "      SequenceParser\n" +
+                        "        0\n" +
+                        "          RepeatingParser\n" +
+                        "            min\n" +
+                        "              0\n" +
+                        "            max\n" +
+                        "              2147483647\n" +
+                        "            parser\n" +
+                        "              AlternativesParser\n" +
+                        "                0\n" +
+                        "                  TransformingParser\n" +
+                        "                    parser\n" +
+                        "                      whitespace{1,2147483647} (walkingkooka.text.cursor.parser.CharPredicateStringParser)\n" +
+                        "                    transformer\n" +
+                        "                      Lambda\n" +
+                        "                1\n" +
+                        "                  TransformingParser\n" +
+                        "                    parser\n" +
+                        "                      \"(*\"*\"*)\" (walkingkooka.text.cursor.parser.SurroundStringParser)\n" +
+                        "                    transformer\n" +
+                        "                      Lambda\n" +
+                        "        1\n" +
+                        "          AlternativesParser\n" +
+                        "            0\n" +
+                        "              TransformingParser\n" +
+                        "                parser\n" +
+                        "                  SequenceParser\n" +
+                        "                    0\n" +
+                        "                      RepeatingParser\n" +
+                        "                        min\n" +
+                        "                          0\n" +
+                        "                        max\n" +
+                        "                          2147483647\n" +
+                        "                        parser\n" +
+                        "                          AlternativesParser\n" +
+                        "                            0\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  whitespace{1,2147483647} (walkingkooka.text.cursor.parser.CharPredicateStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                            1\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  \"(*\"*\"*)\" (walkingkooka.text.cursor.parser.SurroundStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                    1\n" +
+                        "                      TransformingParser\n" +
+                        "                        parser\n" +
+                        "                          SequenceParser\n" +
+                        "                            0\n" +
+                        "                              'A'..'Z' || 'a'..'z' (walkingkooka.text.cursor.parser.CharPredicateCharacterParser)\n" +
+                        "                            1\n" +
+                        "                              AlternativesParser\n" +
+                        "                                0\n" +
+                        "                                  RepeatingParser\n" +
+                        "                                    min\n" +
+                        "                                      0\n" +
+                        "                                    max\n" +
+                        "                                      2147483647\n" +
+                        "                                    parser\n" +
+                        "                                      'A'..'Z' || 'a'..'z' || \"0123456789\" || '_' (walkingkooka.text.cursor.parser.CharPredicateCharacterParser)\n" +
+                        "                                1\n" +
+                        "                                  ReportingParser\n" +
+                        "                                    condition\n" +
+                        "                                      ALWAYS\n" +
+                        "                                    reporter\n" +
+                        "                                      Fail (walkingkooka.text.cursor.parser.BasicParserReporter)\n" +
+                        "                        transformer\n" +
+                        "                          Lambda\n" +
+                        "                    2\n" +
+                        "                      RepeatingParser\n" +
+                        "                        min\n" +
+                        "                          0\n" +
+                        "                        max\n" +
+                        "                          2147483647\n" +
+                        "                        parser\n" +
+                        "                          AlternativesParser\n" +
+                        "                            0\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  whitespace{1,2147483647} (walkingkooka.text.cursor.parser.CharPredicateStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                            1\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  \"(*\"*\"*)\" (walkingkooka.text.cursor.parser.SurroundStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                    3\n" +
+                        "                      AlternativesParser\n" +
+                        "                        0\n" +
+                        "                          TransformingParser\n" +
+                        "                            parser\n" +
+                        "                              '=' (walkingkooka.text.cursor.parser.CharPredicateCharacterParser)\n" +
+                        "                            transformer\n" +
+                        "                              Lambda\n" +
+                        "                        1\n" +
+                        "                          ReportingParser\n" +
+                        "                            condition\n" +
+                        "                              ALWAYS\n" +
+                        "                            reporter\n" +
+                        "                              Fail (walkingkooka.text.cursor.parser.BasicParserReporter)\n" +
+                        "                    4\n" +
+                        "                      RepeatingParser\n" +
+                        "                        min\n" +
+                        "                          0\n" +
+                        "                        max\n" +
+                        "                          2147483647\n" +
+                        "                        parser\n" +
+                        "                          AlternativesParser\n" +
+                        "                            0\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  whitespace{1,2147483647} (walkingkooka.text.cursor.parser.CharPredicateStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                            1\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  \"(*\"*\"*)\" (walkingkooka.text.cursor.parser.SurroundStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                    5\n" +
+                        "                      rhs (walkingkooka.text.cursor.parser.ebnf.EbnfGrammarParser$1)\n" +
+                        "                    6\n" +
+                        "                      RepeatingParser\n" +
+                        "                        min\n" +
+                        "                          0\n" +
+                        "                        max\n" +
+                        "                          2147483647\n" +
+                        "                        parser\n" +
+                        "                          AlternativesParser\n" +
+                        "                            0\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  whitespace{1,2147483647} (walkingkooka.text.cursor.parser.CharPredicateStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                            1\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  \"(*\"*\"*)\" (walkingkooka.text.cursor.parser.SurroundStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                    7\n" +
+                        "                      AlternativesParser\n" +
+                        "                        0\n" +
+                        "                          TransformingParser\n" +
+                        "                            parser\n" +
+                        "                              ';' (walkingkooka.text.cursor.parser.CharPredicateCharacterParser)\n" +
+                        "                            transformer\n" +
+                        "                              Lambda\n" +
+                        "                        1\n" +
+                        "                          ReportingParser\n" +
+                        "                            condition\n" +
+                        "                              ALWAYS\n" +
+                        "                            reporter\n" +
+                        "                              Fail (walkingkooka.text.cursor.parser.BasicParserReporter)\n" +
+                        "                transformer\n" +
+                        "                  Lambda\n" +
+                        "            1\n" +
+                        "              ReportingParser\n" +
+                        "                condition\n" +
+                        "                  ALWAYS\n" +
+                        "                reporter\n" +
+                        "                  Fail (walkingkooka.text.cursor.parser.BasicParserReporter)\n" +
+                        "        2\n" +
+                        "          RepeatingParser\n" +
+                        "            min\n" +
+                        "              0\n" +
+                        "            max\n" +
+                        "              2147483647\n" +
+                        "            parser\n" +
+                        "              TransformingParser\n" +
+                        "                parser\n" +
+                        "                  SequenceParser\n" +
+                        "                    0\n" +
+                        "                      RepeatingParser\n" +
+                        "                        min\n" +
+                        "                          0\n" +
+                        "                        max\n" +
+                        "                          2147483647\n" +
+                        "                        parser\n" +
+                        "                          AlternativesParser\n" +
+                        "                            0\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  whitespace{1,2147483647} (walkingkooka.text.cursor.parser.CharPredicateStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                            1\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  \"(*\"*\"*)\" (walkingkooka.text.cursor.parser.SurroundStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                    1\n" +
+                        "                      TransformingParser\n" +
+                        "                        parser\n" +
+                        "                          SequenceParser\n" +
+                        "                            0\n" +
+                        "                              'A'..'Z' || 'a'..'z' (walkingkooka.text.cursor.parser.CharPredicateCharacterParser)\n" +
+                        "                            1\n" +
+                        "                              AlternativesParser\n" +
+                        "                                0\n" +
+                        "                                  RepeatingParser\n" +
+                        "                                    min\n" +
+                        "                                      0\n" +
+                        "                                    max\n" +
+                        "                                      2147483647\n" +
+                        "                                    parser\n" +
+                        "                                      'A'..'Z' || 'a'..'z' || \"0123456789\" || '_' (walkingkooka.text.cursor.parser.CharPredicateCharacterParser)\n" +
+                        "                                1\n" +
+                        "                                  ReportingParser\n" +
+                        "                                    condition\n" +
+                        "                                      ALWAYS\n" +
+                        "                                    reporter\n" +
+                        "                                      Fail (walkingkooka.text.cursor.parser.BasicParserReporter)\n" +
+                        "                        transformer\n" +
+                        "                          Lambda\n" +
+                        "                    2\n" +
+                        "                      RepeatingParser\n" +
+                        "                        min\n" +
+                        "                          0\n" +
+                        "                        max\n" +
+                        "                          2147483647\n" +
+                        "                        parser\n" +
+                        "                          AlternativesParser\n" +
+                        "                            0\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  whitespace{1,2147483647} (walkingkooka.text.cursor.parser.CharPredicateStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                            1\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  \"(*\"*\"*)\" (walkingkooka.text.cursor.parser.SurroundStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                    3\n" +
+                        "                      AlternativesParser\n" +
+                        "                        0\n" +
+                        "                          TransformingParser\n" +
+                        "                            parser\n" +
+                        "                              '=' (walkingkooka.text.cursor.parser.CharPredicateCharacterParser)\n" +
+                        "                            transformer\n" +
+                        "                              Lambda\n" +
+                        "                        1\n" +
+                        "                          ReportingParser\n" +
+                        "                            condition\n" +
+                        "                              ALWAYS\n" +
+                        "                            reporter\n" +
+                        "                              Fail (walkingkooka.text.cursor.parser.BasicParserReporter)\n" +
+                        "                    4\n" +
+                        "                      RepeatingParser\n" +
+                        "                        min\n" +
+                        "                          0\n" +
+                        "                        max\n" +
+                        "                          2147483647\n" +
+                        "                        parser\n" +
+                        "                          AlternativesParser\n" +
+                        "                            0\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  whitespace{1,2147483647} (walkingkooka.text.cursor.parser.CharPredicateStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                            1\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  \"(*\"*\"*)\" (walkingkooka.text.cursor.parser.SurroundStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                    5\n" +
+                        "                      rhs (walkingkooka.text.cursor.parser.ebnf.EbnfGrammarParser$1)\n" +
+                        "                    6\n" +
+                        "                      RepeatingParser\n" +
+                        "                        min\n" +
+                        "                          0\n" +
+                        "                        max\n" +
+                        "                          2147483647\n" +
+                        "                        parser\n" +
+                        "                          AlternativesParser\n" +
+                        "                            0\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  whitespace{1,2147483647} (walkingkooka.text.cursor.parser.CharPredicateStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                            1\n" +
+                        "                              TransformingParser\n" +
+                        "                                parser\n" +
+                        "                                  \"(*\"*\"*)\" (walkingkooka.text.cursor.parser.SurroundStringParser)\n" +
+                        "                                transformer\n" +
+                        "                                  Lambda\n" +
+                        "                    7\n" +
+                        "                      AlternativesParser\n" +
+                        "                        0\n" +
+                        "                          TransformingParser\n" +
+                        "                            parser\n" +
+                        "                              ';' (walkingkooka.text.cursor.parser.CharPredicateCharacterParser)\n" +
+                        "                            transformer\n" +
+                        "                              Lambda\n" +
+                        "                        1\n" +
+                        "                          ReportingParser\n" +
+                        "                            condition\n" +
+                        "                              ALWAYS\n" +
+                        "                            reporter\n" +
+                        "                              Fail (walkingkooka.text.cursor.parser.BasicParserReporter)\n" +
+                        "                transformer\n" +
+                        "                  Lambda\n" +
+                        "        3\n" +
+                        "          RepeatingParser\n" +
+                        "            min\n" +
+                        "              0\n" +
+                        "            max\n" +
+                        "              2147483647\n" +
+                        "            parser\n" +
+                        "              AlternativesParser\n" +
+                        "                0\n" +
+                        "                  TransformingParser\n" +
+                        "                    parser\n" +
+                        "                      whitespace{1,2147483647} (walkingkooka.text.cursor.parser.CharPredicateStringParser)\n" +
+                        "                    transformer\n" +
+                        "                      Lambda\n" +
+                        "                1\n" +
+                        "                  TransformingParser\n" +
+                        "                    parser\n" +
+                        "                      \"(*\"*\"*)\" (walkingkooka.text.cursor.parser.SurroundStringParser)\n" +
+                        "                    transformer\n" +
+                        "                      Lambda\n" +
+                        "    transformer\n" +
+                        "      Lambda\n"
         );
     }
 }
