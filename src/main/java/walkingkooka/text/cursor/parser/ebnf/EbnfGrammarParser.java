@@ -28,6 +28,8 @@ import walkingkooka.text.cursor.parser.Parsers;
 import walkingkooka.text.cursor.parser.RequiredParser;
 import walkingkooka.text.cursor.parser.SequenceParserToken;
 import walkingkooka.text.cursor.parser.StringParserToken;
+import walkingkooka.text.printer.IndentingPrinter;
+import walkingkooka.text.printer.TreePrintable;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +41,8 @@ import java.util.function.BiFunction;
  * <a href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">EBNF</a>
  */
 final class EbnfGrammarParser implements Parser<EbnfParserContext>,
-        RequiredParser<EbnfParserContext> {
+        RequiredParser<EbnfParserContext>,
+        TreePrintable {
 
     /**
      * This needs to be initialized before references below to avoid forward reference problems.
@@ -479,5 +482,22 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
     @Override
     public String toString() {
         return GRAMMAR.toString();
+    }
+
+    // TreePrintable....................................................................................................
+
+    @Override
+    public void printTree(final IndentingPrinter printer) {
+        printer.println(this.getClass().getSimpleName());
+
+        printer.indent();
+        {
+            TreePrintable.printTreeOrToString(
+                    GRAMMAR,
+                    printer
+            );
+            printer.lineStart();
+        }
+        printer.outdent();
     }
 }
