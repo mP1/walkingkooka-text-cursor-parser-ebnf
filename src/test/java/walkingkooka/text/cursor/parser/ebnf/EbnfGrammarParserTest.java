@@ -22,7 +22,7 @@ import walkingkooka.collect.list.Lists;
 import walkingkooka.text.cursor.parser.Parser;
 
 // TODO EbnfGrammarParser - ClassTesting2
-public final class EbnfGrammarParserTest extends EbnfParserTestCase<GrammarEbnfParserToken> {
+public final class EbnfGrammarParserTest extends EbnfParserTestCase {
 
     private final static String RULE1 = IDENTIFIER1 + "=" + TERMINAL1_TEXT + ";";
     private final static String RULE2 = IDENTIFIER2 + "=" + TERMINAL2_TEXT + ";";
