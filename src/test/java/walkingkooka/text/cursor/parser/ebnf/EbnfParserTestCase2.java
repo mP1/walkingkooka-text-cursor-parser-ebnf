@@ -16,7 +16,7 @@
  */
 package walkingkooka.text.cursor.parser.ebnf;
 
-public abstract class EbnfParserTestCase2<T extends EbnfParserToken> extends EbnfParserTestCase<T> {
+public abstract class EbnfParserTestCase2<T extends EbnfParserToken> extends EbnfParserTestCase {
 
     EbnfParserTestCase2() {
         super();
