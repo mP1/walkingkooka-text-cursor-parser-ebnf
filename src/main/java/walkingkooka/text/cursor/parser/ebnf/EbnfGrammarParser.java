@@ -61,12 +61,22 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
                 .repeating();
     }
 
-    private static ParserToken transformWhitespace(final ParserToken token, ParserContext context) {
-        return WhitespaceEbnfParserToken.with(((StringParserToken) token).value(), token.text());
+    private static ParserToken transformWhitespace(final ParserToken token,
+                                                   final ParserContext context) {
+        return WhitespaceEbnfParserToken.with(
+                ((StringParserToken) token)
+                        .value(),
+                token.text()
+        );
     }
 
-    private static ParserToken transformComment(final ParserToken token, ParserContext context) {
-        return CommentEbnfParserToken.with(((StringParserToken) token).value(), token.text());
+    private static ParserToken transformComment(final ParserToken token,
+                                                final ParserContext context) {
+        return CommentEbnfParserToken.with(
+                ((StringParserToken) token)
+                        .value(),
+                token.text()
+        );
     }
 
     /**
@@ -431,7 +441,11 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
     }
 
     private static BiFunction<ParserToken, EbnfParserContext, ParserToken> filterAndWrap(final BiFunction<List<ParserToken>, String, ParserToken> wrapper) {
-        return (token, context) -> EbnfGrammarParserWrapperEbnfParserTokenVisitor.wrap(token, wrapper);
+        return (token, context) ->
+                EbnfGrammarParserWrapperEbnfParserTokenVisitor.wrap(
+                        token,
+                        wrapper
+                );
     }
 
     /**
@@ -449,14 +463,16 @@ final class EbnfGrammarParser implements Parser<EbnfParserContext>,
                 .transform(EbnfGrammarParser::grammarParserToken);
     }
 
-    private static GrammarEbnfParserToken grammarParserToken(final ParserToken sequence, final EbnfParserContext context) {
+    private static GrammarEbnfParserToken grammarParserToken(final ParserToken sequence,
+                                                             final EbnfParserContext context) {
         return GrammarEbnfParserToken.with(((SequenceParserToken) sequence).flat()
                         .value(),
                 sequence.text());
     }
 
     @Override
-    public Optional<ParserToken> parse(final TextCursor cursor, final EbnfParserContext context) {
+    public Optional<ParserToken> parse(final TextCursor cursor,
+                                       final EbnfParserContext context) {
         return GRAMMAR.parse(cursor, context);
     }
 
