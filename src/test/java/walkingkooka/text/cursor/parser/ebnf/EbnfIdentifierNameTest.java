@@ -20,14 +20,11 @@ package walkingkooka.text.cursor.parser.ebnf;
 import org.junit.jupiter.api.Test;
 import walkingkooka.InvalidCharacterException;
 import walkingkooka.naming.NameTesting2;
-import walkingkooka.reflect.ClassTesting2;
-import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.text.CaseSensitivity;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-final public class EbnfIdentifierNameTest implements ClassTesting2<EbnfIdentifierName>,
-        NameTesting2<EbnfIdentifierName, EbnfIdentifierName> {
+final public class EbnfIdentifierNameTest implements NameTesting2<EbnfIdentifierName, EbnfIdentifierName> {
 
     @Test
     public void testCreateContainsSeparatorFails() {
@@ -94,10 +91,5 @@ final public class EbnfIdentifierNameTest implements ClassTesting2<EbnfIdentifie
     @Override
     public Class<EbnfIdentifierName> type() {
         return EbnfIdentifierName.class;
-    }
-
-    @Override
-    public JavaVisibility typeVisibility() {
-        return JavaVisibility.PUBLIC;
     }
 }
