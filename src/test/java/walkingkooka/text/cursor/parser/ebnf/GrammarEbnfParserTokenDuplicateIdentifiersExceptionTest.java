@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class GrammarEbnfParserTokenDuplicateIdentifiersExceptionTest implements ClassTesting<GrammarEbnfParserTokenDuplicateIdentifiersException>,
         ThrowableTesting,
-        ToStringTesting<GrammarEbnfParserTokenDuplicateIdentifiersException> {
+        ToStringTesting {
 
     @SuppressWarnings("ThrowableNotThrown")
     @Test
