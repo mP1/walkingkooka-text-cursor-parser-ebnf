@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class EbnfGrammarParserTokenInvalidReferencesExceptionTest implements ClassTesting2<EbnfGrammarParserTokenInvalidReferencesException>,
         ThrowableTesting,
-        ToStringTesting<EbnfGrammarParserTokenInvalidReferencesException> {
+        ToStringTesting {
 
     @SuppressWarnings("ThrowableNotThrown")
     @Test
